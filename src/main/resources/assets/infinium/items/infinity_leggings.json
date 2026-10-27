@@ -1,0 +1,444 @@
+{
+ "model": {
+  "type": "minecraft:composite",
+  "models": [
+   {
+    "type": "minecraft:model",
+    "model": "infinium:item/infinity_leggings"
+   },
+   {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "infinium:glow_color",
+    "cases": [
+     {
+      "when": "white",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -1512193
+        }
+       ]
+      }
+     },
+     {
+      "when": "orange",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -31971
+        }
+       ]
+      }
+     },
+     {
+      "when": "magenta",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -39950
+        }
+       ]
+      }
+     },
+     {
+      "when": "light_blue",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -12332545
+        }
+       ]
+      }
+     },
+     {
+      "when": "yellow",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -10179
+        }
+       ]
+      }
+     },
+     {
+      "when": "lime",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -5963993
+        }
+       ]
+      }
+     },
+     {
+      "when": "pink",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -28238
+        }
+       ]
+      }
+     },
+     {
+      "when": "gray",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -6645082
+        }
+       ]
+      }
+     },
+     {
+      "when": "light_gray",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -3618606
+        }
+       ]
+      }
+     },
+     {
+      "when": "cyan",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -14417921
+        }
+       ]
+      }
+     },
+     {
+      "when": "purple",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -4372993
+        }
+       ]
+      }
+     },
+     {
+      "when": "blue",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -10852609
+        }
+       ]
+      }
+     },
+     {
+      "when": "brown",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -23711
+        }
+       ]
+      }
+     },
+     {
+      "when": "green",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -4063443
+        }
+       ]
+      }
+     },
+     {
+      "when": "red",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -48585
+        }
+       ]
+      }
+     },
+     {
+      "when": "black",
+      "model": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+       "tints": [
+        {
+         "type": "minecraft:constant",
+         "value": -10856346
+        }
+       ]
+      }
+     }
+    ],
+    "fallback": {
+     "type": "minecraft:select",
+     "property": "infinium:preview_color",
+     "cases": [
+      {
+       "when": "white",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -1512193
+         }
+        ]
+       }
+      },
+      {
+       "when": "orange",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -31971
+         }
+        ]
+       }
+      },
+      {
+       "when": "magenta",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -39950
+         }
+        ]
+       }
+      },
+      {
+       "when": "light_blue",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -12332545
+         }
+        ]
+       }
+      },
+      {
+       "when": "yellow",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -10179
+         }
+        ]
+       }
+      },
+      {
+       "when": "lime",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -5963993
+         }
+        ]
+       }
+      },
+      {
+       "when": "pink",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -28238
+         }
+        ]
+       }
+      },
+      {
+       "when": "gray",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -6645082
+         }
+        ]
+       }
+      },
+      {
+       "when": "light_gray",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -3618606
+         }
+        ]
+       }
+      },
+      {
+       "when": "cyan",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -14417921
+         }
+        ]
+       }
+      },
+      {
+       "when": "purple",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -4372993
+         }
+        ]
+       }
+      },
+      {
+       "when": "blue",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -10852609
+         }
+        ]
+       }
+      },
+      {
+       "when": "brown",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -23711
+         }
+        ]
+       }
+      },
+      {
+       "when": "green",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -4063443
+         }
+        ]
+       }
+      },
+      {
+       "when": "red",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -48585
+         }
+        ]
+       }
+      },
+      {
+       "when": "black",
+       "model": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_infinity_gray/infinity_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -10856346
+         }
+        ]
+       }
+      }
+     ],
+     "fallback": {
+      "type": "minecraft:model",
+      "model": "infinium:item/cracks_infinity/infinity_leggings"
+     }
+    }
+   }
+  ]
+ }
+}

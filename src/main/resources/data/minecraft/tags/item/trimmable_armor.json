@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "infinium:infinium_helmet",
+    "infinium:infinium_chestplate",
+    "infinium:infinium_leggings",
+    "infinium:infinium_boots",
+    "infinium:infinity_helmet",
+    "infinium:infinity_chestplate",
+    "infinium:infinity_leggings",
+    "infinium:infinity_boots"
+  ]
+}

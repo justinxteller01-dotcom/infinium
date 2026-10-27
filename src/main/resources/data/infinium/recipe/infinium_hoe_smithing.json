@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:netherite_hoe",
+  "addition": "infinium:infinium_ingot",
+  "result": {
+    "id": "infinium:infinium_hoe"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "infinium:astral_upgrade_smithing_template",
+  "base": "minecraft:netherite_leggings",
+  "addition": "infinium:infinium_ingot",
+  "result": {
+    "id": "infinium:infinium_leggings",
+    "components": {
+      "infinium:style": "astral"
+    }
+  }
+}

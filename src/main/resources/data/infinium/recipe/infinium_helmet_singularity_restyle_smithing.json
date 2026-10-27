@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "infinium:singularity_upgrade_smithing_template",
+  "base": "infinium:infinium_helmet",
+  "result": {
+    "id": "infinium:infinium_helmet",
+    "components": {
+      "infinium:style": "singularity"
+    }
+  }
+}

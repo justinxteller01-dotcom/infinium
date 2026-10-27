@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "infinium",
+  "version": "1.0.0",
+  "name": "Infinium",
+  "description": "Infinium: a dark purple tier above netherite.",
+  "authors": [
+    "Justin Teller"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.justin.infinium.Infinium"
+    ],
+    "client": [
+      "dev.justin.infinium.client.InfiniumClient"
+    ],
+    "jei_mod_plugin": [
+      "dev.justin.infinium.compat.InfiniumJeiPlugin",
+      "dev.justin.infinium.compat.InfiniumJeiDyeHider"
+    ],
+    "modmenu": [
+      "dev.justin.infinium.client.compat.InfiniumModMenu"
+    ],
+    "lambdynlights:initializer": [
+      "dev.justin.infinium.client.compat.InfiniumDynamicLights"
+    ]
+  },
+  "mixins": [
+    "infinium.mixins.json",
+    "infinium.compat.mixins.json",
+    {
+      "config": "infinium.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "26.2",
+    "fabric-api": "*",
+    "java": ">=25",
+    "punchy": "*",
+    "roguelike": "*"
+  },
+  "suggests": {
+    "jei": "*",
+    "modmenu": "*",
+    "lambdynlights": ">=4.12.4"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": "infinium:spacetime_fragments",
+    "A": "minecraft:amethyst_shard"
+  },
+  "pattern": [
+    "FFF",
+    "FAF",
+    "FFF"
+  ],
+  "result": {
+    "id": "infinium:spacetime_crystal",
+    "count": 1
+  }
+}

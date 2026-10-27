@@ -1,0 +1,30 @@
+{
+  "parent": "infinium:root",
+  "criteria": {
+    "set": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "set"
+    ]
+  ],
+  "display": {
+    "icon": {
+      "id": "infinium:infinium_chestplate",
+      "components": {
+        "infinium:style": "singularity"
+      }
+    },
+    "title": {
+      "translate": "advancements.infinium.singularity_set.title"
+    },
+    "description": {
+      "translate": "advancements.infinium.singularity_set.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "fabric:type": "fabric:components",
+    "base": "infinium:infinium_chestplate",
+    "components": {
+      "infinium:style": "cyberpsycho"
+    }
+  },
+  "base": {
+    "fabric:type": "fabric:components",
+    "base": "infinium:infinium_chestplate",
+    "components": {
+      "infinium:style": "singularity"
+    }
+  },
+  "addition": "infinium:infinium_ingot",
+  "result": {
+    "id": "infinium:infinity_chestplate",
+    "count": 1
+  }
+}

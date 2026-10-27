@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:lime_dye",
+ "base": "infinium:infinity_boots",
+ "result": {
+  "id": "infinium:infinity_boots",
+  "components": {
+   "infinium:glow_color": "lime"
+  }
+ }
+}

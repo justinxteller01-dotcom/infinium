@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:pink_dye",
+ "base": "infinium:infinity_leggings",
+ "result": {
+  "id": "infinium:infinity_leggings",
+  "components": {
+   "infinium:glow_color": "pink"
+  }
+ }
+}

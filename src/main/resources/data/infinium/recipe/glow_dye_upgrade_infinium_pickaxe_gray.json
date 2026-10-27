@@ -1,0 +1,12 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:gray_dye",
+ "base": "minecraft:netherite_pickaxe",
+ "addition": "infinium:infinium_ingot",
+ "result": {
+  "id": "infinium:infinium_pickaxe",
+  "components": {
+   "infinium:glow_color": "gray"
+  }
+ }
+}

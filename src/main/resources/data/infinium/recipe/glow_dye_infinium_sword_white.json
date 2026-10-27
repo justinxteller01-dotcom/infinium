@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:white_dye",
+ "base": "infinium:infinium_sword",
+ "result": {
+  "id": "infinium:infinium_sword",
+  "components": {
+   "infinium:glow_color": "white"
+  }
+ }
+}

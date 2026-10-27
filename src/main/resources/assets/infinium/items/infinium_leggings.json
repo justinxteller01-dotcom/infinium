@@ -1,0 +1,1944 @@
+{
+ "model": {
+  "type": "minecraft:composite",
+  "models": [
+   {
+    "type": "minecraft:model",
+    "model": "infinium:item/infinium_leggings"
+   },
+   {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "infinium:glow_color",
+    "cases": [
+     {
+      "when": "white",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -1512193
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -1512193
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -1512193
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -1512193
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "orange",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -31971
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -31971
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -31971
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -31971
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "magenta",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -39950
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -39950
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -39950
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -39950
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "light_blue",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -12332545
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -12332545
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -12332545
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -12332545
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "yellow",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10179
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10179
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10179
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -10179
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "lime",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -5963993
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -5963993
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -5963993
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -5963993
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "pink",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -28238
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -28238
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -28238
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -28238
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "gray",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -6645082
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -6645082
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -6645082
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -6645082
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "light_gray",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -3618606
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -3618606
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -3618606
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -3618606
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "cyan",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -14417921
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -14417921
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -14417921
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -14417921
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "purple",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -4372993
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -4372993
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -4372993
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -4372993
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "blue",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10852609
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10852609
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10852609
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -10852609
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "brown",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -23711
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -23711
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -23711
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -23711
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "green",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -4063443
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -4063443
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -4063443
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -4063443
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "red",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -48585
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -48585
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -48585
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -48585
+         }
+        ]
+       }
+      }
+     },
+     {
+      "when": "black",
+      "model": {
+       "type": "minecraft:select",
+       "property": "minecraft:component",
+       "component": "infinium:style",
+       "cases": [
+        {
+         "when": "cybernetic",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10856346
+           }
+          ]
+         }
+        },
+        {
+         "when": "singularity",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10856346
+           }
+          ]
+         }
+        },
+        {
+         "when": "cyberpsycho",
+         "model": {
+          "type": "minecraft:model",
+          "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+          "tints": [
+           {
+            "type": "minecraft:constant",
+            "value": -10856346
+           }
+          ]
+         }
+        }
+       ],
+       "fallback": {
+        "type": "minecraft:model",
+        "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+        "tints": [
+         {
+          "type": "minecraft:constant",
+          "value": -10856346
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "fallback": {
+     "type": "minecraft:select",
+     "property": "infinium:preview_color",
+     "cases": [
+      {
+       "when": "white",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -1512193
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -1512193
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -1512193
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -1512193
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "orange",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -31971
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -31971
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -31971
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -31971
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "magenta",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -39950
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -39950
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -39950
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -39950
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "light_blue",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -12332545
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -12332545
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -12332545
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -12332545
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "yellow",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10179
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10179
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10179
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -10179
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "lime",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -5963993
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -5963993
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -5963993
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -5963993
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "pink",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -28238
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -28238
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -28238
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -28238
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "gray",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -6645082
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -6645082
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -6645082
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -6645082
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "light_gray",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -3618606
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -3618606
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -3618606
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -3618606
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "cyan",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -14417921
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -14417921
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -14417921
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -14417921
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "purple",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -4372993
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -4372993
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -4372993
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -4372993
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "blue",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10852609
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10852609
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10852609
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -10852609
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "brown",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -23711
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -23711
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -23711
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -23711
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "green",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -4063443
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -4063443
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -4063443
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -4063443
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "red",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -48585
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -48585
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -48585
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -48585
+          }
+         ]
+        }
+       }
+      },
+      {
+       "when": "black",
+       "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "infinium:style",
+        "cases": [
+         {
+          "when": "cybernetic",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cybernetic_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10856346
+            }
+           ]
+          }
+         },
+         {
+          "when": "singularity",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_singularity_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10856346
+            }
+           ]
+          }
+         },
+         {
+          "when": "cyberpsycho",
+          "model": {
+           "type": "minecraft:model",
+           "model": "infinium:item/cracks_cyberpsycho_gray/infinium_leggings",
+           "tints": [
+            {
+             "type": "minecraft:constant",
+             "value": -10856346
+            }
+           ]
+          }
+         }
+        ],
+        "fallback": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_astral_gray/infinium_leggings",
+         "tints": [
+          {
+           "type": "minecraft:constant",
+           "value": -10856346
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:component",
+      "component": "infinium:style",
+      "cases": [
+       {
+        "when": "cybernetic",
+        "model": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_cybernetic/infinium_leggings"
+        }
+       },
+       {
+        "when": "singularity",
+        "model": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_singularity/infinium_leggings"
+        }
+       },
+       {
+        "when": "cyberpsycho",
+        "model": {
+         "type": "minecraft:model",
+         "model": "infinium:item/cracks_cyberpsycho/infinium_leggings"
+        }
+       }
+      ],
+      "fallback": {
+       "type": "minecraft:model",
+       "model": "infinium:item/cracks_astral/infinium_leggings"
+      }
+     }
+    }
+   }
+  ]
+ }
+}

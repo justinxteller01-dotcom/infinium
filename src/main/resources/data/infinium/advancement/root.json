@@ -1,0 +1,28 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ],
+  "display": {
+    "icon": {
+      "id": "infinium:infinium_ingot"
+    },
+    "title": {
+      "translate": "advancements.infinium.root.title"
+    },
+    "description": {
+      "translate": "advancements.infinium.root.description"
+    },
+    "background": "minecraft:block/obsidian",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

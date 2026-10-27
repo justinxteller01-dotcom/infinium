@@ -1,0 +1,100 @@
+# Project Map - Infinium Mod
+
+## Environment & Build Info
+- **Minecraft Version:** Java 26.2
+- **Loader:** Fabric Loader 0.19.5
+- **Toolchain:** Custom `build.ps1` (Python asset generators -> `javac --release 25` -> `jar.exe`). No Gradle.
+- **Root Directory:** `F:\GrokBot\work\infinium_pass2`
+- **Output Artifact:** `out/infinium-1.0.0+26.2.jar`
+- **Deployed Target:** `C:\Users\justi\AppData\Roaming\.minecraft\mods\infinium-1.0.0+26.2.jar`
+
+---
+
+## Package Overview (`dev.justin.infinium`)
+
+### 1. Core Logic & Game Rules
+- `Infinium.java`: Mod entrypoint, registry holders for items, blocks, effects, sounds, components, armor set checks (`fullSet`, `styledSet`, `infinitySet`).
+- `InfiniumStyle.java`: Style enum (`ASTRAL`, `CYBERNETIC`, `SINGULARITY`, `CYBERPSYCHO`).
+- `SetLook.java`: Active equipped set look (`ASTRAL`, `CYBERNETIC`, `SINGULARITY`, `CYBERPSYCHO`, `INFINITY`) and `lookWith(...)` simulation helper.
+- `SetBonuses.java`: Full-set passive abilities, slow aura, and equip sound dispatcher (`equipSound` / `clientEquipSound`).
+- `Perk.java`, `Perks.java`, `PerkValues.java`: Armor perk definitions, bitmask toggles, scaling values per style family.
+- `CrystalCharge.java`: Spacetime Crystal socketing, charge thresholds, perk unlocking milestones, visual progress calculation.
+- `dungeon/DungeonHudPayload.java`: Network packet syncing dungeon presence and chest reset time remaining to client.
+- `GlowColor.java`: Dye recoloring component (`infinium:glow_color`).
+- `SingularityStacks.java`: Stacking capacity overrides (up to 96/24/2).
+- `ModSounds.java`: Sound event registration for armor/tool pickup, place, equip, full set equip, crystal UI events, and themed sword audio suite (`sword(LivingEntity, kind, fallback)`).
+- `Info.java`: Tooltip text formatting and perk descriptions.
+- `InfiniumArmorTier.java`: Server and client authoritative helper for resolving full Infinium armor set tier (Tier 1 = Astral/Cybernetic, Tier 2 = Singularity/Cyberpsycho, Tier 3 = Infinity, 0 = incomplete/none). Live equipment resolution enables tier >= 1 immediately upon equipping.
+- `SwordSlashHandler.java`: Server-side authoritative handler for energy slashes (tier & energy-mode gating, rate limits, 1.25x stab gate, server player rotation, color clamping, roll NaN/infinite rejection & clamp, tier-scaled launch audio, per-player disconnect cleanup, no attack-cooldown reset). Zero client imports.
+- `SwordSlashPayload.java`: C2S network packet for energy slash attacks.
+- `SwordTheme.java`: Server and client sword sound theme resolution helper (allowed choices, resolving per-set ordinals, server-side per-player choice storage).
+- `SwordThemePayload.java`: C2S network packet syncing player's sword sound theme preferences.
+- `EnergySlashEntity.java`: 15-node piercing segmented energy wave entity with block surface scorch burns, dye color sync, synched TIER data accessor, and tiered damage (T1: 30%/35%, T2: 40%/55%, T3: 50%/75% of 11.0 base damage).
+
+### 2. Items & Blocks
+- `InfiniumSwordItem.java`: Infinium Sword with bleeding effect, sneak + right-click energy mode toggle (stored in `SWORD_ENERGY_MODE` data component, defaults to energy mode), action bar notifications, and hover tooltip.
+- `InfiniumPickaxeItem.java`, `InfiniumAxeItem.java`, `InfiniumShovelItem.java`, `InfiniumHoeItem.java`: Infinium multi-mode tools.
+- `InfiniumFarmlandBlock.java`: Permanent lit, saturated farmland created by the hoe.
+- `NetheriteRocketItem.java`: Netherite firework rocket item.
+- `DungeonFinder.java`: Compass tracking nearby roguelike dungeons.
+- `InfiniumGuide.java`, `InfiniumBook.java`: Informational crystal guide item.
+
+### 3. Client Package (`dev.justin.infinium.client`)
+- `InfiniumClient.java`: Client initialization, event listeners, packet receivers.
+- `InfiniumClientConfig.java`: Client settings JSON manager (`infinium-client.json`).
+- `InfiniumSettingsScreen.java`: Visual & Sound Settings GUI (3-way particle toggles, world effects, sounds, controls).
+- `InfiniumPerksScreen.java`: Perk toggles per armor set, with prominent button for Visual Settings.
+- `CrystalScreen.java`: Spacetime Crystal Matrix upgrade UI (progress bar, 2-row milestone cards, infusion socket).
+- `InventorySettingsButton.java`: Inventory gear settings gear button and player portrait cosmic energy progress bar.
+- `DungeonHudClient.java`: On-screen minimalistic HUD showing remaining dungeon chest reset time when in dungeon chunks.
+- `InfiniumUiSounds.java`: Sound management for inventory pickup/place/drop and full set equip sound deduplication.
+- `InventoryHudTheme.java`, `UiInfection.java`: Progressive cosmic HUD ambient effects, motes, hairline cracks, and rim energy.
+- `ArmorParticles.java`: First-person and third-person ambient particle emitters for worn gear, held tools, wing deploy/retract bursts, and in-flight wingtip trail ribbons.
+- `WorldSkyFx.java`: Ambient sky effects: daytime spacetime ripples, nighttime shooting stars, and underwater shimmer.
+- `WingFold.java`: Elytra wings transition timing, ground angle lerp, and absorb retraction.
+- `InfiniumWingModels.java`: Custom 3D wing geometries for all 5 styles (Astral crescent, Cybernetic vector thruster, Singularity void scythe, CyberPsycho serrated razor, Infinity divine archangel). Multi-layer piece hierarchy (up to 9 pieces) dynamically toggled per unlocked perk milestone.
+- `InfiniumWingsRenderer.java`: Dedicated wing renderer completely replacing vanilla's flat box ElytraModel; handles sleek non-clipping resting V-pose, 100% walking clearance, dynamic per-crystal opacity scaling (up to 90% at max Infinity), unlocked perk milestone pieces, and synchronized armor-matching glow overlays.
+- `PreviewColorProperty.java`: Model select property for GUI item rendering.
+- `SwordSlashClientHandler.java`: Client-side attack combo controller (Left Cut -> Right Cut -> Stab), timing gates matching server rate limits, armor tier >= 1 & sword energy-mode gating, pre-beam clip resolution, dye/style color sync, tier-scaled audio volume and pitch, early stab animation/beam synchronization, direct integration with Punchy animation playback, and Stage 2 crit/stab spin audio (playing punchy:animationssounds/firstspinv2 by registry name on idle return motion with SoundInstance handle stopped on next attack click).
+- `EnergySlashRenderer.java`: Render geometry using RenderTypes.lightning() for lightsaber arc waves and straight cylindrical laser lance beams, with tier-scaled thickness and core/aura alpha.
+- `EnergySlashRenderState.java`: Client render state for energy slash projectiles, including active segments, roll/yaw/pitch, color, isStab flag, age ticks, and tier.
+
+### 4. Client Guide (`dev.justin.infinium.client.guide`)
+- `InfiniumGuideScreen.java`: 2-page Informational Crystal guidebook UI.
+- `FlatGuideScreen.java`: 2D fallback guide screen.
+
+### 5. Mixins (`dev.justin.infinium.mixin` & `client.mixin`)
+- `LivingEntityMixin.java`: Intercepts `onEquipItem` for sound triggers (server & client).
+- `EquipmentLayerRendererMixin.java`: Cancels vanilla WINGS layers for Infinium/Infinity assets and renders animated glow overlays for armor.
+- `WingsLayerMixin.java`: Intercepts `submit()` at HEAD for Infinium chestplates, bypassing vanilla ElytraModel and delegating directly to `InfiniumWingsRenderer`.
+- `ElytraModelMixin.java`: Ensures vanilla/non-Infinium elytras retain valid initial scales and poses.
+- `ContainerScreenMixin.java`: Renders progressive UI infection inside inventory screens.
+- `EffectsInInventoryMixin.java`: Positions status effect badges level with container edge.
+- `SlotClickSoundMixin.java`, `CreativeSlotClickSoundMixin.java`: Triggers pickup/place UI sounds on container slots.
+- `SoundManagerMuteMixin.java`: Silences sounds muted in client settings or suppressed during full set equip.
+- `MinecraftAttackMixin.java`: Intercepts attack start; records queued click target for block detection at HEAD before missTime/handsBusy early returns (no stale flags); delegates to vanilla click handler when Punchy is absent, or defers to Punchy's animation playback when Punchy is present. Registered in `infinium.client.mixins.json` via `gen_data.py`. Blocks are left untouched.
+
+### 6. Compatibility & QA (`dev.justin.infinium.compat` & `dev.justin.infinium.qa`)
+- `punchy/PunchyBridge.java`: Soft-dependency bridge to Punchy animation mod (combo clip resolution; critical clip resolution reading "critical_hit" from the attack entry with player's preferred option and fallback chain critical_hit -> "attack_critical"; stack attack entry lookup via `findAttackEntry`; flourish twirl trigger neutralized to prevent triggering Punchy's 19s `sword_inspect_rework`; Stage 3 verified Punchy cannot load clips from foreign namespaces without modification).
+- `punchy/PunchyAttackStateMachineMixin.java`: Hooks Punchy's `playAttack` and `resolveCustomAttackClip`. Synchronizes Punchy's visual attacks with Infinium energy slashes, checks client rate-limit throttle before returning true (preventing crit animation without beam), preserves unconsumed crit state on block clicks while leaving mining thrust intact using click-time `isQueuedAttackTargetBlock` with zero play-time `mc.hitResult` (ITEM 1e), fires crit cleave only when Punchy's crit clip actually resolves and plays via preferred entry option (falling back safely to combo beam, never both), looks up current stack's "attack" entry at crit time with fallback to LAST_ENTRY then null (ITEM 1d), keeps Punchy's `comboIndex` meaning as the next stage, and registered in `infinium.compat.mixins.json` via `gen_data.py`.
+- `CompatMixinPlugin.java`: Soft mixin configuration plugin gating compat mixins (tb, spatial, jei, punchy) on active mod presence.
+- `SpatialMargin.java`: Offscreen buffer scaling and scissor support for Spatial GUI.
+- `GuiRendererOverscanMixin.java`: Wraps OpenGL `enableScissor` for Spatial GUI offscreen targets.
+- `InfiniumJeiPlugin.java`, `InfiniumJeiDyeHider.java`: JEI integration.
+- `qa/QaTelemetryBridge.java`: Native 26.2 Fabric QA & telemetry bridge syncing player info, block queries, commands, and screenshots with the local MCP bridge.
+
+### 7. Asset Generators (Python Root)
+- `gen_textures.py`, `gen_cracks.py`, `gen_styles.py`, `gen_tool_styles.py`: Full-color animated texture generators.
+- `gen_crystal_sounds.py`, `gen_flight_sounds.py`, `gen_sword_sounds.py`: Procedural audio suite synthesizers for crystals, flight thrusters, and default/themed sword sound effects.
+- `gen_dye.py`: Grayscale and tinted dye variant texture generators.
+- `white_fix.py`, `hue_fix.py`, `r8_post.py`: Texture safety passes (hue guards, chamfers, corner cuts).
+- `gen_book.py`: Guidebook text, recipe, and page structure generator (`pages.json`).
+- `build.ps1`: Orchestrates all generator scripts, runs `javac`, and packages the JAR.
+
+### 8. Productivity & QA Tools
+- `tools/voice_bridge.py`: Background microphone bridge. Press hotkey (`Numpad -`) in Minecraft to record and dictate; sends directly to Antigravity chat with auto-focus restoration so you never need to click or switch windows manually.
+- `tools/start_voice_bridge.bat`: One-click runner for the voice bridge script.
+- `tools/telemetry_bridge.js`: Native 26.2 QA & Telemetry MCP Server exposing `http://localhost:8080/mcp` for live in-game testing.
+- `tools/start_telemetry_bridge.bat`: One-click background launcher for the telemetry bridge.
+- `tools/sync_sqlite.py`: Syncs runtime dungeon reset timers, player stats, and refill logs into `breadcraft.sqlite`.
+- `breadcraft.sqlite`: Local SQLite database containing weekly chest resets, refills, and player statistics for the SQLite MCP server.

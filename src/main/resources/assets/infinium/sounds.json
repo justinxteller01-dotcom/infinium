@@ -1,0 +1,254 @@
+{
+  "astral_pickup": {
+    "sounds": [
+      "infinium:astral/pickup"
+    ],
+    "subtitle": "subtitles.infinium.astral_pickup"
+  },
+  "astral_place": {
+    "sounds": [
+      "infinium:astral/place"
+    ],
+    "subtitle": "subtitles.infinium.astral_place"
+  },
+  "astral_equip": {
+    "sounds": [
+      "infinium:astral/equip"
+    ],
+    "subtitle": "subtitles.infinium.astral_equip"
+  },
+  "astral_set_equip": {
+    "sounds": [
+      "infinium:astral/fullset"
+    ],
+    "subtitle": "subtitles.infinium.astral_set_equip"
+  },
+  "cybernetic_pickup": {
+    "sounds": [
+      "infinium:cybernetic/pickup"
+    ],
+    "subtitle": "subtitles.infinium.cybernetic_pickup"
+  },
+  "cybernetic_place": {
+    "sounds": [
+      "infinium:cybernetic/place"
+    ],
+    "subtitle": "subtitles.infinium.cybernetic_place"
+  },
+  "cybernetic_equip": {
+    "sounds": [
+      "infinium:cybernetic/equip"
+    ],
+    "subtitle": "subtitles.infinium.cybernetic_equip"
+  },
+  "cybernetic_set_equip": {
+    "sounds": [
+      "infinium:cybernetic/fullset"
+    ],
+    "subtitle": "subtitles.infinium.cybernetic_set_equip"
+  },
+  "singularity_pickup": {
+    "sounds": [
+      "infinium:singularity/pickup"
+    ],
+    "subtitle": "subtitles.infinium.singularity_pickup"
+  },
+  "singularity_place": {
+    "sounds": [
+      "infinium:singularity/place"
+    ],
+    "subtitle": "subtitles.infinium.singularity_place"
+  },
+  "singularity_equip": {
+    "sounds": [
+      "infinium:singularity/equip"
+    ],
+    "subtitle": "subtitles.infinium.singularity_equip"
+  },
+  "singularity_set_equip": {
+    "sounds": [
+      "infinium:singularity/fullset"
+    ],
+    "subtitle": "subtitles.infinium.singularity_set_equip"
+  },
+  "cyberpsycho_pickup": {
+    "sounds": [
+      "infinium:cyberpsycho/pickup"
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_pickup"
+  },
+  "cyberpsycho_place": {
+    "sounds": [
+      "infinium:cyberpsycho/place"
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_place"
+  },
+  "cyberpsycho_equip": {
+    "sounds": [
+      "infinium:cyberpsycho/equip"
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_equip"
+  },
+  "cyberpsycho_set_equip": {
+    "sounds": [
+      "infinium:cyberpsycho/fullset"
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_set_equip"
+  },
+  "infinity_pickup": {
+    "sounds": [
+      "infinium:infinity/pickup"
+    ],
+    "subtitle": "subtitles.infinium.infinity_pickup"
+  },
+  "infinity_place": {
+    "sounds": [
+      "infinium:infinity/place"
+    ],
+    "subtitle": "subtitles.infinium.infinity_place"
+  },
+  "infinity_equip": {
+    "sounds": [
+      "infinium:infinity/equip"
+    ],
+    "subtitle": "subtitles.infinium.infinity_equip"
+  },
+  "infinity_set_equip": {
+    "sounds": [
+      "infinium:infinity/fullset"
+    ],
+    "subtitle": "subtitles.infinium.infinity_set_equip"
+  },
+  "tool_pickup": {
+    "sounds": [
+      "infinium:tools/pickup"
+    ],
+    "subtitle": "subtitles.infinium.tool_pickup"
+  },
+  "tool_place": {
+    "sounds": [
+      "infinium:tools/place"
+    ],
+    "subtitle": "subtitles.infinium.tool_place"
+  },
+  "crystal.astral.insert": {
+    "sounds": [
+      "infinium:crystal/astral_insert"
+    ],
+    "subtitle": "subtitles.infinium.crystal_insert"
+  },
+  "crystal.astral.perk": {
+    "sounds": [
+      "infinium:crystal/astral_perk"
+    ],
+    "subtitle": "subtitles.infinium.crystal_perk"
+  },
+  "crystal.astral.full": {
+    "sounds": [
+      "infinium:crystal/astral_full"
+    ],
+    "subtitle": "subtitles.infinium.crystal_full"
+  },
+  "crystal.astral.denied": {
+    "sounds": [
+      "infinium:crystal/astral_denied"
+    ],
+    "subtitle": "subtitles.infinium.crystal_denied"
+  },
+  "crystal.cybernetic.insert": {
+    "sounds": [
+      "infinium:crystal/cybernetic_insert"
+    ],
+    "subtitle": "subtitles.infinium.crystal_insert"
+  },
+  "crystal.cybernetic.perk": {
+    "sounds": [
+      "infinium:crystal/cybernetic_perk"
+    ],
+    "subtitle": "subtitles.infinium.crystal_perk"
+  },
+  "crystal.cybernetic.full": {
+    "sounds": [
+      "infinium:crystal/cybernetic_full"
+    ],
+    "subtitle": "subtitles.infinium.crystal_full"
+  },
+  "crystal.cybernetic.denied": {
+    "sounds": [
+      "infinium:crystal/cybernetic_denied"
+    ],
+    "subtitle": "subtitles.infinium.crystal_denied"
+  },
+  "crystal.singularity.insert": {
+    "sounds": [
+      "infinium:crystal/singularity_insert"
+    ],
+    "subtitle": "subtitles.infinium.crystal_insert"
+  },
+  "crystal.singularity.perk": {
+    "sounds": [
+      "infinium:crystal/singularity_perk"
+    ],
+    "subtitle": "subtitles.infinium.crystal_perk"
+  },
+  "crystal.singularity.full": {
+    "sounds": [
+      "infinium:crystal/singularity_full"
+    ],
+    "subtitle": "subtitles.infinium.crystal_full"
+  },
+  "crystal.singularity.denied": {
+    "sounds": [
+      "infinium:crystal/singularity_denied"
+    ],
+    "subtitle": "subtitles.infinium.crystal_denied"
+  },
+  "crystal.cyberpsycho.insert": {
+    "sounds": [
+      "infinium:crystal/cyberpsycho_insert"
+    ],
+    "subtitle": "subtitles.infinium.crystal_insert"
+  },
+  "crystal.cyberpsycho.perk": {
+    "sounds": [
+      "infinium:crystal/cyberpsycho_perk"
+    ],
+    "subtitle": "subtitles.infinium.crystal_perk"
+  },
+  "crystal.cyberpsycho.full": {
+    "sounds": [
+      "infinium:crystal/cyberpsycho_full"
+    ],
+    "subtitle": "subtitles.infinium.crystal_full"
+  },
+  "crystal.cyberpsycho.denied": {
+    "sounds": [
+      "infinium:crystal/cyberpsycho_denied"
+    ],
+    "subtitle": "subtitles.infinium.crystal_denied"
+  },
+  "crystal.infinity.insert": {
+    "sounds": [
+      "infinium:crystal/infinity_insert"
+    ],
+    "subtitle": "subtitles.infinium.crystal_insert"
+  },
+  "crystal.infinity.perk": {
+    "sounds": [
+      "infinium:crystal/infinity_perk"
+    ],
+    "subtitle": "subtitles.infinium.crystal_perk"
+  },
+  "crystal.infinity.full": {
+    "sounds": [
+      "infinium:crystal/infinity_full"
+    ],
+    "subtitle": "subtitles.infinium.crystal_full"
+  },
+  "crystal.infinity.denied": {
+    "sounds": [
+      "infinium:crystal/infinity_denied"
+    ],
+    "subtitle": "subtitles.infinium.crystal_denied"
+  }
+}

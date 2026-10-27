@@ -1,0 +1,29 @@
+# Build output
+build/
+build_*/
+out/
+*.jar
+__pycache__/
+*.pyc
+# Third-party libraries (download yourself, see README)
+libs/
+libs_compile/
+libs_jei/
+libs_opt/
+# Mojang game files and decompiled vanilla code (extract from your own copy, see README)
+ref/mc/
+ref/src/
+ref/*.jar
+# Previews and local scratch
+preview/
+previews/
+prompts/
+.vscode/
+.agents/
+# Personal local tools not needed to build
+tools/start_telemetry_bridge.bat
+tools/start_voice_bridge.bat
+tools/telemetry_bridge.js
+tools/voice_bridge.py
+tools/sync_sqlite.py
+src/main/resources.zip

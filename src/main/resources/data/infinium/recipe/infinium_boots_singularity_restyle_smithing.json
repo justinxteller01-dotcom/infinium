@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "infinium:singularity_upgrade_smithing_template",
+  "base": "infinium:infinium_boots",
+  "result": {
+    "id": "infinium:infinium_boots",
+    "components": {
+      "infinium:style": "singularity"
+    }
+  }
+}

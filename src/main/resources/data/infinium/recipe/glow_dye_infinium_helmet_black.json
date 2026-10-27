@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:black_dye",
+ "base": "infinium:infinium_helmet",
+ "result": {
+  "id": "infinium:infinium_helmet",
+  "components": {
+   "infinium:glow_color": "black"
+  }
+ }
+}

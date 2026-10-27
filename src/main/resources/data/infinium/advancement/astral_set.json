@@ -1,0 +1,30 @@
+{
+  "parent": "infinium:root",
+  "criteria": {
+    "set": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "set"
+    ]
+  ],
+  "display": {
+    "icon": {
+      "id": "infinium:infinium_chestplate",
+      "components": {
+        "infinium:style": "astral"
+      }
+    },
+    "title": {
+      "translate": "advancements.infinium.astral_set.title"
+    },
+    "description": {
+      "translate": "advancements.infinium.astral_set.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  }
+}

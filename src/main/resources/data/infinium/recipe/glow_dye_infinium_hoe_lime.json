@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:lime_dye",
+ "base": "infinium:infinium_hoe",
+ "result": {
+  "id": "infinium:infinium_hoe",
+  "components": {
+   "infinium:glow_color": "lime"
+  }
+ }
+}

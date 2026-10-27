@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "infinium:cybernetic_upgrade_smithing_template",
+  "base": "infinium:infinium_chestplate",
+  "result": {
+    "id": "infinium:infinium_chestplate",
+    "components": {
+      "infinium:style": "cybernetic"
+    }
+  }
+}

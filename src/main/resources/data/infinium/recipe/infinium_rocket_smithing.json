@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:firework_rocket",
+  "addition": "infinium:infinium_ingot",
+  "result": {
+    "id": "infinium:infinium_rocket",
+    "count": 1
+  }
+}

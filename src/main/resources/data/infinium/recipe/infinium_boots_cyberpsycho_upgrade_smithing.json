@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "infinium:cyberpsycho_upgrade_smithing_template",
+  "base": "infinium:infinium_boots",
+  "addition": "infinium:infinium_ingot",
+  "result": {
+    "id": "infinium:infinium_boots",
+    "components": {
+      "infinium:style": "cyberpsycho"
+    }
+  }
+}

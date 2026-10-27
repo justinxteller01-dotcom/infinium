@@ -1,0 +1,12 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:light_gray_dye",
+ "base": "minecraft:netherite_sword",
+ "addition": "infinium:infinium_ingot",
+ "result": {
+  "id": "infinium:infinium_sword",
+  "components": {
+   "infinium:glow_color": "light_gray"
+  }
+ }
+}

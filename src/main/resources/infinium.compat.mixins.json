@@ -1,0 +1,24 @@
+{
+  "required": false,
+  "package": "dev.justin.infinium.compat.mixin",
+  "plugin": "dev.justin.infinium.compat.CompatMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "tb.AttachmentUtilsMixin",
+    "tb.StorageOwnerAccessor",
+    "tb.ItemStackHandlerMixin"
+  ],
+  "client": [
+    "jei.InventoryEffectRendererMixin",
+    "spatial.GuiRendererOverscanMixin",
+    "spatial.TextureTargetManagerMixin",
+    "spatial.AnimationUtilMixin",
+    "spatial.InventoryRendererMixin",
+    "spatial.RenderUtilMixin",
+    "spatial.ShouldHookScreenMixin",
+    "punchy.PunchyAttackStateMachineMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:gray_dye",
+ "base": "infinium:infinium_axe",
+ "result": {
+  "id": "infinium:infinium_axe",
+  "components": {
+   "infinium:glow_color": "gray"
+  }
+ }
+}

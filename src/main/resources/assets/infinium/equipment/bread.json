@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "infinium:bread"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "infinium:bread"
+      }
+    ]
+  }
+}

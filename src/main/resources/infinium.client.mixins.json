@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "package": "dev.justin.infinium.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "HudOverlayMixin",
+    "WingsLayerMixin",
+    "EquipmentLayerRendererMixin",
+    "ElytraModelMixin",
+    "HumanoidRenderStateMixin",
+    "MinecraftUseMixin",
+    "ClientTextTooltipMixin",
+    "TooltipNameMixin",
+    "SelectItemModelPropertiesAccessor",
+    "ContainerScreenMixin",
+    "ContainerScreenPosAccessor",
+    "SoundManagerMuteMixin",
+    "AnvilScreenMixin",
+    "SlotClickSoundMixin",
+    "CreativeSlotClickSoundMixin",
+    "AdvancementToastMixin",
+    "EffectsInInventoryMixin",
+    "ArmorRemoveGuardMixin",
+    "InfiniumClientBookMixin",
+    "TitleScreenFxMixin",
+    "ContainerLabelColorMixin",
+    "MinecraftAttackMixin",
+    "LightmapRenderStateExtractorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

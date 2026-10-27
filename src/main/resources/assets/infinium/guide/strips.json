@@ -1,0 +1,42 @@
+{
+  "astral": {
+    "file": "astral_fb",
+    "fw": 384,
+    "fh": 192,
+    "cols": 8,
+    "frames": 120,
+    "ms": 100
+  },
+  "cybernetic": {
+    "file": "cybernetic_fb",
+    "fw": 384,
+    "fh": 192,
+    "cols": 8,
+    "frames": 120,
+    "ms": 100
+  },
+  "singularity": {
+    "file": "singularity_fb",
+    "fw": 384,
+    "fh": 192,
+    "cols": 8,
+    "frames": 100,
+    "ms": 100
+  },
+  "cyberpsycho": {
+    "file": "cyberpsycho_fb",
+    "fw": 384,
+    "fh": 192,
+    "cols": 8,
+    "frames": 80,
+    "ms": 100
+  },
+  "infinity": {
+    "file": "infinity_fb",
+    "fw": 384,
+    "fh": 192,
+    "cols": 8,
+    "frames": 32,
+    "ms": 100
+  }
+}

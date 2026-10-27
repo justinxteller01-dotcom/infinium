@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "infinium:spacetime_fragments"
+  ],
+  "result": {
+    "id": "infinium:infinium_guide",
+    "count": 1
+  }
+}

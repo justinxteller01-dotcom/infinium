@@ -1,0 +1,12 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:black_dye",
+ "base": "minecraft:netherite_hoe",
+ "addition": "infinium:infinium_ingot",
+ "result": {
+  "id": "infinium:infinium_hoe",
+  "components": {
+   "infinium:glow_color": "black"
+  }
+ }
+}

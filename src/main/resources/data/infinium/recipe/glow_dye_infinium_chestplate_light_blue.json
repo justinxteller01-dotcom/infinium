@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:light_blue_dye",
+ "base": "infinium:infinium_chestplate",
+ "result": {
+  "id": "infinium:infinium_chestplate",
+  "components": {
+   "infinium:glow_color": "light_blue"
+  }
+ }
+}

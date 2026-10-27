@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:blue_dye",
+ "base": "infinium:infinium_pickaxe",
+ "result": {
+  "id": "infinium:infinium_pickaxe",
+  "components": {
+   "infinium:glow_color": "blue"
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:purple_dye",
+ "base": "infinium:infinium_boots",
+ "result": {
+  "id": "infinium:infinium_boots",
+  "components": {
+   "infinium:glow_color": "purple"
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "type": "minecraft:smithing_transform",
+ "template": "minecraft:purple_dye",
+ "base": "infinium:infinium_shovel",
+ "result": {
+  "id": "infinium:infinium_shovel",
+  "components": {
+   "infinium:glow_color": "purple"
+  }
+ }
+}

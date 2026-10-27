@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "infinium:infinium"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "infinium:infinium"
+      }
+    ],
+    "wings": [
+      {
+        "texture": "infinium:infinium",
+        "use_player_texture": false
+      }
+    ]
+  }
+}
