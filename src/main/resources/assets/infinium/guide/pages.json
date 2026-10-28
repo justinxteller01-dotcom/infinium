@@ -225,7 +225,7 @@
     "tier 1",
     "builder"
    ],
-   "body": "Forged from fallen starlight, it hums with the memory of deep space.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, unlocks the sword's energy slashes, items stack higher, and longer reach.",
+   "body": "Forged from fallen starlight, it hums with the memory of deep space.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: move slightly faster. Quantum Tunnel zips you forward, on the ground or in the air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, unlocks the sword's energy slashes, items stack higher, and longer reach.",
    "visual": "armor:0",
    "caption": "Full Astral set, fully charged",
    "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}. Reach +{n:reach_t1}."
@@ -372,7 +372,7 @@
     "dash",
     "leggings"
    ],
-   "body": "Astral-line leggings. Press {key:warp} in mid-air to tunnel forward and shoot out the end.\nIt stops at solid walls.\nThe key is not set at first. Pick one in Controls.",
+   "body": "Astral-line leggings. Press {key:warp} on the ground or in mid-air to tunnel forward and shoot out the end.\nIt stops at solid walls.\nThe key is not set at first. Pick one in Controls.",
    "visual": "items:infinium:infinium_leggings",
    "caption": "Leggings",
    "numbers": "Numbers: {n:tunnel_t1} / {n:tunnel_t2} / {n:tunnel_t3} blocks, every {n:tunnel_cd_t1} / {n:tunnel_cd_t2} / {n:tunnel_cd_t3}s."

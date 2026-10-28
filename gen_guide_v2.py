@@ -96,7 +96,7 @@ armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
    "Helmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\n"
    "Chestplate: built-in wings.\n"
-   "Leggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\n"
+   "Leggings: move slightly faster. Quantum Tunnel zips you forward, on the ground or in the air.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump higher.\n"
    "Full set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, unlocks the sword's energy slashes, items stack higher, and longer reach.",
@@ -182,7 +182,7 @@ pg('jumping', 4, 'Jumping', 'Higher and again', ['jump', 'air jump', 'double jum
    "Numbers: hold-jump up to {n:jump_astral} / {n:jump_sing} / {n:jump_inf} blocks (Astral / Singularity / Infinity). "
    "Air jumps {n:airjumps_t1} / {n:airjumps_t2} / {n:airjumps_t3} (Cybernetic / Cyber Psycho / Infinity).")
 pg('tunnel', 4, 'Quantum Tunnel', 'Zip forward through the air', ['tunnel', 'warp', 'dash', 'leggings'],
-   "Astral-line leggings. Press {key:warp} in mid-air to tunnel forward and shoot out the end.\n"
+   "Astral-line leggings. Press {key:warp} on the ground or in mid-air to tunnel forward and shoot out the end.\n"
    "It stops at solid walls.\n"
    "The key is not set at first. Pick one in Controls.",
    'items:infinium:infinium_leggings', 'Leggings',

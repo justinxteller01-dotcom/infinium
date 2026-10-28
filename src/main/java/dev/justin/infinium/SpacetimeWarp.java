@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
  * - Astral Leggings: 8 blocks, 8 s.  Singularity: 12 blocks, 6 s.  Infinity: 16 blocks, 4 s.
  * - Ends with a forward launch along the warp direction (small/medium/large) + placeholder audio cue.
  * - (Cybernetic and CyberPsycho leggings are explicitly excluded).
- * - M2: an ability in the M1 system (id infinium:warp, own key, unbound by default). Mid-air only. Cooldown
+ * - M2: an ability in the M1 system (id infinium:warp, own key, unbound by default). Ground or mid-air (batch1 2026-10-28; was mid-air only). Cooldown
  *   (see COOLDOWN_SEC; server-authoritative, see ability.Abilities). The player comes
  *   out of the warp sprinting (server + client).
  * - Anti-Phasing: Sweeps the player box along the look vector (blocks only, passes through entities). Obstacles up to
@@ -70,11 +70,11 @@ public final class SpacetimeWarp {
     }
 
     /**
-     * M2 mid-air rule: any time airborne. Not on the ground, not in water or lava, not on a ladder/vine,
-     * not riding. Elytra gliding COUNTS (Justin: "only work when the player is mid air").
+     * Warp state rule (batch1 2026-10-28, Justin: "work on the ground too"): on the ground or airborne, elytra gliding
+     * included. Still not in water or lava, not on a ladder/vine, not riding. (M2 used to also require !onGround.)
      */
-    public static boolean isMidAir(Player p) {
-        return !p.onGround() && !p.isInWater() && !p.isInLava() && !p.onClimbable() && !p.isPassenger();
+    public static boolean canWarpHere(Player p) {
+        return !p.isInWater() && !p.isInLava() && !p.onClimbable() && !p.isPassenger();
     }
 
     public static double getWarpDistance(Player player) {
@@ -90,7 +90,7 @@ public final class SpacetimeWarp {
 
     public static boolean canWarp(Player player) {
         if (player == null || !player.isAlive() || player.isSpectator()) return false;
-        if (!isMidAir(player)) return false;
+        if (!canWarpHere(player)) return false;
         return getWarpDistance(player) > 0.0;   // cooldown is handled by the ability system
     }
 

@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
  * @param owned         does the player have it right now (full set or piece check). Must work on both sides,
  *                      it only reads worn equipment, which is synced.
  * @param action        server-side effect. Return true if it fired (cooldown starts), false if it was not
- *                      applicable right now (e.g. warp on the ground) - no cooldown is spent then.
+ *                      applicable right now (e.g. warp blocked by a wall or in water) - no cooldown is spent then.
  */
 public record Ability(Identifier id, Identifier icon, ToIntFunction<Player> cooldownTicks,
                       Predicate<Player> owned, Predicate<ServerPlayer> action) {
