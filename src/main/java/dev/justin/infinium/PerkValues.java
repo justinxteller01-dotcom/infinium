@@ -98,6 +98,7 @@ public final class PerkValues {
                 case "noconsume": return "Block Saver";
                 case "reach": return "+" + (int) reach(f) + " Block Reach";
                 case "stacks": return "Bigger Stacks";
+                case "saber": return "Energy Slash";
                 default: break;
             }
         }
@@ -114,6 +115,7 @@ public final class PerkValues {
                 default -> "Faster attacks +" + Math.round(attackAndBow(f) * 100) + "%";
             };
             case "slow" -> "Slow nearby mobs when damaged";
+            case "saber" -> "Energy Slash & Beam";
             default -> kind;
         };
     }

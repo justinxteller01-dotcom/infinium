@@ -83,7 +83,7 @@ public final class Info {
         if (it == Infinium.SWORD) {
             o.add(l("Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12."));
             o.add(l("Your first two swings send out energy slashes. The third fires an energy beam that hits even harder."));
-            o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (6 / 7.7 / 9.6 dmg by tier); the beam does 7.5 / 9.35 / 11.4. Slashes and the beam apply bleed, or Cyberburn with Cyber armor: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
+            o.add(l("Energy mode (full Infinium armor set only; Astral unlocks it with crystals): a fully charged swing fires a piercing Energy Slash (6 / 7.7 / 9.6 dmg by tier); the beam does 7.5 / 9.35 / 11.4. Slashes and the beam apply bleed, or Cyberburn with Cyber armor: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
             o.add(l("Without a full set it's a normal sword."));
             o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
         }
@@ -191,6 +191,7 @@ public final class Info {
                 case "mining" -> "Mine faster (+" + pct(PerkValues.mining(f)) + ").";
                 case "jump" -> "Jump again in mid-air (" + PerkValues.airJumps(f) + " extra). Turn wings off to use it.";
                 case "attack" -> "Swing swords and draw bows faster (+" + pct(PerkValues.attackAndBow(f)) + ").";
+                case "saber" -> "Energy slashes and the beam from the Infinium sword.";
                 case "slow" -> "When you get hit, nearby mobs slow down (" + pct(PerkValues.slowAmount(f)) + " for " + PerkValues.slowDurationTicks(f) / 20 + "s, every " + PerkValues.slowCooldownTicks(f) / 20 + "s).";
                 default -> kind;
             };
@@ -206,6 +207,7 @@ public final class Info {
             case "noconsume" -> "Sometimes doesn't use up the block you place.";
             case "reach" -> blocks((int) PerkValues.reach(f)) + " reach.";
             case "stacks" -> "Items stack higher (64 becomes " + PerkValues.boostedMax(f, 64) + ").";
+            case "saber" -> "Unlocks the sword's energy slashes and beam.";
             default -> kind;
         };
     }

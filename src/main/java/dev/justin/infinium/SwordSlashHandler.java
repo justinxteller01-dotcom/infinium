@@ -29,7 +29,7 @@ public final class SwordSlashHandler {
         if (!held.is(Infinium.SWORD) || InfiniumDurability.disabled(held)) return;
         if (!InfiniumSwordItem.isEnergyMode(held)) return;
         int tier = InfiniumArmorTier.getTier(player);
-        if (tier < 1) return;
+        if (tier < 1 || !CrystalCharge.saberUnlocked(player)) return;
 
         double attackSpeed = player.getAttributeValue(Attributes.ATTACK_SPEED);
         int baseInterval = Math.max(3, (int) Math.floor(20.0 / attackSpeed) - 1);

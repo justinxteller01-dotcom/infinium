@@ -192,7 +192,7 @@
     "cyber psycho",
     "infinity"
    ],
-   "body": "Tier 1 is Astral or Cybernetic.\nTier 2: upgrade a fully charged tier 1 piece. Astral becomes Singularity, Cybernetic becomes Cyber Psycho.\nA tier 2 piece counts as fully charged tier 1. It keeps every tier 1 perk at full strength. Crystals then upgrade those perks.\nTier 3: combine a Singularity piece with the same Cyber Psycho piece and an ingot to make Infinity. It counts as both lines fully charged and upgrades all 8 perks.\nEvery set: fire and lava can't hurt you, no fall damage, built-in wings.",
+   "body": "Tier 1 is Astral or Cybernetic.\nTier 2: upgrade a fully charged tier 1 piece. Astral becomes Singularity, Cybernetic becomes Cyber Psycho.\nA tier 2 piece counts as fully charged tier 1. It keeps every tier 1 perk at full strength. Crystals then upgrade those perks.\nTier 3: combine a Singularity piece with the same Cyber Psycho piece and an ingot to make Infinity. It counts as both lines fully charged and upgrades all 9 perks.\nEvery set: fire and lava can't hurt you, no fall damage, built-in wings.",
    "visual": "recipe:tiers",
    "caption": "Smithing table: upgrade, then combine",
    "numbers": ""
@@ -212,7 +212,7 @@
    "body": "Wear a full set and put crystals {C} into it to unlock its perks one by one. Click a milestone to unlock it.\nThe counter tracks every crystal you have ever put in.\nMore charge also means a stronger glow.",
    "visual": "matrix",
    "caption": "Tier 1, tier 2 and Infinity milestones",
-   "numbers": "Numbers: tier 1 holds {n:crystals_t1} crystals (a perk every 2), tier 2 holds {n:crystals_t2} (every 4), Infinity holds {n:crystals_t3} (every 4). {n:crystals_total} for the whole journey."
+   "numbers": "Numbers: tier 1 holds {n:crystals_t1} crystals, tier 2 holds {n:crystals_t2}, Infinity holds {n:crystals_t3}; milestones are spread evenly along the bar. {n:crystals_total} for the whole journey."
   },
   {
    "id": "astral",
@@ -225,7 +225,7 @@
     "tier 1",
     "builder"
    ],
-   "body": "Forged from fallen starlight, it hums with the memory of deep space.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, items stack higher, and longer reach.",
+   "body": "Forged from fallen starlight, it hums with the memory of deep space.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, unlocks the sword's energy slashes, items stack higher, and longer reach.",
    "visual": "armor:0",
    "caption": "Full Astral set, fully charged",
    "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}. Reach +{n:reach_t1}."
@@ -257,7 +257,7 @@
     "tier 2",
     "upgrade"
    ],
-   "body": "Compressed to the point of collapse, it bends gravity around the wearer.\nUpgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: move slightly faster, with a longer Quantum Tunnel.\nBoots: no fall damage.\nHold jump to jump even higher.\nFull set, in unlock order: faster repair, gets blocks back more often, bigger stacks, more reach.",
+   "body": "Compressed to the point of collapse, it bends gravity around the wearer.\nUpgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: move slightly faster, with a longer Quantum Tunnel.\nBoots: no fall damage.\nHold jump to jump even higher.\nFull set, in unlock order: faster repair, gets blocks back more often, energy slashes, bigger stacks, more reach.",
    "visual": "armor:2",
    "caption": "Full Singularity set, fully charged",
    "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}. Reach +{n:reach_t2}."
@@ -290,10 +290,10 @@
     "tier 3",
     "upgrade"
    ],
-   "body": "No edge, no limit — it stretches as far as the wearer dares to go.\nUpgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\nTakes half the damage netherite would. Fire, lava and explosions can't hurt you.\nHelmet: the widest X-Ray.\nChestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\nLeggings: maximum running speed and the longest tunnel.\nBoots: no fall damage.\nHold jump to reach ridiculous heights.\nFull set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
+   "body": "No edge, no limit — it stretches as far as the wearer dares to go.\nUpgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 9 perks. Crystals upgrade them to Infinity strength.\nTakes half the damage netherite would. Fire, lava and explosions can't hurt you.\nHelmet: the widest X-Ray.\nChestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\nLeggings: maximum running speed and the longest tunnel.\nBoots: no fall damage.\nHold jump to reach ridiculous heights.\nFull set, in unlock order: repair, mining, blocks back, air jumps, energy slashes, slow, stacks, attack speed, reach, all at their best.",
    "visual": "armor:4",
    "caption": "Full Infinity set, fully charged",
-   "numbers": "Numbers: {n:dmg_t3} of netherite damage. X-Ray {n:xray_t3} blocks. Speed +{n:speed_inf}. Tunnel {n:tunnel_t3} blocks, every {n:tunnel_cd_t3}s. Jump up to {n:jump_inf} blocks. Mining +{n:mining_t3}. {n:airjumps_t3} air jumps. Attack +{n:attack_t3}. Repair every {n:repair_t3}s. Stacks 64 to {n:stack64_t3}, 16 to {n:stack16_t3}, 1 to {n:stack1_t3}. Slow {n:slow_t3} for {n:slowdur_t3}s, every {n:slowcd_t3}s. Block back {n:keep_t3}. Reach +{n:reach_t3}."
+   "numbers": "Numbers: {n:dmg_t3} of netherite damage. X-Ray {n:xray_t3} blocks. Speed +{n:speed_inf}. Tunnel {n:tunnel_t3} blocks, every {n:tunnel_cd_t3}s. Jump up to {n:jump_inf} blocks. Repair every {n:repair_t3}s. Mining +{n:mining_t3}. Block back {n:keep_t3}. {n:airjumps_t3} air jumps. Slow {n:slow_t3} for {n:slowdur_t3}s, every {n:slowcd_t3}s. Stacks 64 to {n:stack64_t3}, 16 to {n:stack16_t3}, 1 to {n:stack1_t3}. Attack +{n:attack_t3}. Reach +{n:reach_t3}."
   },
   {
    "id": "bread",

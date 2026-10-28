@@ -113,7 +113,7 @@ public final class SwordSlashClientHandler {
         if (player == null) return false;
         ItemStack held = player.getMainHandItem();
         if (!held.is(dev.justin.infinium.Infinium.SWORD) || dev.justin.infinium.InfiniumDurability.disabled(held)) return false;
-        if (!InfiniumSwordItem.isEnergyMode(held) || InfiniumArmorTier.getTier(player) < 1) return false;
+        if (!InfiniumSwordItem.isEnergyMode(held) || InfiniumArmorTier.getTier(player) < 1 || !dev.justin.infinium.CrystalCharge.saberUnlocked(player)) return false;
         long currentTick = player.level().getGameTime();
         int baseInterval = getBaseIntervalTicks(player);
         return CLIENT_LAST_SLASH_TICK == -1L || (currentTick - CLIENT_LAST_SLASH_TICK) >= baseInterval;
@@ -146,7 +146,7 @@ public final class SwordSlashClientHandler {
         if (mc.player == null) return false;
         cancelPendingSpin(); // Any new swing cancels pending twirl and stops active spin sound
         int tier = InfiniumArmorTier.getTier(mc.player);
-        if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held)) return false;
+        if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held) || !dev.justin.infinium.CrystalCharge.saberUnlocked(mc.player)) return false;
 
         long currentTick = mc.player.level().getGameTime();
         int baseInterval = getBaseIntervalTicks(mc.player);
@@ -185,7 +185,7 @@ public final class SwordSlashClientHandler {
         }
 
         int tier = InfiniumArmorTier.getTier(mc.player);
-        if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held)) {
+        if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held) || !dev.justin.infinium.CrystalCharge.saberUnlocked(mc.player)) {
             return null;
         }
 
@@ -295,7 +295,7 @@ public final class SwordSlashClientHandler {
      */
     public static void onStartAttackVanilla(LocalPlayer player, ItemStack held) {
         int tier = InfiniumArmorTier.getTier(player);
-        if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held)) return;
+        if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held) || !dev.justin.infinium.CrystalCharge.saberUnlocked(player)) return;
 
         long now = System.currentTimeMillis();
         long currentTick = player.level().getGameTime();

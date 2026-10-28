@@ -77,7 +77,7 @@ pg('tiers', 3, 'How Tiers Work', 'Tier 1, tier 2, Infinity', ['tier', 'upgrade',
    "Tier 1 is Astral or Cybernetic.\n"
    "Tier 2: upgrade a fully charged tier 1 piece. Astral becomes Singularity, Cybernetic becomes Cyber Psycho.\n"
    "A tier 2 piece counts as fully charged tier 1. It keeps every tier 1 perk at full strength. Crystals then upgrade those perks.\n"
-   "Tier 3: combine a Singularity piece with the same Cyber Psycho piece and an ingot to make Infinity. It counts as both lines fully charged and upgrades all 8 perks.\n"
+   "Tier 3: combine a Singularity piece with the same Cyber Psycho piece and an ingot to make Infinity. It counts as both lines fully charged and upgrades all 9 perks.\n"
    "Every set: fire and lava can't hurt you, no fall damage, built-in wings.",
    'recipe:tiers', 'Smithing table: upgrade, then combine')
 pg('matrix', 3, 'The Crystal Matrix', 'Charge your set', ['matrix', 'crystal', 'charge', 'perk', 'unlock'],
@@ -85,8 +85,8 @@ pg('matrix', 3, 'The Crystal Matrix', 'Charge your set', ['matrix', 'crystal', '
    "The counter tracks every crystal you have ever put in.\n"
    "More charge also means a stronger glow.",
    'matrix', 'Tier 1, tier 2 and Infinity milestones',
-   "Numbers: tier 1 holds {n:crystals_t1} crystals (a perk every 2), tier 2 holds {n:crystals_t2} (every 4), "
-   "Infinity holds {n:crystals_t3} (every 4). {n:crystals_total} for the whole journey.")
+   "Numbers: tier 1 holds {n:crystals_t1} crystals, tier 2 holds {n:crystals_t2}, Infinity holds {n:crystals_t3}; milestones are spread evenly along the bar. "
+   "{n:crystals_total} for the whole journey.")
 
 def armor(id, fam, title, sub, kw, body, caption, numbers):
     pg(id, 3, title, sub, kw, body, 'armor:%d' % fam, caption, numbers)
@@ -99,7 +99,7 @@ armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor
    "Leggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump higher.\n"
-   "Full set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, items stack higher, and longer reach.",
+   "Full set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, unlocks the sword's energy slashes, items stack higher, and longer reach.",
    'Full Astral set, fully charged',
    "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. "
    "Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. "
@@ -124,7 +124,7 @@ armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor'
    "Leggings: move slightly faster, with a longer Quantum Tunnel.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump even higher.\n"
-   "Full set, in unlock order: faster repair, gets blocks back more often, bigger stacks, more reach.",
+   "Full set, in unlock order: faster repair, gets blocks back more often, energy slashes, bigger stacks, more reach.",
    'Full Singularity set, fully charged',
    "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. "
    "Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. "
@@ -143,19 +143,19 @@ armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic a
    "{n:airjumps_t2} air jumps. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s. Attack +{n:attack_t2}.")
 armor('infinity', 4, 'Infinity Armor', 'Tier 3, upgrade both lines into one', ['infinity', 'armor', 'tier 3', 'upgrade'],
    "No edge, no limit — it stretches as far as the wearer dares to go.\n"
-   "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\n"
+   "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 9 perks. Crystals upgrade them to Infinity strength.\n"
    "Takes half the damage netherite would. Fire, lava and explosions can't hurt you.\n"
    "Helmet: the widest X-Ray.\n"
    "Chestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\n"
    "Leggings: maximum running speed and the longest tunnel.\n"
    "Boots: no fall damage.\n"
    "Hold jump to reach ridiculous heights.\n"
-   "Full set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
+   "Full set, in unlock order: repair, mining, blocks back, air jumps, energy slashes, slow, stacks, attack speed, reach, all at their best.",
    'Full Infinity set, fully charged',
    "Numbers: {n:dmg_t3} of netherite damage. X-Ray {n:xray_t3} blocks. Speed +{n:speed_inf}. Tunnel {n:tunnel_t3} blocks, every {n:tunnel_cd_t3}s. "
-   "Jump up to {n:jump_inf} blocks. Mining +{n:mining_t3}. {n:airjumps_t3} air jumps. Attack +{n:attack_t3}. Repair every {n:repair_t3}s. "
-   "Stacks 64 to {n:stack64_t3}, 16 to {n:stack16_t3}, 1 to {n:stack1_t3}. Slow {n:slow_t3} for {n:slowdur_t3}s, every {n:slowcd_t3}s. "
-   "Block back {n:keep_t3}. Reach +{n:reach_t3}.")
+   "Jump up to {n:jump_inf} blocks. Repair every {n:repair_t3}s. Mining +{n:mining_t3}. Block back {n:keep_t3}. {n:airjumps_t3} air jumps. "
+   "Slow {n:slow_t3} for {n:slowdur_t3}s, every {n:slowcd_t3}s. Stacks 64 to {n:stack64_t3}, 16 to {n:stack16_t3}, 1 to {n:stack1_t3}. "
+   "Attack +{n:attack_t3}. Reach +{n:reach_t3}.")
 armor('bread', 5, 'Bread Armor', 'A joke set', ['bread', 'joke', 'armor'],
    "Made of bread. Really.\n"
    "It protects about as well as leather and it never breaks.\n"

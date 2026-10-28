@@ -323,7 +323,7 @@ public final class CrystalScreen extends Screen {
 
         int invCrystals = countInventoryCrystals(minecraft.player);
         int cardsTopY = barY + barH + 12;
-        boolean twoRows = perks > 4; // 4 cards for Tier 1/2, 8 cards (2 rows of 4) for Infinity
+        boolean twoRows = perks > 4; // 4 cards in one row; 5 (Astral/Singularity) or 9 (Infinity) in two rows
         int cardH = twoRows ? 48 : 96;
 
         for (int i = 0; i < perks; i++) {
@@ -352,10 +352,11 @@ public final class CrystalScreen extends Screen {
                 cardX = barX + i * (cardW + gap);
                 cardY = cardsTopY;
             } else {
-                int row = i / 4;
-                int col = i % 4;
+                int cols = (perks + 1) / 2;   // two rows: 5 perks = 3+2, 9 perks = 5+4
+                int row = i / cols;
+                int col = i % cols;
                 int gap = 6;
-                cardW = (barW - gap * 3) / 4;
+                cardW = (barW - gap * (cols - 1)) / cols;
                 cardX = barX + col * (cardW + gap);
                 cardY = cardsTopY + row * (cardH + 6);
             }
@@ -548,10 +549,11 @@ public final class CrystalScreen extends Screen {
                         cardX = barX + i * (cardW + gap);
                         cardY = cardsTopY;
                     } else {
-                        int row = i / 4;
-                        int col = i % 4;
+                        int cols = (perks + 1) / 2;   // two rows: 5 perks = 3+2, 9 perks = 5+4
+                        int row = i / cols;
+                        int col = i % cols;
                         int gap = 6;
-                        cardW = (barW - gap * 3) / 4;
+                        cardW = (barW - gap * (cols - 1)) / cols;
                         cardX = barX + col * (cardW + gap);
                         cardY = cardsTopY + row * (cardH + 6);
                     }

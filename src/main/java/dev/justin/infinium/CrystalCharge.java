@@ -22,9 +22,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Crystal fill stored on each armor piece. Filled slots never empty.
- * Astral and Cybernetic: 8 slots, one perk every 2 crystals.
- * Singularity and Cyber Psycho: 16 slots, one perk every 4 crystals.
- * Infinity: 32 slots, one perk every 4 crystals (12.5% each).
+ * Astral and Cybernetic: 8 slots; Singularity and Cyber Psycho: 16; Infinity: 32.
+ * Milestones are spread evenly: ceil((i+1) * slots / perks) (Astral 2,4,5,7,8; Cybernetic 2,4,6,8;
+ * Singularity 4,7,10,13,16; Cyber Psycho 4,8,12,16; Infinity 4,8,11,15,18,22,25,29,32).
  * Sounds: infinium:crystal.<set>.{insert,perk,full,denied}. No removal sound (slots never empty).
  * A set perk turns on only when every worn piece of that set has reached that perk's mark.
  * Fire, lava, explosion, damage taken, and leggings speed are not gated here.
@@ -36,14 +36,16 @@ public final class CrystalCharge {
             .persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build();
 
     /** Crystal unlock order. Index 0 is the first perk. Not the piece defaults.
-     *  Locked 2026-10-28: Astral/Singularity repair, block saver, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack.
-     *  Infinity: still undecided (unchanged). */
+     *  Locked 2026-10-28: Astral/Singularity repair, block saver, saber, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack;
+     *  Infinity alternates the two: repair, mining, block saver, jump, saber, slow, stacks, attack, reach.
+     *  "saber" = the sword's energy slash/beam (no Perk enum entry, not toggleable). Only Astral actually gates it
+     *  (tier 2/3 perks are always active; Cybernetic has no saber milestone, so slashes stay free there). */
     public static final String[][] ORDER = {
-            {"regen", "noconsume", "stacks", "reach"},
+            {"regen", "noconsume", "saber", "stacks", "reach"},
             {"mining", "jump", "slow", "attack"},
-            {"regen", "noconsume", "stacks", "reach"},
+            {"regen", "noconsume", "saber", "stacks", "reach"},
             {"mining", "jump", "slow", "attack"},
-            {"jump", "slow", "mining", "noconsume", "regen", "stacks", "reach", "attack"}
+            {"regen", "mining", "noconsume", "jump", "saber", "slow", "stacks", "attack", "reach"}
     };
 
     public record Insert(int containerId, int slot, int targetCrystals) implements CustomPacketPayload {
@@ -249,6 +251,13 @@ public final class CrystalCharge {
     }
 
     /** True when this set perk is active (Tier 1 requires crystal milestone; Tier 2 and Infinity have previous-tier baseline active at 0 crystals). */
+    /** Saber milestone (energy slash/beam): gated on Astral only; every other set/tier has it from the start. */
+    public static boolean saberUnlocked(net.minecraft.world.entity.LivingEntity e) {
+        SetLook look = SetLook.of(e);
+        if (look != SetLook.ASTRAL) return true;
+        return setPerkUnlocked(e, look, "saber");
+    }
+
     public static boolean unlocked(Player player, Perk perk) {
         if (perk == null || !perk.isSet()) return true;
         int idx = orderIndex(perk.family, perk.kind);
