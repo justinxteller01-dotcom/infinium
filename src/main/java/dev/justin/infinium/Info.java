@@ -137,9 +137,9 @@ public final class Info {
                 default -> "Chestplate: Built-in Elytra (toggleable).";
             };
             case LEGS -> switch (fam) {
-                case 0 -> "Leggings: A bit faster running speed; Quantum Tunnel zips you " + (int) SpacetimeWarp.DISTANCE[0] + " blocks forward in mid-air (" + key("warp", "Quantum Tunnel", null) + ").";
+                case 0 -> "Leggings: Move slightly faster; Quantum Tunnel zips you " + (int) SpacetimeWarp.DISTANCE[0] + " blocks forward in mid-air (" + key("warp", "Quantum Tunnel", null) + ").";
                 case 1 -> "Leggings: Faster running speed (your view won't zoom), +10%.";
-                case 2 -> "Leggings: Faster running speed, +5%. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
+                case 2 -> "Leggings: Move slightly faster, +5%. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
                 case 3 -> "Leggings: Super fast running speed (your view won't zoom), +15%.";
                 case 4 -> "Leggings: The fastest running speed, +20%. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";

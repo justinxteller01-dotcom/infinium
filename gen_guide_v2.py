@@ -96,7 +96,7 @@ armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
    "Helmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\n"
    "Chestplate: built-in wings.\n"
-   "Leggings: a bit faster running speed. Quantum Tunnel zips you forward in mid-air.\n"
+   "Leggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump higher.\n"
    "Full set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
@@ -121,7 +121,7 @@ armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor'
    "Takes almost half the damage netherite would.\n"
    "Helmet: X-Ray reaches farther.\n"
    "Chestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\n"
-   "Leggings: faster running speed and a longer Quantum Tunnel.\n"
+   "Leggings: move slightly faster, with a longer Quantum Tunnel.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump even higher.\n"
    "Full set: faster repair, gets blocks back more often, more reach, bigger stacks.",

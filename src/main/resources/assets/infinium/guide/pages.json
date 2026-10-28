@@ -225,7 +225,7 @@
     "tier 1",
     "builder"
    ],
-   "body": "Forged from fallen starlight, it hums with the memory of deep space.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: a bit faster running speed. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
+   "body": "Forged from fallen starlight, it hums with the memory of deep space.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
    "visual": "armor:0",
    "caption": "Full Astral set, fully charged",
    "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Reach +{n:reach_t1}. Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}."
@@ -257,7 +257,7 @@
     "tier 2",
     "upgrade"
    ],
-   "body": "Compressed to the point of collapse, it bends gravity around the wearer.\nUpgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: faster running speed and a longer Quantum Tunnel.\nBoots: no fall damage.\nHold jump to jump even higher.\nFull set: faster repair, gets blocks back more often, more reach, bigger stacks.",
+   "body": "Compressed to the point of collapse, it bends gravity around the wearer.\nUpgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: move slightly faster, with a longer Quantum Tunnel.\nBoots: no fall damage.\nHold jump to jump even higher.\nFull set: faster repair, gets blocks back more often, more reach, bigger stacks.",
    "visual": "armor:2",
    "caption": "Full Singularity set, fully charged",
    "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Reach +{n:reach_t2}. Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}."
