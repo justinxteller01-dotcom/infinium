@@ -141,7 +141,7 @@ public final class Info {
                 case 1 -> "Leggings: Faster running speed (your view won't zoom), +10%.";
                 case 2 -> "Leggings: Move slightly faster, +5%. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
                 case 3 -> "Leggings: Super fast running speed (your view won't zoom), +15%.";
-                case 4 -> "Leggings: The fastest running speed, +20%. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
+                case 4 -> "Leggings: Maximum running speed, +20%. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";
             };
             default -> switch (fam) {

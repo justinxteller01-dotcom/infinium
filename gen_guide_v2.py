@@ -147,7 +147,7 @@ armor('infinity', 4, 'Infinity Armor', 'Tier 3, upgrade both lines into one', ['
    "Takes half the damage netherite would. Fire, lava and explosions can't hurt you.\n"
    "Helmet: the widest X-Ray.\n"
    "Chestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\n"
-   "Leggings: the fastest running speed and the longest tunnel.\n"
+   "Leggings: maximum running speed and the longest tunnel.\n"
    "Boots: no fall damage.\n"
    "Hold jump to reach ridiculous heights.\n"
    "Full set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
