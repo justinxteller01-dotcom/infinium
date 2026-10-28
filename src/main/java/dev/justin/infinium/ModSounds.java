@@ -47,6 +47,9 @@ public final class ModSounds {
     public static final String[] CRYSTAL_KINDS = {"insert", "perk", "full", "denied"};
     public static final int INSERT = 0, PERK = 1, FULL = 2, DENIED = 3;
     public static final Holder.Reference<SoundEvent>[][] CRYSTAL = new Holder.Reference[5][4];
+    /** batch1: per-set perk unlock/upgrade cue and one-time "set maxed" cue, [family 0..4]. Placeholders (vanilla events) in sounds.json. */
+    public static final Holder.Reference<SoundEvent>[] PERK_UNLOCK = new Holder.Reference[5];
+    public static final Holder.Reference<SoundEvent>[] SET_MAXED = new Holder.Reference[5];
     static Holder.Reference<SoundEvent> reg(String n) {
         Identifier id = Infinium.id(n);
         return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
@@ -54,6 +57,10 @@ public final class ModSounds {
     public static void register() {
         for (int f = 0; f < 5; f++) for (int e = 0; e < 4; e++) ARMOR[f][e] = reg(Perk.FAMILY_IDS[f] + "_" + EVENTS[e]);
         for (int f = 0; f < 5; f++) for (int k = 0; k < 4; k++) CRYSTAL[f][k] = reg("crystal." + Perk.FAMILY_IDS[f] + "." + CRYSTAL_KINDS[k]);
+        for (int f = 0; f < 5; f++) {
+            PERK_UNLOCK[f] = reg("perk_unlock_" + Perk.FAMILY_IDS[f]);
+            SET_MAXED[f] = reg("set_maxed_" + Perk.FAMILY_IDS[f]);
+        }
         TOOL_PICKUP = reg("tool_pickup"); TOOL_PLACE = reg("tool_place");
         TOOL_MODE = reg("tool_mode");
 

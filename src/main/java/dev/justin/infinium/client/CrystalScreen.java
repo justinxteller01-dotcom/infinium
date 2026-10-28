@@ -39,6 +39,12 @@ public final class CrystalScreen extends Screen {
     private final int containerId;
     private final int slotIndex;
     private float displayRatio = -1f;
+    /** batch1 insert redesign: one crystal per click, 150 ms anti-spam, small flash on the bar when a step lands. */
+    private static final long INSERT_COOLDOWN_MS = 150L;
+    private long lastInsertMs;
+    private int lastFilled = -1;
+    private long flashStartMs;
+    private Button insertButton;
 
     private int panelX;
     private int panelY;
@@ -111,8 +117,37 @@ public final class CrystalScreen extends Screen {
         super.init();
         panelX = (this.width - PANEL_W) / 2;
         panelY = (this.height - PANEL_H) / 2;
+        insertButton = addRenderableWidget(Button.builder(Component.translatable("gui.infinium.crystal.insert"), b -> insertOne())
+                .bounds(this.width / 2 - 116, panelY + PANEL_H - 24, 150, 18).build());
         addRenderableWidget(Button.builder(Component.literal("Done"), b -> onClose())
-                .bounds(this.width / 2 - 36, panelY + PANEL_H - 24, 72, 18).build());
+                .bounds(this.width / 2 + 42, panelY + PANEL_H - 24, 72, 18).build());
+        updateInsertButton();
+    }
+
+    /** Sends one crystal insert. Server checks the set level is still {@code filled} and takes exactly 1 crystal. */
+    private void insertOne() {
+        if (minecraft == null || minecraft.player == null) return;
+        long now = System.currentTimeMillis();
+        if (now - lastInsertMs < INSERT_COOLDOWN_MS) return;
+        int cap = currentCap(), filled = currentFilled();
+        if (cap <= 0 || filled >= cap || countInventoryCrystals(minecraft.player) <= 0) return;
+        lastInsertMs = now;
+        if (ClientPlayNetworking.canSend(CrystalCharge.Insert.TYPE)) {
+            ClientPlayNetworking.send(new CrystalCharge.Insert(containerId, slotIndex, filled + 1));
+        }
+    }
+
+    /** Button label/state: "Insert Crystal (N left)", or disabled with "No crystals" / "Fully powered". */
+    private void updateInsertButton() {
+        if (insertButton == null || minecraft == null || minecraft.player == null) return;
+        int cap = currentCap(), filled = currentFilled();
+        int have = countInventoryCrystals(minecraft.player);
+        boolean full = cap > 0 && filled >= cap;
+        insertButton.active = cap > 0 && !full && have > 0
+                && System.currentTimeMillis() - lastInsertMs >= INSERT_COOLDOWN_MS;
+        insertButton.setMessage(full ? Component.translatable("gui.infinium.crystal.full")
+                : have <= 0 ? Component.translatable("gui.infinium.crystal.none")
+                : Component.translatable("gui.infinium.crystal.insert_count", have));
     }
 
     /** M4 (bug 5): the matrix is only reachable with a full set on; close if the set is broken while open. */
@@ -164,6 +199,9 @@ public final class CrystalScreen extends Screen {
         }
 
         int filled = currentFilled();
+        if (lastFilled >= 0 && filled > lastFilled) flashStartMs = System.currentTimeMillis();
+        lastFilled = filled;
+        updateInsertButton();
         float targetRatio = Math.min(1f, Math.max(0f, filled / (float) cap));
         if (displayRatio < 0f) displayRatio = targetRatio;
         else displayRatio += (targetRatio - displayRatio) * 0.18f;
@@ -263,6 +301,13 @@ public final class CrystalScreen extends Screen {
                     g.fill(px, py, px + pw, py + 2, 0xDDE8B8FF);
                 }
             }
+            // Insert flash: brief bright pulse over the newest step (fades over 350 ms)
+            long fl = ms - flashStartMs;
+            if (fl >= 0 && fl < 350 && filled > 0) {
+                int a = (int) (200 * (1f - fl / 350f));
+                int sx = barX + (filled - 1) * barW / cap;
+                g.fill(sx, barY, Math.min(barX + fw, barX + filled * barW / cap), barY + barH, (a << 24) | 0xFFFFFF);
+            }
             // Leading edge energy flare
             if (fw < barW) {
                 g.fill(Math.max(barX, barX + fw - 2), barY - 1, barX + fw + 1, barY + barH + 1, 0xFFFFD8FF);
@@ -287,8 +332,7 @@ public final class CrystalScreen extends Screen {
             Perk perkI = Perk.set(fam, order[i]);
             boolean lit = unlocked && ClientPerks.enabled(perkI);   // M5: same state as the settings menu
             int needed = req - filled;
-            boolean canAfford = !unlocked && (invCrystals >= needed);
-            int perksGained = unlocked ? 0 : Math.max(1, unlockedCount(req, cap, perks) - unlockedCount(filled, cap, perks));
+            boolean canAfford = !unlocked && needed == 1 && invCrystals >= 1;   // highlight: the next crystal reaches this perk
             int markX = barX + (i + 1) * barW / perks;
 
             // Milestone activation line on the energy bar
@@ -332,7 +376,7 @@ public final class CrystalScreen extends Screen {
 
             String badge = String.valueOf(req);
             boolean up = fam >= 2;   // tier 2/3: perks are already active, crystals upgrade them (tier 1 keeps "unlock")
-            String status = unlocked ? (up ? "UPGRADED" : "UNLOCKED") : (canAfford ? (perksGained > 1 ? ("READY (+" + perksGained + ")") : "READY") : ("NEED " + needed));
+            String status = unlocked ? (up ? "UPGRADED" : "UNLOCKED") : (canAfford ? "NEXT" : ("NEED " + needed));
             int statusCol = unlocked ? 0xFFFF7CD3 : (canAfford ? 0xFFFF00AA : 0xFF8E729E);
 
             float bScale = 0.72f;
@@ -349,26 +393,13 @@ public final class CrystalScreen extends Screen {
             int btnX = cardX + 3;
             int btnW = cardW - 6;
 
-            if (canAfford) {
-                boolean btnHover = mouseX >= btnX && mouseX < btnX + btnW && mouseY >= btnY && mouseY < btnY + btnH;
-                int bBorder = btnHover || hovered ? 0xFFFFFFFF : 0xFFFF00AA;
-                int bBg = btnHover ? 0xFF5A1C72 : 0xFF351046;
-                g.fill(btnX, btnY, btnX + btnW, btnY + btnH, bBorder);
-                g.fill(btnX + 1, btnY + 1, btnX + btnW - 1, btnY + btnH - 1, bBg);
-
-                String verb = up ? "UPGRADE" : "UNLOCK";
-                String bLabel = (perksGained > 1) ? (verb + " " + perksGained + " PERKS (-" + needed + ")") : (verb + " PERK (-" + needed + ")");
-                int bCol = (btnHover || hovered) ? 0xFFFFFFFF : 0xFFFFB8E7;
-                float bLabelScale = twoRows ? 0.58f : 0.68f;
-                int blw = (int) (this.font.width(bLabel) * bLabelScale);
-                drawScaledText(g, bLabel, btnX + (btnW - blw) / 2, btnY + (twoRows ? 2 : 3), bLabelScale, bCol);
-            } else if (unlocked) {
+            if (unlocked) {
                 String aLabel = lit ? "ON · CLICK = LIGHTS OFF" : "LIGHTS OFF · CLICK = ON";
                 float aScale = twoRows ? 0.50f : 0.56f;
                 int aw = (int) (this.font.width(aLabel) * aScale);
                 drawScaledText(g, aLabel, btnX + (btnW - aw) / 2, btnY + (twoRows ? 2 : 3), aScale, lit ? 0xFFFF7CD3 : 0xFF8A7A96);
             } else {
-                String nLabel = "Need " + needed + " (Have " + invCrystals + ")";
+                String nLabel = (up ? "Upgrades at " : "Unlocks at ") + req + " crystals";
                 float nScale = twoRows ? 0.56f : 0.64f;
                 int nw = (int) (this.font.width(nLabel) * nScale);
                 drawScaledText(g, nLabel, btnX + (btnW - nw) / 2, btnY + (twoRows ? 2 : 3), nScale, 0xFF8A6E96);
@@ -394,9 +425,8 @@ public final class CrystalScreen extends Screen {
                 hoveredTooltipStatus = unlocked ? (lit ? (up ? "Status: Upgraded & On. Click to turn the lights off (also in Infinium Perk Settings)."
                                 : "Status: Unlocked & On. Click to turn the lights off (also in Infinium Perk Settings).")
                         : (up ? "Status: Upgraded, lights off. Click to turn it back on." : "Status: Unlocked, lights off. Click to turn it back on."))
-                        : (canAfford ? (up ? ("Status: Ready to Upgrade! Click to spend " + needed + " Crystals and upgrade " + (perksGained > 1 ? (perksGained + " perks!") : "this perk."))
-                                : ("Status: Ready to Unlock! Click to spend " + needed + " Crystals and unlock " + (perksGained > 1 ? (perksGained + " perks!") : "this perk.")))
-                        : ("Status: Locked — Requires " + needed + " more Crystals (You have " + invCrystals + " in inventory)"));
+                        : ("Status: " + needed + " more crystal" + (needed == 1 ? "" : "s") + " to " + (up ? "upgrade" : "unlock")
+                            + ". Use Insert Crystal below (you have " + invCrystals + ").");
             }
         }
 
@@ -504,7 +534,6 @@ public final class CrystalScreen extends Screen {
             int cap = currentCap();
             int filled = currentFilled();
             if (fam >= 0 && cap > 0 && minecraft != null && minecraft.player != null) {
-                int invCrystals = countInventoryCrystals(minecraft.player);
                 String[] order = CrystalCharge.ORDER[fam];
                 int perks = order.length;
                 boolean twoRows = perks > 4;
@@ -543,16 +572,7 @@ public final class CrystalScreen extends Screen {
                             }
                             return true;
                         }
-                        int needed = req - filled;
-                        if (invCrystals >= needed) {
-                            if (ClientPlayNetworking.canSend(CrystalCharge.Insert.TYPE)) {
-                                ClientPlayNetworking.send(new CrystalCharge.Insert(containerId, slotIndex, req));
-                            }
-                            return true;
-                        } else {
-                            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 0.6F));
-                            return true;
-                        }
+                        return true;   // locked card: info only (crystals go in through the Insert Crystal button)
                     }
                 }
             }

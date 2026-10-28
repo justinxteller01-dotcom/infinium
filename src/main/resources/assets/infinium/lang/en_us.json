@@ -165,5 +165,19 @@
   "gui.infinium.settings.open_controls": "Open Controls (key binds)",
   "subtitles.infinium.cyberpsycho_thrust_start": "Cyber Psycho thrust powers up",
   "subtitles.infinium.cyberpsycho_thrust_loop": "Cyber Psycho thrust hums",
-  "subtitles.infinium.cyberpsycho_thrust_stop": "Cyber Psycho thrust powers down"
-}
+  "subtitles.infinium.cyberpsycho_thrust_stop": "Cyber Psycho thrust powers down",
+  "subtitles.infinium.perk_unlock_astral": "Perk unlocked",
+  "subtitles.infinium.perk_unlock_cybernetic": "Perk unlocked",
+  "subtitles.infinium.perk_unlock_singularity": "Perk upgraded",
+  "subtitles.infinium.perk_unlock_cyberpsycho": "Perk upgraded",
+  "subtitles.infinium.perk_unlock_infinity": "Perk upgraded",
+  "subtitles.infinium.set_maxed_astral": "Armor fully powered",
+  "subtitles.infinium.set_maxed_cybernetic": "Armor fully powered",
+  "subtitles.infinium.set_maxed_singularity": "Armor fully powered",
+  "subtitles.infinium.set_maxed_cyberpsycho": "Armor fully powered",
+  "subtitles.infinium.set_maxed_infinity": "Armor fully powered",
+  "gui.infinium.crystal.insert": "Insert Crystal",
+  "gui.infinium.crystal.insert_count": "Insert Crystal (%s left)",
+  "gui.infinium.crystal.none": "No crystals",
+  "gui.infinium.crystal.full": "Fully powered"
+}

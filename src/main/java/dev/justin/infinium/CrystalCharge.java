@@ -332,56 +332,51 @@ public final class CrystalCharge {
         return remaining == 0;
     }
 
+    /**
+     * One crystal per click (batch1 insert redesign). {@code payload.targetCrystals()} is the set level the client
+     * expects AFTER this crystal (= current + 1); a stale/duplicate click (target != current + 1) is ignored silently,
+     * so a double click can never skip ahead or spend two. Perks unlock/upgrade when the total crosses their mark
+     * (same marks as before: crystalsRequired), so saved FILLED counts keep their meaning.
+     */
     public static void insert(ServerPlayer player, Insert payload) {
         AbstractContainerMenu menu = player.containerMenu;
         SetLook look = SetLook.of(player);
-        if (look == null) { deny(player, 0); return; }   // M4: full matching set only; solo-chestplate infusion removed
+        if (look == null) { deny(player, 0); return; }   // M4: full matching set only
         int fam = look.ordinal();
         int cap = setSlots(look);
         int before = setFilled(player, look);   // set level = lowest piece
+        if (before >= cap) { deny(player, fam); return; }
+        if (payload.targetCrystals() != before + 1) return;   // stale or duplicate click: ignore quietly
+        if (!consumeCrystals(player, menu, 1)) { deny(player, fam); return; }
 
-        int targetCrystals = payload.targetCrystals();
-        if (targetCrystals <= before || targetCrystals > cap) { deny(player, fam); return; }
-
-        // Must match a valid perk milestone for this family
-        int perks = ORDER[fam].length;
-        boolean validMilestone = false;
-        for (int i = 0; i < perks; i++) {
-            if (crystalsRequired(fam, i) == targetCrystals) {
-                validMilestone = true;
-                break;
-            }
-        }
-        if (!validMilestone) { deny(player, fam); return; }
-
-        int needed = targetCrystals - before;
-        if (!consumeCrystals(player, menu, needed)) { deny(player, fam); return; }
-
-        int after = targetCrystals;
-        // M4: one insert goes into all 4 pieces. Each piece keeps its own count and is only ever raised (never lowered),
-        // so swapping a fresh piece in lowers the set level (min) and putting the old one back restores it.
-        // Cost = target - lowest, paid once: a fresh piece must be paid up to the target, so no free upgrades.
-        // Higher-tier pieces in a lower-tier set already count as full for it and are left untouched.
+        int after = before + 1;
+        // M4: one insert goes into all 4 pieces; each piece is only ever raised. A fresh piece swapped in lowers the
+        // set level (min), so it is paid up one crystal at a time like the rest. Higher-tier pieces are left untouched.
         for (EquipmentSlot sl : Infinium.ARMOR_SLOTS) {
             ItemStack piece = player.getItemBySlot(sl);
             if (Perk.family(piece) == fam && filled(piece) < after) piece.set(FILLED, after);
         }
 
+        int perks = ORDER[fam].length;
+        boolean crossed = unlockedCount(after, cap, perks) > unlockedCount(before, cap, perks);
         boolean done = after >= cap;
-        int u0 = unlockedCount(before, cap, perks);
-        int u1 = unlockedCount(after, cap, perks);
-        var sound = ModSounds.crystal(fam, done ? ModSounds.FULL : ModSounds.PERK);
         float progress = (float) after / Math.max(1, cap);
-        float pitch = done ? 1.0F : (0.92F + 0.22F * progress);
-        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), sound.value(), SoundSource.PLAYERS, 0.90F, pitch);
-        if (done) {
-            switch (look) {
-                case ASTRAL -> InfiniumAdvancements.award(player, "astral_max_charge");
-                case CYBERNETIC -> InfiniumAdvancements.award(player, "cybernetic_max_charge");
-                case SINGULARITY -> InfiniumAdvancements.award(player, "singularity_max_charge");
-                case CYBERPSYCHO -> InfiniumAdvancements.award(player, "cyberpsycho_max_charge");
-                case INFINITY -> InfiniumAdvancements.award(player, "infinity_max_charge");
-            }
+        double x = player.getX(), y = player.getY(), z = player.getZ();
+        // Per-click insert sound (placeholder: existing crystal insert event; audio overhaul later). Pitch climbs with the bar.
+        player.level().playSound(null, x, y, z, ModSounds.crystal(fam, ModSounds.INSERT).value(), SoundSource.PLAYERS, 0.85F, 0.9F + 0.3F * progress);
+        boolean firstMax = done && InfiniumAdvancements.award(player, switch (look) {
+            case ASTRAL -> "astral_max_charge";
+            case CYBERNETIC -> "cybernetic_max_charge";
+            case SINGULARITY -> "singularity_max_charge";
+            case CYBERPSYCHO -> "cyberpsycho_max_charge";
+            case INFINITY -> "infinity_max_charge";
+        });
+        if (firstMax) {
+            // Grand cue, once per player per set (gated by the max-charge advancement, so never again on relog/re-max).
+            player.level().playSound(null, x, y, z, ModSounds.SET_MAXED[fam].value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            player.level().playSound(null, x, y, z, ModSounds.crystal(fam, ModSounds.FULL).value(), SoundSource.PLAYERS, 0.8F, 1.0F);
+        } else if (crossed) {
+            player.level().playSound(null, x, y, z, ModSounds.PERK_UNLOCK[fam].value(), SoundSource.PLAYERS, 0.95F, 1.0F);
         }
         SetBonuses.markDirty(player);
         player.getInventory().setChanged();

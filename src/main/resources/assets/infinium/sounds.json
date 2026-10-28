@@ -277,5 +277,105 @@
       }
     ],
     "subtitle": "subtitles.infinium.cyberpsycho_thrust_stop"
+  },
+  "perk_unlock_astral": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.resonate",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.infinium.perk_unlock_astral"
+  },
+  "perk_unlock_cybernetic": {
+    "sounds": [
+      {
+        "name": "minecraft:block.respawn_anchor.charge",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.infinium.perk_unlock_cybernetic"
+  },
+  "perk_unlock_singularity": {
+    "sounds": [
+      {
+        "name": "minecraft:block.conduit.activate",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.infinium.perk_unlock_singularity"
+  },
+  "perk_unlock_cyberpsycho": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.power_select",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.infinium.perk_unlock_cyberpsycho"
+  },
+  "perk_unlock_infinity": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.infinium.perk_unlock_infinity"
+  },
+  "set_maxed_astral": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.toast.challenge_complete",
+        "type": "event",
+        "pitch": 1.1
+      }
+    ],
+    "subtitle": "subtitles.infinium.set_maxed_astral"
+  },
+  "set_maxed_cybernetic": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.toast.challenge_complete",
+        "type": "event",
+        "pitch": 1.35
+      }
+    ],
+    "subtitle": "subtitles.infinium.set_maxed_cybernetic"
+  },
+  "set_maxed_singularity": {
+    "sounds": [
+      {
+        "name": "minecraft:block.end_portal.spawn",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.infinium.set_maxed_singularity"
+  },
+  "set_maxed_cyberpsycho": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.infinium.set_maxed_cyberpsycho"
+  },
+  "set_maxed_infinity": {
+    "sounds": [
+      {
+        "name": "minecraft:block.end_portal.spawn",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.infinium.set_maxed_infinity"
   }
-}
+}
