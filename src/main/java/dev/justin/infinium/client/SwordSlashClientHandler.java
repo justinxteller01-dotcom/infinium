@@ -129,7 +129,7 @@ public final class SwordSlashClientHandler {
         if (style != null) {
             return switch (style) {
                 case ASTRAL -> 0xBD45FF;
-                case CYBERNETIC -> 0x23FFFF;
+                case CYBERNETIC -> 0xFF23B6;
                 case SINGULARITY -> 0x8820C8;
                 case CYBERPSYCHO -> 0xFF3898;
             };

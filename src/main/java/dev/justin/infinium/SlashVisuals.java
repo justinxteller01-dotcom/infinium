@@ -56,15 +56,15 @@ public final class SlashVisuals {
 
     //                                   accent    mix  core width alpha glow tail halo flick spd  glitch warp  pChance sec   primary                         secondary                    speed
     /** weaker, glitchy, flickery electric crescent. */
-    public static final Profile CYBERNETIC  = new Profile(0x3FE8FF, 0.45F, 150, 0.70F, 0.75F, 0.80F, 0.70F, 0, 0.55F, 0.90F, 0.18F, 0.00F, 0.14F, 0.35F, ParticleTypes.ELECTRIC_SPARK, ParticleTypes.WAX_OFF,      0.04F);
+    public static final Profile CYBERNETIC  = new Profile(0xFF3FBF, 0.45F, 150, 0.70F, 0.75F, 0.80F, 0.70F, 0, 0.55F, 0.90F, 0.18F, 0.00F, 0.14F, 0.35F, ParticleTypes.ELECTRIC_SPARK, ParticleTypes.WAX_OFF,      0.04F);
     /** brighter, thicker, fiery laser energy. */
-    public static final Profile CYBERPSYCHO = new Profile(0xFF3A1E, 0.50F, 170, 1.10F, 1.00F, 1.30F, 1.20F, 1, 0.10F, 0.60F, 0.00F, 0.00F, 0.30F, 0.45F, ParticleTypes.FLAME,          ParticleTypes.ELECTRIC_SPARK, 0.07F);
+    public static final Profile CYBERPSYCHO = new Profile(0xFF1EB4, 0.50F, 170, 1.10F, 1.00F, 1.30F, 1.20F, 1, 0.10F, 0.60F, 0.00F, 0.00F, 0.30F, 0.45F, ParticleTypes.FLAME,          ParticleTypes.ELECTRIC_SPARK, 0.07F);
     /** dark, magical, starry purple energy. */
     public static final Profile ASTRAL      = new Profile(0x7A3CFF, 0.55F, 110, 0.95F, 0.90F, 1.25F, 1.10F, 1, 0.12F, 0.12F, 0.00F, 0.05F, 0.22F, 0.40F, ParticleTypes.END_ROD,        ParticleTypes.REVERSE_PORTAL, 0.02F);
     /** darker, denser, strong gravity warp (particles pulled inward). */
     public static final Profile SINGULARITY = new Profile(0x3A0F7A, 0.65F,  80, 1.15F, 1.00F, 1.50F, 1.30F, 2, 0.08F, 0.08F, 0.00F, 0.22F, 0.32F, 0.55F, ParticleTypes.REVERSE_PORTAL, ParticleTypes.SQUID_INK,      -0.05F);
     /** most epic: widest, layered halos, starry + fiery sparks, slow warp breathing. */
-    public static final Profile INFINITY    = new Profile(0xFFE6A0, 0.35F, 200, 1.40F, 1.00F, 1.80F, 1.50F, 3, 0.06F, 0.20F, 0.00F, 0.10F, 0.45F, 0.60F, ParticleTypes.END_ROD,        ParticleTypes.FLAME,         0.05F);
+    public static final Profile INFINITY    = new Profile(0xFFA0DF, 0.35F, 200, 1.40F, 1.00F, 1.80F, 1.50F, 3, 0.06F, 0.20F, 0.00F, 0.10F, 0.45F, 0.60F, ParticleTypes.END_ROD,        ParticleTypes.FLAME,         0.05F);
 
     public static Profile of(SetLook look) {
         if (look == null) return null;

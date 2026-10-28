@@ -196,7 +196,7 @@ public final class SpacetimeWarp {
 
     private static void spawnWarpParticles(ServerLevel level, Vec3 from, Vec3 to, int fam) {
         // Departure burst
-        int color = (fam == 4) ? 0xFFD700 : (fam == 2 ? 0x8A2BE2 : 0x00E5FF);
+        int color = (fam == 4) ? 0xFF00AA : (fam == 2 ? 0x8A2BE2 : 0xFF00AA);
         DustParticleOptions dust = new DustParticleOptions(color, 1.2F);
         level.sendParticles(dust, from.x, from.y + 0.9, from.z, 20, 0.35, 0.5, 0.35, 0.05);
         level.sendParticles(ParticleTypes.PORTAL, from.x, from.y + 0.9, from.z, 15, 0.25, 0.4, 0.25, 0.3);
@@ -216,7 +216,7 @@ public final class SpacetimeWarp {
     }
 
     private static void spawnArrivalParticles(ServerLevel level, Vec3 pos, int fam) {
-        int color = (fam == 4) ? 0xFFD700 : (fam == 2 ? 0xD24CFF : 0x00FFFF);
+        int color = (fam == 4) ? 0xFF00AA : (fam == 2 ? 0xD24CFF : 0xFF00AA);
         DustParticleOptions dust = new DustParticleOptions(color, 1.3F);
         level.sendParticles(dust, pos.x, pos.y + 0.9, pos.z, 25, 0.4, 0.6, 0.4, 0.06);
         level.sendParticles(ParticleTypes.END_ROD, pos.x, pos.y + 0.9, pos.z, 10, 0.3, 0.5, 0.3, 0.04);

@@ -42,7 +42,7 @@ public final class HelmetVisionHud {
 
         if (fbActive) {
             String fbText = "✦ Full Bright";
-            int fbColor = 0xFFFFD700; // Bright gold
+            int fbColor = 0xFFFF00AA; // bright pink (palette rule; was gold)
             int tw = font.width(fbText);
             int pillWidth = tw + 8;
 

@@ -23,6 +23,6 @@ public abstract class AnvilScreenMixin extends ItemCombinerScreen<AnvilMenu> {
         Component c = Component.translatable("container.infinium.rename_free");
         int x = this.imageWidth - 8 - this.font.width(c) - 2;
         g.fill(x - 2, 67, this.imageWidth - 8, 79, 0x4F000000);
-        g.text(this.font, c, x, 69, 0xFF80FF20, true);
+        g.text(this.font, c, x, 69, 0xFFFF20B5, true);
     }
 }

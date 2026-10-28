@@ -27,9 +27,9 @@ public class InfiniumSettingsScreen extends OptionsSubScreen {
     private CycleButton<Boolean> gesture;
 
     public enum ParticleMode {
-        ON("On", ChatFormatting.GREEN, "Visible in both third and first person."),
-        THIRD_PERSON_ONLY("3rd Person Only", ChatFormatting.YELLOW, "Visible in third person only."),
-        OFF("Off", ChatFormatting.RED, "Disabled completely.");
+        ON("On", ChatFormatting.LIGHT_PURPLE, "Visible in both third and first person."),
+        THIRD_PERSON_ONLY("3rd Person Only", ChatFormatting.LIGHT_PURPLE, "Visible in third person only."),
+        OFF("Off", ChatFormatting.DARK_GRAY, "Disabled completely.");
 
         public final String label;
         public final ChatFormatting format;
@@ -94,7 +94,7 @@ public class InfiniumSettingsScreen extends OptionsSubScreen {
         // Top navigation: Perk settings & prominent Reset to defaults
         list.addSmall(
             Button.builder(Component.literal("< Perk Settings"), b -> minecraft.gui.setScreen(new InfiniumPerksScreen(lastScreen))).build(),
-            Button.builder(Component.literal("Reset to Defaults").withStyle(ChatFormatting.RED), b -> {
+            Button.builder(Component.literal("Reset to Defaults").withStyle(ChatFormatting.DARK_PURPLE), b -> {
                 InfiniumClientConfig.defaults();
                 InfiniumClientConfig.save();
                 InfiniumClientConfig.sendSwordTheme();
@@ -204,7 +204,7 @@ public class InfiniumSettingsScreen extends OptionsSubScreen {
         // ---- Controls ----
         list.addHeader(Component.translatable("gui.infinium.settings.controls").withStyle(ChatFormatting.LIGHT_PURPLE));
         list.addBig(new StringWidget(Component.literal("Wings toggle: Shift + Right Click on air (default)."), font));
-        keyButton = Button.builder(keyLabel(), b -> { listening = true; b.setMessage(Component.literal("> press a key <").withStyle(ChatFormatting.YELLOW)); }).build();
+        keyButton = Button.builder(keyLabel(), b -> { listening = true; b.setMessage(Component.literal("> press a key <").withStyle(ChatFormatting.LIGHT_PURPLE)); }).build();
         keyButton.setTooltip(Tooltip.create(Component.literal("Click, then press a key. Escape cancels, Backspace/Delete unbinds.")));
         boolean unbound = InfiniumKeys.TOGGLE_WINGS == null || InfiniumKeys.TOGGLE_WINGS.isUnbound();
         gesture = CycleButton.onOffBuilder(InfiniumClientConfig.wingsGesture())

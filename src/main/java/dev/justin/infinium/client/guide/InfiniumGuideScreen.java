@@ -254,7 +254,7 @@ public class InfiniumGuideScreen extends Screen {
             boolean isAdd = "additional_info".equals(sp.art);
             String title = isAdd ? "Additional Information" : sp.title;
             String pgNum = isAdd ? (i + 1) + "–" + spreads.size() : String.valueOf(i + 1);
-            int accent = isAdd ? 0xFFFFD700 : titleColor(sp.art);
+            int accent = isAdd ? 0xFFFF00AA : titleColor(sp.art);
 
             boolean rightCol = rowIdx >= leftCap;
             int colRow = rightCol ? (rowIdx - leftCap) : rowIdx;
@@ -265,7 +265,7 @@ public class InfiniumGuideScreen extends Screen {
             boolean hover = localMx >= rx && localMx < rx + rw && localMy >= ry && localMy < ry + rh;
 
             int bg = hover ? 0xFF3A1848 : 0xFF160820;
-            int border = hover ? 0xFFD864FF : (isAdd ? 0xFF8A6020 : 0xFF5A246E);
+            int border = hover ? 0xFFD864FF : (isAdd ? 0xFF8A2067 : 0xFF5A246E);
             g.fill(rx, ry, rx + rw, ry + rh, border);
             g.fill(rx + 1, ry + 1, rx + rw - 1, ry + rh - 1, bg);
 
@@ -430,7 +430,7 @@ public class InfiniumGuideScreen extends Screen {
         pose.pushMatrix();
         pose.translate(x + 20, y + 9);
         pose.scale(0.68f, 0.68f);
-        graphics.text(this.font, "80 / 80 Crystals (MAX)", 0, 0, 0xFFFFD700, false);
+        graphics.text(this.font, "80 / 80 Crystals (MAX)", 0, 0, 0xFFFF00AA, false);
         pose.popMatrix();
 
         // Mini Spacetime Energy Bar underneath
@@ -452,15 +452,15 @@ public class InfiniumGuideScreen extends Screen {
         int startY = y + 27;
         drawMilestoneCard(graphics, x, startY, 124, 25,
                 "Tier 1: Astral & Cybernetic", 0xFFC45AD4,
-                "8 Crystals Max • 4 Perks (2/perk)", 8, 4, 0xFF00E5FF, ms);
+                "8 Crystals Max • 4 Perks (2/perk)", 8, 4, 0xFFFF00AA, ms);
 
         drawMilestoneCard(graphics, x, startY + 28, 124, 25,
                 "Tier 2: Singularity & Cyber Psycho", 0xFFA14AD0,
                 "16 Crystals Max • 4 Perks (4/perk)", 16, 4, 0xFFA14AD0, ms);
 
         drawMilestoneCard(graphics, x, startY + 56, 124, 26,
-                "Tier 3: Infinity Armor", 0xFFFFD700,
-                "32 Crystals Max • 8 Perks (4/perk)", 32, 8, 0xFFFFD700, ms);
+                "Tier 3: Infinity Armor", 0xFFFF00AA,
+                "32 Crystals Max • 8 Perks (4/perk)", 32, 8, 0xFFFF00AA, ms);
 
         // 3. Footer Summary Box
         int footY = startY + 85;
@@ -470,7 +470,7 @@ public class InfiniumGuideScreen extends Screen {
         pose.pushMatrix();
         pose.translate(x + 5, footY + 4);
         pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "✦ Matrix Sockets: 80 Crystals Total", 0, 0, 0xFFFFAA44, false);
+        graphics.text(this.font, "✦ Matrix Sockets: 80 Crystals Total", 0, 0, 0xFFFF44C1, false);
         pose.popMatrix();
 
         pose.pushMatrix();
@@ -482,7 +482,7 @@ public class InfiniumGuideScreen extends Screen {
         pose.pushMatrix();
         pose.translate(x + 5, footY + 20);
         pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "✦ The Golden Total: 100 Crystals", 0, 0, 0xFF55FFFF, false);
+        graphics.text(this.font, "✦ The Golden Total: 100 Crystals", 0, 0, 0xFFFF55C6, false);
         pose.popMatrix();
     }
 
@@ -529,7 +529,7 @@ public class InfiniumGuideScreen extends Screen {
 
         // 1. Animated Night Sky Celestial Event Window (124 x 56)
         int skyW = 124, skyH = 56;
-        graphics.fill(x, y, x + skyW, y + skyH, 0xFF8A3A10);
+        graphics.fill(x, y, x + skyW, y + skyH, 0xFF8A1061);
         graphics.fill(x + 1, y + 1, x + skyW - 1, y + skyH - 1, 0xFF06030A);
 
         // Twinkling stars
@@ -550,10 +550,10 @@ public class InfiniumGuideScreen extends Screen {
                 for (int t = 1; t <= 5; t++) {
                     float tx = mx + t * 3.5f;
                     float ty = my - t * 1.5f;
-                    int tailCol = t > 3 ? 0x66FF3300 : 0xAAFFAA00;
+                    int tailCol = t > 3 ? 0x66FF00AA : 0xAAFF00AA;
                     graphics.fill((int) tx, (int) ty, (int) tx + 2, (int) ty + 2, tailCol);
                 }
-                graphics.fill((int) mx, (int) my, (int) mx + 3, (int) my + 3, 0xFFFFFFAA);
+                graphics.fill((int) mx, (int) my, (int) mx + 3, (int) my + 3, 0xFFFFAAE3);
             }
         }
 
@@ -566,8 +566,8 @@ public class InfiniumGuideScreen extends Screen {
         int craterX = x + 38;
         int ringPhase = (int) ((ms / 50L) % 24);
         int ringAlpha = Math.max(0, 160 - ringPhase * 6);
-        graphics.fill(craterX - ringPhase, groundY - ringPhase / 3, craterX + ringPhase, groundY + ringPhase / 3, (ringAlpha << 24) | 0xFF9900);
-        graphics.fill(craterX - 3, groundY - 1, craterX + 3, groundY + 2, 0xFFFFCC00);
+        graphics.fill(craterX - ringPhase, groundY - ringPhase / 3, craterX + ringPhase, groundY + ringPhase / 3, (ringAlpha << 24) | 0xFF00AA);
+        graphics.fill(craterX - 3, groundY - 1, craterX + 3, groundY + 2, 0xFFFF00AA);
 
         // Floating fragment item above impact
         if (Infinium.STRANGE_FRAGMENTS != null) {
@@ -581,18 +581,18 @@ public class InfiniumGuideScreen extends Screen {
         pose.pushMatrix();
         pose.translate(x + 4, y + 4);
         pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "CELESTIAL IMPACT EVENT", 0, 0, 0xFFFFCC66, false);
+        graphics.text(this.font, "CELESTIAL IMPACT EVENT", 0, 0, 0xFFFF66CC, false);
         pose.popMatrix();
 
         // 2. Event Intel & Survival Briefing Box (124 x 84)
         int boxY = y + 59, boxH = 84;
-        graphics.fill(x, boxY, x + skyW, boxY + boxH, 0xFF6A2A10);
+        graphics.fill(x, boxY, x + skyW, boxY + boxH, 0xFF6A104C);
         graphics.fill(x + 1, boxY + 1, x + skyW - 1, boxY + boxH - 1, 0xEE140608);
 
         pose.pushMatrix();
         pose.translate(x + 5, boxY + 4);
         pose.scale(0.66f, 0.66f);
-        graphics.text(this.font, "Event Intel & Hazards", 0, 0, 0xFFFFAA33, false);
+        graphics.text(this.font, "Event Intel & Hazards", 0, 0, 0xFFFF33BB, false);
         pose.popMatrix();
 
         String[] intel = {
@@ -608,18 +608,18 @@ public class InfiniumGuideScreen extends Screen {
             pose.pushMatrix();
             pose.translate(x + 5, ly);
             pose.scale(0.58f, 0.58f);
-            int col = line.contains("Danger") ? 0xFFFF6666 : 0xFFD8C4C0;
+            int col = line.contains("Danger") ? 0xFFFF66CC : 0xFFD8C4C0;
             graphics.text(this.font, line, 0, 0, col, false);
             pose.popMatrix();
             ly += 8;
         }
 
         int alertY = boxY + boxH - 17;
-        graphics.fill(x + 4, alertY, x + skyW - 4, alertY + 13, 0x884A0A0A);
+        graphics.fill(x + 4, alertY, x + skyW - 4, alertY + 13, 0x884A0A35);
         pose.pushMatrix();
         pose.translate(x + 8, alertY + 3);
         pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "⚠ Take cover under solid roofs!", 0, 0, 0xFFFF5555, false);
+        graphics.text(this.font, "⚠ Take cover under solid roofs!", 0, 0, 0xFFFF55C6, false);
         pose.popMatrix();
     }
 
@@ -689,8 +689,8 @@ public class InfiniumGuideScreen extends Screen {
         }
 
         boolean on = (mode % 2 == 0);
-        g.fill(cx + size - 15, cy + 3, cx + size - 3, cy + 9, on ? 0xFF285A38 : 0xFF482038);
-        g.fill(cx + size - 14, cy + 4, cx + size - 4, cy + 8, on ? 0xFF66FF99 : 0xFF9A6888);
+        g.fill(cx + size - 15, cy + 3, cx + size - 3, cy + 9, on ? 0xFF5A2849 : 0xFF482038);
+        g.fill(cx + size - 14, cy + 4, cx + size - 4, cy + 8, on ? 0xFFFF66CC : 0xFF9A6888);
     }
 
     private void blitArt(GuiGraphicsExtractor graphics, String art, int x, int y, int size) {
@@ -1001,7 +1001,7 @@ public class InfiniumGuideScreen extends Screen {
             boolean active = i == activeSub;
             boolean hovered = localMx >= tx && localMx < tx + tw && localMy >= ty && localMy < ty + th;
 
-            int border = active ? 0xFFFFD700 : (hovered ? 0xFFD864FF : 0xFF5A246E);
+            int border = active ? 0xFFFF00AA : (hovered ? 0xFFD864FF : 0xFF5A246E);
             int bg = active ? 0xFF3A1848 : (hovered ? 0xFF2A1038 : 0xFF160820);
             int textCol = active ? 0xFFFFFFFF : (hovered ? 0xFFFFFFFF : 0xFFB898C8);
 
@@ -1020,7 +1020,7 @@ public class InfiniumGuideScreen extends Screen {
             pose.popMatrix();
 
             if (active) {
-                graphics.fill(tx + 1, ty + th - 2, tx + tw - 1, ty + th - 1, 0xFFFFD700);
+                graphics.fill(tx + 1, ty + th - 2, tx + tw - 1, ty + th - 1, 0xFFFF00AA);
             }
         }
 
@@ -1095,8 +1095,8 @@ public class InfiniumGuideScreen extends Screen {
             case "cyberpsycho" -> 0xFFE0235A;
             case "infinity" -> 0xFFC43A7A;
             case "matrix" -> 0xFFC45AD4;
-            case "meteor" -> 0xFFFFAA44;
-            case "additional_info" -> 0xFFFFD700;
+            case "meteor" -> 0xFFFF44C1;
+            case "additional_info" -> 0xFFFF00AA;
             default -> 0xFFE070C0;
         };
     }

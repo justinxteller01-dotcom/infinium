@@ -232,7 +232,7 @@ public final class InventorySettingsButton extends AbstractButton {
             pose.pushMatrix();
             pose.translate(x + 9f, y + 1f);
             pose.scale(scale, scale);
-            g.text(font, txt, 0, 0, total >= 80 ? 0xFFFFD700 : 0xFFE8D4EE, true);
+            g.text(font, txt, 0, 0, total >= 80 ? 0xFFFF00AA : 0xFFE8D4EE, true);
             pose.popMatrix();
         }
 

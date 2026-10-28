@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 public final class DungeonBeams {
     private static volatile List<DungeonFinder.Beam> beams = List.of();
     private static volatile long lastMs;
-    static final int[] COLORS = {0xFF3CFF3C, 0xFFFFE23C, 0xFFFF3030};   // green normal, yellow large, red extra large
+    static final int[] COLORS = {0xFF9B4CFF, 0xFFFF6AD5, 0xFFE0206E};   // purple normal, pink large, deep magenta extra large (palette rule)
 
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(DungeonFinder.BeamsPayload.TYPE, (pl, ctx) -> { beams = pl.beams(); lastMs = System.currentTimeMillis(); });

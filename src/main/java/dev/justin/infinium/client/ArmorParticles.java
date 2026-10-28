@@ -670,7 +670,7 @@ public final class ArmorParticles {
                     if (isPsycho) {
                         particle = dust(psycho(r, -1), thrustHeld ? 0.65F : 0.55F);
                     } else {
-                        particle = r.nextFloat() < 0.35F ? ParticleTypes.ELECTRIC_SPARK : dust(r.nextBoolean() ? 0x00E5FF : 0xD24CFF, thrustHeld ? 0.60F : 0.50F);
+                        particle = r.nextFloat() < 0.35F ? ParticleTypes.ELECTRIC_SPARK : dust(r.nextBoolean() ? 0xFF00AA : 0xD24CFF, thrustHeld ? 0.60F : 0.50F);
                     }
                     exact(level, particle, tip.x + jx, tip.y + jy, tip.z + jz, trailVel.x, trailVel.y, trailVel.z, thrustHeld ? CYBER_LIFE_THRUST : CYBER_LIFE);   // batch1: shorter (was 14 / 9)
                 }

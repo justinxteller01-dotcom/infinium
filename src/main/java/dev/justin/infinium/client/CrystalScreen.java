@@ -294,10 +294,10 @@ public final class CrystalScreen extends Screen {
             int markX = barX + (i + 1) * barW / perks;
 
             // Milestone activation line on the energy bar
-            int markCol = unlocked ? 0xFFFFB8FF : (canAfford ? 0xFFFFD700 : 0xFF6A3882);
+            int markCol = unlocked ? 0xFFFFB8FF : (canAfford ? 0xFFFF00AA : 0xFF6A3882);
             g.fill(markX - 1, barY - 3, markX + 1, barY + barH + 3, markCol);
             // Diamond/node indicator at the bottom of the mark on the bar
-            g.fill(markX - 2, barY + barH + 1, markX + 2, barY + barH + 4, unlocked ? accent : (canAfford ? 0xFFFFD700 : 0xFF3A1848));
+            g.fill(markX - 2, barY + barH + 1, markX + 2, barY + barH + 4, unlocked ? accent : (canAfford ? 0xFFFF00AA : 0xFF3A1848));
             if (unlocked || canAfford) {
                 g.fill(markX - 1, barY + barH + 1, markX + 1, barY + barH + 3, 0xFFFFFFFF);
             }
@@ -324,7 +324,7 @@ public final class CrystalScreen extends Screen {
 
             int borderCol = unlocked
                     ? (hovered ? 0xFFFFB0FF : accent)
-                    : (canAfford ? (hovered ? 0xFFFFFFFF : 0xFFFFD700) : (hovered ? 0xFF8A4A9E : 0xFF3E1C4C));
+                    : (canAfford ? (hovered ? 0xFFFFFFFF : 0xFFFF00AA) : (hovered ? 0xFF8A4A9E : 0xFF3E1C4C));
             int bgCol = unlocked ? 0xFF1A0A26 : (canAfford ? (hovered ? 0xFF321244 : 0xFF220C2E) : 0xFF100618);
 
             g.fill(cardX, cardY, cardX + cardW, cardY + cardH, borderCol);
@@ -334,7 +334,7 @@ public final class CrystalScreen extends Screen {
 
             String badge = String.valueOf(req);
             String status = unlocked ? "UNLOCKED" : (canAfford ? (perksGained > 1 ? ("READY (+" + perksGained + ")") : "READY") : ("NEED " + needed));
-            int statusCol = unlocked ? 0xFF7CFF9B : (canAfford ? 0xFFFFD700 : 0xFF8E729E);
+            int statusCol = unlocked ? 0xFFFF7CD3 : (canAfford ? 0xFFFF00AA : 0xFF8E729E);
 
             float bScale = 0.72f;
             int bw = (int) (this.font.width(badge) * bScale);
@@ -352,13 +352,13 @@ public final class CrystalScreen extends Screen {
 
             if (canAfford) {
                 boolean btnHover = mouseX >= btnX && mouseX < btnX + btnW && mouseY >= btnY && mouseY < btnY + btnH;
-                int bBorder = btnHover || hovered ? 0xFFFFFFFF : 0xFFFFD700;
+                int bBorder = btnHover || hovered ? 0xFFFFFFFF : 0xFFFF00AA;
                 int bBg = btnHover ? 0xFF5A1C72 : 0xFF351046;
                 g.fill(btnX, btnY, btnX + btnW, btnY + btnH, bBorder);
                 g.fill(btnX + 1, btnY + 1, btnX + btnW - 1, btnY + btnH - 1, bBg);
 
                 String bLabel = (perksGained > 1) ? ("UNLOCK " + perksGained + " PERKS (-" + needed + ")") : ("UNLOCK PERK (-" + needed + ")");
-                int bCol = (btnHover || hovered) ? 0xFFFFFFFF : 0xFFFFE8B8;
+                int bCol = (btnHover || hovered) ? 0xFFFFFFFF : 0xFFFFB8E7;
                 float bLabelScale = twoRows ? 0.58f : 0.68f;
                 int blw = (int) (this.font.width(bLabel) * bLabelScale);
                 drawScaledText(g, bLabel, btnX + (btnW - blw) / 2, btnY + (twoRows ? 2 : 3), bLabelScale, bCol);
@@ -366,7 +366,7 @@ public final class CrystalScreen extends Screen {
                 String aLabel = lit ? "ON · CLICK = LIGHTS OFF" : "LIGHTS OFF · CLICK = ON";
                 float aScale = twoRows ? 0.50f : 0.56f;
                 int aw = (int) (this.font.width(aLabel) * aScale);
-                drawScaledText(g, aLabel, btnX + (btnW - aw) / 2, btnY + (twoRows ? 2 : 3), aScale, lit ? 0xFF7CFF9B : 0xFF8A7A96);
+                drawScaledText(g, aLabel, btnX + (btnW - aw) / 2, btnY + (twoRows ? 2 : 3), aScale, lit ? 0xFFFF7CD3 : 0xFF8A7A96);
             } else {
                 String nLabel = "Need " + needed + " (Have " + invCrystals + ")";
                 float nScale = twoRows ? 0.56f : 0.64f;

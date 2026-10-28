@@ -81,7 +81,7 @@ public class InfiniumClient implements ClientModInitializer {
             if (lines.isEmpty()) return;
             int at = 1;
             if (dev.justin.infinium.InfiniumDurability.disabled(stack))   // 13.5: first line under the name
-                lines.add(at++, net.minecraft.network.chat.Component.translatable(Infinium.isArmor(stack) ? "tooltip.infinium.broken" : "tooltip.infinium.broken_tool").withStyle(net.minecraft.ChatFormatting.RED));
+                lines.add(at++, net.minecraft.network.chat.Component.translatable(Infinium.isArmor(stack) ? "tooltip.infinium.broken" : "tooltip.infinium.broken_tool").withStyle(net.minecraft.ChatFormatting.DARK_PURPLE));
             if (Infinium.isChestplate(stack))
                 lines.add(at++, net.minecraft.network.chat.Component.literal("Wings: " + (stack.has(net.minecraft.core.component.DataComponents.GLIDER) ? "On" : "Off"))
                     .withStyle(net.minecraft.ChatFormatting.DARK_PURPLE));

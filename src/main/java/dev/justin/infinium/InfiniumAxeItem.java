@@ -62,7 +62,7 @@ public class InfiniumAxeItem extends AxeItem {
             int m = (mode(stack) + 1) % TYPES.length;
             stack.set(LOG_MODE, m); // component change: Singularity split rule applies via ItemStackSplitMixin
             ModeFx.burst(player, ModeFx.AXE, m, stack);
-            player.sendOverlayMessage(Component.literal("Mode: " + (m == 0 ? "No effect" : TYPES[m][0] + (m == 12 ? "s" : " Logs"))).withStyle(ChatFormatting.GOLD));
+            player.sendOverlayMessage(Component.literal("Mode: " + (m == 0 ? "No effect" : TYPES[m][0] + (m == 12 ? "s" : " Logs"))).withStyle(ChatFormatting.LIGHT_PURPLE));
             level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.TOOL_MODE.value(), SoundSource.PLAYERS, 0.65F, 0.90F + 0.03F * m);
         }
         return InteractionResult.SUCCESS;

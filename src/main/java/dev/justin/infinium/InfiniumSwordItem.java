@@ -55,7 +55,7 @@ public class InfiniumSwordItem extends Item {
                 if (tier > 0) {
                     player.sendOverlayMessage(Component.literal("Mode: Energy").withStyle(ChatFormatting.LIGHT_PURPLE));
                 } else {
-                    player.sendOverlayMessage(Component.literal("Requires a full Infinium armor set").withStyle(ChatFormatting.RED));
+                    player.sendOverlayMessage(Component.literal("Requires a full Infinium armor set").withStyle(ChatFormatting.DARK_PURPLE));
                 }
             } else {
                 player.sendOverlayMessage(Component.literal("Mode: Normal").withStyle(ChatFormatting.GRAY));

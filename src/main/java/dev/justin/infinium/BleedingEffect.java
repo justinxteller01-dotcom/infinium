@@ -6,7 +6,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 public class BleedingEffect extends MobEffect {
-    public BleedingEffect() { super(MobEffectCategory.HARMFUL, 0x5A0A0A); }
+    public BleedingEffect() { super(MobEffectCategory.HARMFUL, 0x5A0A3F); }
     @Override public boolean shouldApplyEffectTickThisTick(int tickCount, int amp) { return tickCount % 20 == 0; }
     @Override public boolean applyEffectTick(ServerLevel level, LivingEntity mob, int amp) {
         mob.hurtServer(level, mob.damageSources().magic(), 1.0F);

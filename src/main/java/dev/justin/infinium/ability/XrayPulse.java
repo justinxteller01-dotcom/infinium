@@ -155,16 +155,16 @@ public final class XrayPulse {
     /** ARGB hologram colour, 0 = not a target. Ore colours kept from the old X-ray. */
     public static int color(BlockState s) {
         if (s.isAir()) return 0;
-        if (isChest(s)) return s.is(Blocks.ENDER_CHEST) ? 0xFF00FFAA : s.is(BlockTags.SHULKER_BOXES) ? 0xFFFF40B0 : 0xFFFFB000;
+        if (isChest(s)) return s.is(Blocks.ENDER_CHEST) ? 0xFFE070FF : s.is(BlockTags.SHULKER_BOXES) ? 0xFFFF40B0 : 0xFFFF9AD8;
         if (!isOre(s)) return 0;
         if (s.is(Blocks.ANCIENT_DEBRIS)) return 0xFFD24CFF;
-        if (s.is(DIAMOND_ORES)) return 0xFF00FFFF;
-        if (s.is(EMERALD_ORES)) return 0xFF00FF7F;
-        if (s.is(BlockTags.GOLD_ORES) || s.is(Blocks.NETHER_GOLD_ORE)) return 0xFFFFD700;
-        if (s.is(BlockTags.IRON_ORES)) return 0xFFE0C090;
-        if (s.is(BlockTags.COPPER_ORES)) return 0xFFFF7F50;
-        if (s.is(REDSTONE_ORES)) return 0xFFFF2020;
-        if (s.is(LAPIS_ORES)) return 0xFF3060FF;
+        if (s.is(DIAMOND_ORES)) return 0xFF4DF0;
+        if (s.is(EMERALD_ORES)) return 0xFFB040FF;
+        if (s.is(BlockTags.GOLD_ORES) || s.is(Blocks.NETHER_GOLD_ORE)) return 0xFFFF7AC8;
+        if (s.is(BlockTags.IRON_ORES)) return 0xFFE0C0E8;
+        if (s.is(BlockTags.COPPER_ORES)) return 0xFFFF5AA0;
+        if (s.is(REDSTONE_ORES)) return 0xFFE0206E;
+        if (s.is(LAPIS_ORES)) return 0xFF7A40FF;
         if (s.is(COAL_ORES)) return 0xFF888888;
         if (s.is(Blocks.NETHER_QUARTZ_ORE)) return 0xFFF0F0F0;
         return 0xFFC0A0FF;   // any other c:ores (modded)

@@ -16,7 +16,7 @@ public final class WarpScreenFx {
     static final long DURATION_MS = 380;
     static final int MAX_EDGE_ALPHA = 0x70;   // vignette peak alpha at the screen edge
     static final int MAX_FLASH_ALPHA = 0x22;  // whole-screen flash peak
-    static final int[] TINT = {0x8A5CFF, 0xB040FF, 0xFFD36A};   // Astral / Singularity / Infinity
+    static final int[] TINT = {0x8A5CFF, 0xB040FF, 0xFF6ACD};   // Astral / Singularity / Infinity
 
     private static long startNanos = 0;
     private static int tint = TINT[0];

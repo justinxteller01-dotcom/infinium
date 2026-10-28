@@ -60,7 +60,7 @@ public final class Perks {
         String label = Component.translatable(p.translationKey()).getString();
         sp.sendOverlayMessage(Component.literal((all ? "All styles" : p.familyName()) + " · " + label + ": ")
             .withStyle(ChatFormatting.LIGHT_PURPLE)
-            .append(Component.literal(on ? "On" : "Off").withStyle(on ? ChatFormatting.GREEN : ChatFormatting.GRAY)));
+            .append(Component.literal(on ? "On" : "Off").withStyle(on ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY)));
     }
     /** M5: tell the client the authoritative mask even when unchanged (the attachment only syncs on change). */
     static void resync(ServerPlayer sp) {

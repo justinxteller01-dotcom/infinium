@@ -51,7 +51,7 @@ public class InfiniumShovelItem extends ShovelItem {
             int m = (mode(stack) + 1) % 3;
             stack.set(DIG_MODE, m);
             ModeFx.burst(player, ModeFx.SHOVEL, m, stack);
-            player.sendOverlayMessage(Component.literal("Mode: " + NAMES[m]).withStyle(ChatFormatting.YELLOW));
+            player.sendOverlayMessage(Component.literal("Mode: " + NAMES[m]).withStyle(ChatFormatting.LIGHT_PURPLE));
             level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.TOOL_MODE.value(), SoundSource.PLAYERS, 0.65F, 0.95F + 0.10F * m);
         }
         return InteractionResult.SUCCESS;

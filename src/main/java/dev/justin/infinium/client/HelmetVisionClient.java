@@ -33,11 +33,11 @@ public final class HelmetVisionClient {
     public static void toggleFullBright(Player player) {
         ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
         if (!isFullBrightEligible(head)) {
-            Minecraft.getInstance().gui.hud.setOverlayMessage(Component.literal("Full Bright requires an Infinium Helmet").withStyle(ChatFormatting.RED), false);
+            Minecraft.getInstance().gui.hud.setOverlayMessage(Component.literal("Full Bright requires an Infinium Helmet").withStyle(ChatFormatting.DARK_PURPLE), false);
             return;
         }
         fullBrightActive = !fullBrightActive;
-        Minecraft.getInstance().gui.hud.setOverlayMessage(Component.literal("Mode: Full Bright " + (fullBrightActive ? "On" : "Off")).withStyle(fullBrightActive ? ChatFormatting.YELLOW : ChatFormatting.GRAY), false);
+        Minecraft.getInstance().gui.hud.setOverlayMessage(Component.literal("Mode: Full Bright " + (fullBrightActive ? "On" : "Off")).withStyle(fullBrightActive ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY), false);
         Minecraft.getInstance().getSoundManager().play(
             SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, fullBrightActive ? 1.2F : 0.8F));
         if (ClientPlayNetworking.canSend(HelmetVisionPayload.TYPE)) {

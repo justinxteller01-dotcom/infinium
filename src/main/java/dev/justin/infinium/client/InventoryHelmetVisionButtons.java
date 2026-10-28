@@ -88,10 +88,10 @@ public final class InventoryHelmetVisionButtons {
 
             int x = getX(), y = getY(), w = getWidth(), h = getHeight();
 
-            int borderColor = active ? 0xFFFFD700 : (hovered ? 0xFF888888 : 0xFF444444);
-            int bgColor = active ? 0xCC1A1608 : 0xCC12061A;
-            int accentBar = active ? 0xFFFFD700 : 0xFF555555;
-            int textColor = active ? 0xFFFFE066 : (hovered ? 0xFFFFFFFF : 0xFFAAAAAA);
+            int borderColor = active ? 0xFFFF00AA : (hovered ? 0xFF888888 : 0xFF444444);
+            int bgColor = active ? 0xCC1A0814 : 0xCC12061A;
+            int accentBar = active ? 0xFFFF00AA : 0xFF555555;
+            int textColor = active ? 0xFFFF66CC : (hovered ? 0xFFFFFFFF : 0xFFAAAAAA);
 
             // Container fill and border
             g.fill(x, y, x + w, y + h, borderColor);

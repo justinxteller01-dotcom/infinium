@@ -329,7 +329,7 @@ public class Infinium implements ModInitializer {
         mods.add(new net.minecraft.world.item.component.ItemAttributeModifiers.Entry(Attributes.KNOCKBACK_RESISTANCE,
             new AttributeModifier(CHEST_KB_ID, kb, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST,
             net.minecraft.world.item.component.ItemAttributeModifiers.Display.override(
-                Component.literal("Extreme extra knockback resistance").withStyle(ChatFormatting.BLUE))));
+                Component.literal("Extreme extra knockback resistance").withStyle(ChatFormatting.LIGHT_PURPLE))));
         chest.attributes(new net.minecraft.world.item.component.ItemAttributeModifiers(mods));
         chest.component(DataComponents.GLIDER, Unit.INSTANCE);   // wings default ON; OFF = removal patch
         return chest;

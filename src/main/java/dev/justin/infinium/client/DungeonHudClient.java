@@ -40,7 +40,7 @@ public final class DungeonHudClient {
         // Minimalistic, clean aesthetic in the upper-left of screen
         String prefix = "✦ Dungeon Loot: ";
         int prefixCol = 0xFFD270FF; // Cosmic purple
-        int valCol = statusText.equalsIgnoreCase("Ready") ? 0xFF7CFF9B : 0xFFEDE0F5; // Mint green if ready, silver/white if counting
+        int valCol = statusText.equalsIgnoreCase("Ready") ? 0xFFFF7CD3 : 0xFFEDE0F5; // pink if ready (was mint green), silver/white if counting
 
         int x = 8;
         int y = 8;

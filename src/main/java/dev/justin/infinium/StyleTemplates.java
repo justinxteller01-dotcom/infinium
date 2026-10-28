@@ -16,15 +16,15 @@ public final class StyleTemplates {
     private static Identifier slot(String n) { return Identifier.withDefaultNamespace("container/slot/" + n); }
 
     public static void register() {
-        Component appliesTo = Component.translatable("item.infinium.smithing_template.applies_to").withStyle(ChatFormatting.BLUE);
-        Component ingredients = Component.translatable("item.infinium.smithing_template.ingredients").withStyle(ChatFormatting.BLUE);
+        Component appliesTo = Component.translatable("item.infinium.smithing_template.applies_to").withStyle(ChatFormatting.LIGHT_PURPLE);
+        Component ingredients = Component.translatable("item.infinium.smithing_template.ingredients").withStyle(ChatFormatting.LIGHT_PURPLE);
         Component baseDesc = Component.translatable("item.infinium.smithing_template.base_slot_description");
         Component addDesc = Component.translatable("item.infinium.smithing_template.additions_slot_description");
         List<Identifier> baseIcons = List.of(slot("helmet"), slot("chestplate"), slot("leggings"), slot("boots"));
         List<Identifier> addIcons = List.of(slot("ingot"));
         for (InfiniumStyle s : InfiniumStyle.values()) {
             String k = "item.infinium." + s.id + "_upgrade_smithing_template.";
-            appliesTo = Component.translatable(k + "applies_to").withStyle(ChatFormatting.BLUE);
+            appliesTo = Component.translatable(k + "applies_to").withStyle(ChatFormatting.LIGHT_PURPLE);
             baseDesc = Component.translatable(k + "base_slot_description"); addDesc = Component.translatable(k + "additions_slot_description");
             Component ap = appliesTo, bd = baseDesc, ad = addDesc;
             Item.Properties p = new Item.Properties().fireResistant().rarity(s.rarer ? Rarity.EPIC : Rarity.RARE);

@@ -72,14 +72,14 @@ public class InfiniumPerksScreen extends OptionsSubScreen {
             b.active = f != fam;
             jump.add(b);
         }
-        list.addBig(Button.builder(Component.literal("✦ Visual & Sound Settings ✦").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+        list.addBig(Button.builder(Component.literal("✦ Visual & Sound Settings ✦").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
             b -> minecraft.gui.setScreen(new InfiniumSettingsScreen(this))).build());
 
         list.addHeader(Component.literal("Armor Sets").withStyle(ChatFormatting.LIGHT_PURPLE));
         list.addSmall(jump.get(0), jump.get(1));
         list.addSmall(jump.get(2), jump.get(3));
         list.addSmall(jump.get(4), (AbstractWidget) null);
-        if (!connected) list.addBig(new StringWidget(Component.literal("Not connected to an Infinium server").withStyle(ChatFormatting.RED), font));
+        if (!connected) list.addBig(new StringWidget(Component.literal("Not connected to an Infinium server").withStyle(ChatFormatting.DARK_PURPLE), font));
 
         // M5: abilities are one toggle across every set (shared with the matrix and the HUD bar)
         List<AbstractWidget> row = new ArrayList<>();
