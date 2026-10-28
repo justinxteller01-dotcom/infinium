@@ -545,6 +545,21 @@ public final class ArmorParticles {
         }
     }
 
+    /** batch1 flight particle tunables. Astral/Singularity magic-flight density factor (toned down from 1.0). */
+    static final float FLIGHT_MAGIC_DENSITY = 0.5F;
+    /** Astral/Singularity flight particles closer than this to the camera (third person) are skipped. */
+    static final double CAMERA_CLEAR_RADIUS = 1.5;
+    /** Cybernetic / Cyber Psycho wingtip trail lifetimes in ticks (were 9 idle / 14 thrust). */
+    static final int CYBER_LIFE = 5, CYBER_LIFE_THRUST = 8;
+
+    static boolean camClear(Minecraft mc, double x, double y, double z) {
+        var cam = mc.gameRenderer.mainCamera();
+        if (cam == null) return true;
+        Vec3 c = cam.position();
+        double dx = x - c.x, dy = y - c.y, dz = z - c.z;
+        return dx * dx + dy * dy + dz * dz > CAMERA_CLEAR_RADIUS * CAMERA_CLEAR_RADIUS;
+    }
+
     static void flightTrailFx(ClientLevel level, RandomSource r, Player p, dev.justin.infinium.SetLook look, float mult) {
         flightTrailFx(level, r, p, look, mult, false);
     }
@@ -576,8 +591,10 @@ public final class ArmorParticles {
         // While thrust is held: more particles emit and are pushed downward (telekinetic thrust) with a trail behind.
         if (look == dev.justin.infinium.SetLook.ASTRAL || look == dev.justin.infinium.SetLook.SINGULARITY) {
             boolean isAstral = (look == dev.justin.infinium.SetLook.ASTRAL);
+            // batch1: no Astral/Singularity flight particles in first person for the camera player
+            if (p == mc.getCameraEntity() && mc.options.getCameraType().isFirstPerson()) return;
             // Particle amount and density scale linearly with progression (Astral has fewer than Singularity)
-            float baseDensity = isAstral ? (0.85F + 0.65F * prog) : (1.50F + 1.20F * prog);
+            float baseDensity = (isAstral ? (0.85F + 0.65F * prog) : (1.50F + 1.20F * prog)) * FLIGHT_MAGIC_DENSITY;   // batch1: toned down
             float countMul = baseDensity * mult * dens * (thrustHeld ? 2.2F : 1.0F);
 
             // A. Swirling particles circling the flying player
@@ -596,7 +613,7 @@ public final class ArmorParticles {
                 } else {
                     particle = r.nextFloat() < 0.25F ? ParticleTypes.WITCH : dust(sing(r), 0.65F);
                 }
-                exact(level, particle, pt.x, pt.y, pt.z, orbitVel.x, orbitVel.y, orbitVel.z, 6 + r.nextInt(5));
+                if (camClear(mc, pt.x, pt.y, pt.z)) exact(level, particle, pt.x, pt.y, pt.z, orbitVel.x, orbitVel.y, orbitVel.z, 6 + r.nextInt(5));
             }
 
             // B. While Shift is held: telekinetic downward thrust & trail behind
@@ -613,7 +630,7 @@ public final class ArmorParticles {
                     ParticleOptions downPart = isAstral
                         ? (r.nextBoolean() ? dust(0xBF70FF, 0.65F) : dust(0x8A3CE0, 0.60F))
                         : dust(sing(r), 0.70F);
-                    exact(level, downPart, downPos.x, downPos.y, downPos.z, downVel.x, downVel.y, downVel.z, 8 + r.nextInt(6));
+                    if (camClear(mc, downPos.x, downPos.y, downPos.z)) exact(level, downPart, downPos.x, downPos.y, downPos.z, downVel.x, downVel.y, downVel.z, 8 + r.nextInt(6));
                 }
 
                 // Streaming cosmic trail behind the player
@@ -626,7 +643,7 @@ public final class ArmorParticles {
                     ParticleOptions trailPart = isAstral
                         ? dust(r.nextBoolean() ? 0x9B4CFF : 0xC45AD4, 0.60F)
                         : (r.nextFloat() < 0.3F ? ParticleTypes.PORTAL : dust(sing(r), 0.70F));
-                    exact(level, trailPart, trailPos.x, trailPos.y, trailPos.z, trailVel.x, trailVel.y, trailVel.z, 12 + r.nextInt(8));
+                    if (camClear(mc, trailPos.x, trailPos.y, trailPos.z)) exact(level, trailPart, trailPos.x, trailPos.y, trailPos.z, trailVel.x, trailVel.y, trailVel.z, 12 + r.nextInt(8));
                 }
             }
             return;
@@ -655,7 +672,7 @@ public final class ArmorParticles {
                     } else {
                         particle = r.nextFloat() < 0.35F ? ParticleTypes.ELECTRIC_SPARK : dust(r.nextBoolean() ? 0x00E5FF : 0xD24CFF, thrustHeld ? 0.60F : 0.50F);
                     }
-                    exact(level, particle, tip.x + jx, tip.y + jy, tip.z + jz, trailVel.x, trailVel.y, trailVel.z, thrustHeld ? 14 : 9);
+                    exact(level, particle, tip.x + jx, tip.y + jy, tip.z + jz, trailVel.x, trailVel.y, trailVel.z, thrustHeld ? CYBER_LIFE_THRUST : CYBER_LIFE);   // batch1: shorter (was 14 / 9)
                 }
             }
             return;
