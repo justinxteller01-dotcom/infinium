@@ -328,8 +328,8 @@ public class EnergySlashEntity extends Projectile {
             DamageSource ds = (owner instanceof Player p) ? damageSources().playerAttack(p) : damageSources().thrown(this, owner);
             target.hurtServer((ServerLevel) level(), ds, damage);
 
-            // Apply 8-second Bleeding effect
-            target.addEffect(new MobEffectInstance(Infinium.BLEEDING, 8 * 20 + 1, 0), owner);
+            // Apply 8-second Bleed (Burn for a Cybernetic / Cyber Psycho owner)
+            target.addEffect(new MobEffectInstance(BleedingEffect.forOwner(owner), 8 * 20 + 1, 0), owner);
 
             // Compress target i-frames based on cyber-tier attack speed bonus
             if (owner instanceof LivingEntity attacker) {

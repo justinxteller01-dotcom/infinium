@@ -92,9 +92,6 @@ public class InfiniumSwordItem extends Item {
 
     @Override
     public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        super.hurtEnemy(stack, target, attacker);
-        if (!target.level().isClientSide() && !InfiniumDurability.disabled(stack)) {
-            target.addEffect(new MobEffectInstance(Infinium.BLEEDING, 8 * 20 + 1, 0), attacker);
-        }
+        super.hurtEnemy(stack, target, attacker);   // batch1: plain melee hits no longer bleed; only slash/beam apply the DoT
     }
 }
