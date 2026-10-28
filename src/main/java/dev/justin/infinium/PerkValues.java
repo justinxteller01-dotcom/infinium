@@ -108,8 +108,12 @@ public final class PerkValues {
             case "stacks" -> "Stacks up to " + boostedMax(f, 64);
             case "mining" -> "+" + Math.round(mining(f) * 100) + "% Mining Speed";
             case "jump" -> "+" + airJumps(f) + " Air Jump" + (airJumps(f) == 1 ? "" : "s");
-            case "attack" -> "+" + Math.round(attackAndBow(f) * 100) + "% Attack & Bow";
-            case "slow" -> Math.round(slowAmount(f) * 100) + "% Mob Slow Aura";
+            case "attack" -> switch (f) {
+                case CYBERPSYCHO -> "Greatly increased attack speed with swords and bows";
+                case INFINITY -> "Massively increased attack speed with swords and bows";
+                default -> "Increased attack speed with swords and bows";
+            };
+            case "slow" -> "Slow nearby mobs when damaged";
             default -> kind;
         };
     }
