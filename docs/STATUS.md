@@ -1,10 +1,11 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~4:31 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~5:40 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-a8612ee` (pre-release, 2026-10-28 4:31 PM ET)
+## 1. Current release: `batch1-019b6a8` (pre-release, 2026-10-28 5:40 PM ET)
+- **Quantum Tunnel on the ground**: the warp now fires on the ground as well as mid-air (still not in water/lava, on ladders or riding). Same 8/12/16 blocks, 8/6/4 s, forward launch, step-up/no-clip sweep; Infinity still refunds only the 3 air jumps. Guide text updated.
 - **Title menu v3**: large bright purple meteors frozen in mid-air (tight cluster upper right + 4 strays; glow pulse, trail shimmer, twinkle spikes, orbiting sparks), fireflies, floating crystal sparkles, high camera (hill lowered, ground crystals gone), noticeable gentle sway; sky unchanged; 120s seamless loop. Preview `/workspace/menu_mock/mock_v3.mp4` (v2 preview was a stale encode).
 - **Crystal order**: Astral/Singularity repair, block saver, saber, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack; Infinity repair, mining, block saver, jump, saber, slow, stacks, attack, reach. Saber = energy slash milestone (Astral needs it before slashes fire). Crystal screen lays 5/9 cards in two rows.
 - **Energy slash / beam**: slash 60/70/80% of the tier base = 6 / 7.7 / 9.6; beam 75/85/95% = 7.5 / 9.35 / 11.4.
@@ -23,7 +24,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 | Wording | Plain language a casual player gets right away; say what it does; no percentage dumps; keep only simple numbers (`+1 jump height`, `8 blocks`); one short line. Tier 2/3 crystals **UPGRADE** perks (tier 1 **UNLOCKS**). Leggings: Astral/Singularity "move slightly faster", escalating up to Infinity "maximum running speed". Cybernetic: "increased attack speed with swords and bows". | 10-28 |
 | Colors | Mod-wide: purple, pink, magenta, black (+ shades) only. No cyan/teal, gold, red-orange, green or blue. Exempt: player dye tints and X-Ray Pulse target colors. | 10-28 |
 | Flight picks | Cybernetic: option 4 jet wings, clean, no thrusters. Cyber Psycho: round-7 variant A armor_hue plates (inner wing pair removed), dye-colored border glow + afterglow trail on thrust. Infinity: Event Horizon + echo outline, fixed 0.80 scale. Astral and Singularity: no elytra (magic flight; purple wave / tight chaotic particles). Particle limit on all wings; mirrored wings; one linear opacity ramp. | 10-28 |
-| Warp (Quantum Tunnel) | Distance 8/12/16 blocks; cooldown **8/6/4 s** (replaces 12/9/6); launch forward along the look direction, small/medium/large. | 10-28 |
+| Warp (Quantum Tunnel) | Works on the ground and mid-air (10-28). Distance 8/12/16 blocks; cooldown **8/6/4 s** (replaces 12/9/6); launch forward along the look direction, small/medium/large. | 10-28 |
 | HUD | Settings button appears on first Infinium item and stays. Energy bar only with a full set. "x/80" counter appears on first full set and stays. Abilities are named "X-Ray Pulse" and "Quantum Tunnel"; settings has an "Open Controls" button. | 10-28 |
 | Jump + warp | Boots tap/hold height: +1/+2/+3. In-air push tiny/small/largest. Air jumps only with elytra off: Cybernetic 1, Cyber Psycho 2, Infinity 3 (4 jumps total). A warp refunds the 3 air jumps, not the ground jump. Only Infinity has both multi-jump and warp. | 10-28 |
 | Audio | Every set gets its own sound family (flight, slash, mode-switch, air jump). Cyber/Psycho: energy-charge sounds (Cyberpunk + Fire Force flair), not 8-bit electric. Infinity = a blend of Astral + Singularity. Cyber Psycho thrust: ramp-up, then a subtle hum, then a fade. Built one piece at a time, at Justin's PC. | 10-28 |
@@ -72,7 +73,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 17. Slash + melee double hit.
 18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-a8612ee`)
+## 5. In-game test checklist (`batch1-019b6a8`)
+- [ ] Quantum Tunnel from the ground: fires standing/walking/sprinting, 8/12/16 blocks, no clipping into walls, floors or hills (steps up to 1.9), launch forward, cooldown 8/6/4 s; blocked in water/lava/ladders/riding; Infinity gets 3 air jumps after a ground warp, no extra ground jump; key doesn't clash with sneak/sprint/use.
 - [ ] Title menu v3: meteors clearly visible, frozen in place (cluster + strays) with visible twinkle/glow/sparks; fireflies and sparkles visible; camera high with the hill out of the way; sway noticeable but gentle; no seam at 120s; no FPS drop; no faint dark patch or ghost in the lower-centre sky.
 - [ ] (superseded) Title menu v2: meteors stay fixed (no travel) and read as far away; twinkle/sparks subtle; fireflies and crystal motes visible but calm; camera sway gentle; no seam at the 120s loop; no FPS drop.
 - [ ] Crystal screen: Astral/Singularity 5 cards (3+2), Infinity 9 (5+4), in the new order; saber card icon is a placeholder (attack icon).
@@ -93,6 +95,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-019b6a8` 10-28 5:40 PM: Quantum Tunnel works on the ground too (was mid-air only); guide wording.
 - `batch1-a8612ee` 10-28 4:31 PM: title menu v3 (large bright frozen meteor cluster + strays, fireflies, crystal sparkles, high camera, ground crystals removed, noticeable sway; sky unchanged).
 - `batch1-c2c2532` 10-28 4:25 PM: title menu v2 (frozen far meteors with twinkle/glow/sparks, fireflies, crystal motes, gentle camera sway; sky unchanged).
 - `batch1-b1bc2b6` 10-28 4:22 PM: crystal unlock order (Astral/Singularity 5 perks incl. saber, Cyber lines 4, Infinity 9 alternating); supersedes `batch1-aad53c6` (4:20 PM, 4-perk order without saber or Infinity).
