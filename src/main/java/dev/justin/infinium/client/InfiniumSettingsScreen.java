@@ -267,6 +267,18 @@ public class InfiniumSettingsScreen extends OptionsSubScreen {
         return super.keyPressed(e);
     }
 
+    /** Rebuild only the list entries in place. Vanilla's rebuildWidgets re-runs init(), which adds a second OptionsList
+     *  (and title/footer) to the final HeaderAndFooterLayout, so the stale list stayed drawn on top as a frozen copy. */
+    @Override
+    protected void rebuildWidgets() {
+        if (list == null) { super.rebuildWidgets(); return; }
+        double scroll = list.scrollAmount();
+        list.setFocused(null);
+        list.replaceEntries(java.util.List.of());
+        addOptions();
+        list.setScrollAmount(scroll);
+    }
+
     @Override
     public void removed() {
         InfiniumClientConfig.save();

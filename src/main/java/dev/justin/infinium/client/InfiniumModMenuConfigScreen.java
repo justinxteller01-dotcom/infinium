@@ -230,6 +230,18 @@ public class InfiniumModMenuConfigScreen extends OptionsSubScreen {
         footer.addChild(Button.builder(CommonComponents.GUI_DONE, b -> this.onClose()).width(140).build());
     }
 
+    /** Rebuild only the list entries in place. Vanilla's rebuildWidgets re-runs init(), which adds a second OptionsList
+     *  (and title/footer) to the final HeaderAndFooterLayout, so the stale list stayed drawn on top as a frozen copy. */
+    @Override
+    protected void rebuildWidgets() {
+        if (list == null) { super.rebuildWidgets(); return; }
+        double scroll = list.scrollAmount();
+        list.setFocused(null);
+        list.replaceEntries(java.util.List.of());
+        addOptions();
+        list.setScrollAmount(scroll);
+    }
+
     @Override
     public void onClose() {
         if (!isRemote()) {

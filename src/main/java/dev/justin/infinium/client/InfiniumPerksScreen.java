@@ -125,6 +125,18 @@ public class InfiniumPerksScreen extends OptionsSubScreen {
     }
     private void flush(List<AbstractWidget> row) { if (!row.isEmpty()) { list.addSmall(row.get(0), (AbstractWidget) null); row.clear(); } }
 
+    /** Rebuild only the list entries in place. Vanilla's rebuildWidgets re-runs init(), which adds a second OptionsList
+     *  (and title/footer) to the final HeaderAndFooterLayout, so the stale list stayed drawn on top as a frozen copy. */
+    @Override
+    protected void rebuildWidgets() {
+        if (list == null) { super.rebuildWidgets(); return; }
+        double scroll = list.scrollAmount();
+        list.setFocused(null);
+        list.replaceEntries(java.util.List.of());
+        addOptions();
+        list.setScrollAmount(scroll);
+    }
+
     @Override
     public void removed() { InfiniumClientConfig.save(); super.removed(); }
 }
