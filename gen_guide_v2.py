@@ -105,6 +105,7 @@ armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor
    "Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Reach +{n:reach_t1}. "
    "Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}.")
 armor('cybernetic', 1, 'Cybernetic Armor', 'Tier 1, the fighter line', ['cybernetic', 'armor', 'tier 1', 'fighter'],
+   "Fused with cosmic energy. Everything feels a little faster.\n"
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
    "Helmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\n"
    "Chestplate: built-in jet wings.\n"
