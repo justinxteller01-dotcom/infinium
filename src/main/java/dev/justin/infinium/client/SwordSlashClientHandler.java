@@ -159,9 +159,7 @@ public final class SwordSlashClientHandler {
         CLIENT_CRIT_START_TIME = System.currentTimeMillis();
 
         int color = resolveSwordColor(held);
-        if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-            ClientPlayNetworking.send(new SwordSlashPayload(mc.player.getYRot(), mc.player.getXRot(), 90.0F, color, false));
-        }
+        emitSlash(mc.player.getYRot(), mc.player.getXRot(), 90.0F, color, false);
         playLaunchSound(mc.player, false, tier);
         playChargeSound(mc.player, false, tier);
         return true;
@@ -208,9 +206,7 @@ public final class SwordSlashClientHandler {
             CLIENT_LAST_SWING_TIME = now;
             CLIENT_LAST_SLASH_TICK = currentTick;
             int color = resolveSwordColor(held);
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(mc.player.getYRot(), mc.player.getXRot(), 0.0F, color, false));
-            }
+            emitSlash(mc.player.getYRot(), mc.player.getXRot(), 0.0F, color, false);
             playLaunchSound(mc.player, false, tier);
             playChargeSound(mc.player, false, tier);
             return new PunchyAttackResult(clip, 0);
@@ -235,9 +231,7 @@ public final class SwordSlashClientHandler {
             CLIENT_COMBO_STAGE = 1;
             CLIENT_LAST_SWING_TIME = now;
             CLIENT_LAST_SLASH_TICK = currentTick;
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(mc.player.getYRot(), mc.player.getXRot(), -35.0F, color, false));
-            }
+            emitSlash(mc.player.getYRot(), mc.player.getXRot(), -35.0F, color, false);
             playLaunchSound(mc.player, false, tier);
             playChargeSound(mc.player, false, tier);
             return new PunchyAttackResult(clip, 1);
@@ -252,9 +246,7 @@ public final class SwordSlashClientHandler {
             CLIENT_COMBO_STAGE = 2;
             CLIENT_LAST_SWING_TIME = now;
             CLIENT_LAST_SLASH_TICK = currentTick;
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(mc.player.getYRot(), mc.player.getXRot(), 35.0F, color, false));
-            }
+            emitSlash(mc.player.getYRot(), mc.player.getXRot(), 35.0F, color, false);
             playLaunchSound(mc.player, false, tier);
             // Next attack will be the heavy stab, play 25% longer deeper vacuum surge
             playChargeSound(mc.player, true, tier);
@@ -272,9 +264,7 @@ public final class SwordSlashClientHandler {
                     CLIENT_COMBO_STAGE = 1;
                     CLIENT_LAST_SWING_TIME = now;
                     CLIENT_LAST_SLASH_TICK = currentTick;
-                    if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                        ClientPlayNetworking.send(new SwordSlashPayload(mc.player.getYRot(), mc.player.getXRot(), -35.0F, color, false));
-                    }
+                    emitSlash(mc.player.getYRot(), mc.player.getXRot(), -35.0F, color, false);
                     playLaunchSound(mc.player, false, tier);
                     playChargeSound(mc.player, false, tier);
                     return new PunchyAttackResult(clip, 1);
@@ -292,9 +282,7 @@ public final class SwordSlashClientHandler {
             CLIENT_STAB_FINISH_TIME = now;
             CLIENT_LAST_SWING_TIME = now;
             CLIENT_LAST_SLASH_TICK = currentTick;
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(mc.player.getYRot(), mc.player.getXRot(), 0.0F, color, true));
-            }
+            emitSlash(mc.player.getYRot(), mc.player.getXRot(), 0.0F, color, true);
             playLaunchSound(mc.player, true, tier);
             playChargeSound(mc.player, false, tier);
             return new PunchyAttackResult(clip, 0);
@@ -332,9 +320,7 @@ public final class SwordSlashClientHandler {
                 CLIENT_PENDING_SPIN = true;
                 CLIENT_STAB_FINISH_TIME = now;
                 int color = resolveSwordColor(held);
-                if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                    ClientPlayNetworking.send(new SwordSlashPayload(player.getYRot(), player.getXRot(), 90.0F, color, false));
-                }
+                emitSlash(player.getYRot(), player.getXRot(), 90.0F, color, false);
                 playLaunchSound(player, false, tier);
                 playChargeSound(player, false, tier);
             }
@@ -348,9 +334,7 @@ public final class SwordSlashClientHandler {
                 CLIENT_LAST_SWING_TIME = now;
                 CLIENT_LAST_SLASH_TICK = currentTick;
                 int color = resolveSwordColor(held);
-                if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                    ClientPlayNetworking.send(new SwordSlashPayload(player.getYRot(), player.getXRot(), 0.0F, color, false));
-                }
+                emitSlash(player.getYRot(), player.getXRot(), 0.0F, color, false);
                 playLaunchSound(player, false, tier);
                 playChargeSound(player, false, tier);
             }
@@ -371,9 +355,7 @@ public final class SwordSlashClientHandler {
                 CLIENT_LAST_SWING_TIME = now;
                 CLIENT_LAST_SLASH_TICK = currentTick;
                 int color = resolveSwordColor(held);
-                if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                    ClientPlayNetworking.send(new SwordSlashPayload(player.getYRot(), player.getXRot(), -35.0F, color, false));
-                }
+                emitSlash(player.getYRot(), player.getXRot(), -35.0F, color, false);
                 playLaunchSound(player, false, tier);
                 playChargeSound(player, false, tier);
                 return;
@@ -387,27 +369,34 @@ public final class SwordSlashClientHandler {
 
         if (stage == 0) {
             CLIENT_COMBO_STAGE = 1;
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(player.getYRot(), player.getXRot(), -35.0F, color, false));
-            }
+            emitSlash(player.getYRot(), player.getXRot(), -35.0F, color, false);
             playLaunchSound(player, false, tier);
             playChargeSound(player, false, tier);
         } else if (stage == 1) {
             CLIENT_COMBO_STAGE = 2;
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(player.getYRot(), player.getXRot(), 35.0F, color, false));
-            }
+            emitSlash(player.getYRot(), player.getXRot(), 35.0F, color, false);
             playLaunchSound(player, false, tier);
             playChargeSound(player, true, tier);
         } else {
             CLIENT_COMBO_STAGE = 0;
             CLIENT_PENDING_SPIN = true;
             CLIENT_STAB_FINISH_TIME = now;
-            if (ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) {
-                ClientPlayNetworking.send(new SwordSlashPayload(player.getYRot(), player.getXRot(), 0.0F, color, true));
-            }
+            emitSlash(player.getYRot(), player.getXRot(), 0.0F, color, true);
             playLaunchSound(player, true, tier);
             playChargeSound(player, false, tier);
+        }
+    }
+
+    /**
+     * Single choke point for every energy slash / beam this client emits. The animation move is
+     * derived from the exact payload values (roll + isStab), so the swing always matches the beam.
+     */
+    private static void emitSlash(float yaw, float pitch, float roll, int color, boolean isStab) {
+        if (!ClientPlayNetworking.canSend(SwordSlashPayload.TYPE)) return;
+        ClientPlayNetworking.send(new SwordSlashPayload(yaw, pitch, roll, color, isStab));
+        Minecraft mc = Minecraft.getInstance();
+        if (mc != null && mc.player != null) {
+            dev.justin.infinium.client.anim.SwordAnimState.recordEmittedSlash(mc.player, roll, isStab);
         }
     }
 

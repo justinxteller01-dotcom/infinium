@@ -27,7 +27,7 @@ public abstract class SwordAnimHumanoidModelMixin {
         if (state.isUsingItem) return;
         HumanoidArm arm = state.mainArm == null ? HumanoidArm.RIGHT : state.mainArm;
         InfiniumSwordAnimator.applyThirdPerson(arm == HumanoidArm.RIGHT ? rightArm : leftArm, arm,
-                state.xRot * ((float) Math.PI / 180F), s.infinium$swordSwing(), s.infinium$swordSide(),
+                state.xRot * ((float) Math.PI / 180F), s.infinium$swordMove(), s.infinium$swordRoll(), s.infinium$swordSwing(),
                 s.infinium$swordEquip(), s.infinium$swordTime());
     }
 }

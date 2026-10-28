@@ -50,7 +50,7 @@ public abstract class SwordAnimItemInHandMixin {
         float lagYaw = player.getViewYRot(pt) - Mth.lerp(pt, player.yBobO, player.yBob);
 
         pose.pushPose();
-        InfiniumSwordAnimator.applyFirstPerson(pose, arm, swing, SwordAnimState.swingSide(player), equip, time, walk, lagYaw, lagPitch);
+        InfiniumSwordAnimator.applyFirstPerson(pose, arm, SwordAnimState.move(player), SwordAnimState.roll(player), swing, equip, time, walk, lagYaw, lagPitch);
         renderItem(player, main, arm == HumanoidArm.RIGHT ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
                 pose, collector, light);
         pose.popPose();

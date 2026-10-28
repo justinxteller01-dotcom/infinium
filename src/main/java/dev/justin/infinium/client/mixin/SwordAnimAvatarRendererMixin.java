@@ -17,8 +17,8 @@ public abstract class SwordAnimAvatarRendererMixin {
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At("TAIL"))
     private void infinium$swordState(Avatar entity, AvatarRenderState state, float pt, CallbackInfo ci) {
         SwordPoseState s = (SwordPoseState) (Object) state;
-        if (!SwordAnimState.active(entity)) { s.infinium$setSword(false, 0F, 1F, 0F, 0F); SwordAnimState.ticksSinceEquip(entity, pt); return; }
+        if (!SwordAnimState.active(entity)) { s.infinium$setSword(false, dev.justin.infinium.client.anim.SwordMove.PLAIN, 0F, 0F, 0F, 0F); SwordAnimState.ticksSinceEquip(entity, pt); return; }
         float equip = SwordAnimCurves.equip(SwordAnimState.ticksSinceEquip(entity, pt));
-        s.infinium$setSword(true, SwordAnimState.swingProgress(entity, pt), SwordAnimState.swingSide(entity), equip, SwordAnimState.clock(entity, pt));
+        s.infinium$setSword(true, SwordAnimState.move(entity), SwordAnimState.roll(entity), SwordAnimState.swingProgress(entity, pt), equip, SwordAnimState.clock(entity, pt));
     }
 }
