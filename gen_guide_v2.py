@@ -141,7 +141,7 @@ armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic a
    "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_cp}. Mining +{n:mining_t2}. "
    "{n:airjumps_t2} air jumps. Attack +{n:attack_t2}. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s.")
 armor('infinity', 4, 'Infinity Armor', 'Tier 3, upgrade both lines into one', ['infinity', 'armor', 'tier 3', 'upgrade'],
-   "No edge, no limit. It stretches as far as the wearer dares to go.\n"
+   "No edge, no limit — it stretches as far as the wearer dares to go.\n"
    "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\n"
    "Takes half the damage netherite would. Fire, lava and explosions can't hurt you.\n"
    "Helmet: the widest X-Ray.\n"
