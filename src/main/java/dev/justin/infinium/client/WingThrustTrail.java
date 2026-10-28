@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-/** batch1: Cyber Psycho thrust afterglow. While thrusting, each wing's trailing edge drops a flat ribbon
+/** batch1: Cyber Psycho + Infinity thrust afterglow. While thrusting, each wing's trailing edge drops a flat ribbon
  *  (laser-blade swing style) that fades out over LIFE_MS. Client only, world-space samples, one per tick. */
 public final class WingThrustTrail {
     static final long LIFE_MS = 450;
@@ -30,8 +30,9 @@ public final class WingThrustTrail {
             for (Player p : mc.level.players()) {
                 ItemStack c = p.getItemBySlot(EquipmentSlot.CHEST);
                 boolean cp = Infinium.isChestplate(c) && InfiniumStyle.get(c) == InfiniumStyle.CYBERPSYCHO;
+                boolean inf = Infinium.isChestplate(c) && Infinium.isInfinity(c);
                 ArrayDeque<S> q = TRAILS.get(p.getId());
-                if (cp && p.isFallFlying() && InfinityFlightClient.thrusting(p)) {
+                if ((cp || inf) && p.isFallFlying() && InfinityFlightClient.thrusting(p)) {
                     if (q == null) TRAILS.put(p.getId(), q = new ArrayDeque<>());
                     Vec3 fwd = p.getLookAngle();
                     Vec3 right = fwd.cross(new Vec3(0, 1, 0));
@@ -41,7 +42,7 @@ public final class WingThrustTrail {
                     boolean cut = q.isEmpty() || now - q.peekLast().t() > 120;
                     q.addLast(new S(back.add(right.scale(1.05)), back.add(right.scale(0.35)),
                         back.subtract(right.scale(1.05)), back.subtract(right.scale(0.35)), now,
-                        dye != -1 ? dye & 0xFFFFFF : InfiniumWingsRenderer.CP_THRUST_DEFAULT, cut));
+                        dye != -1 ? dye & 0xFFFFFF : inf ? InfiniumWingsRenderer.INF_THRUST_DEFAULT : InfiniumWingsRenderer.CP_THRUST_DEFAULT, cut));
                 }
             }
             TRAILS.values().forEach(q -> { while (!q.isEmpty() && now - q.peekFirst().t() > LIFE_MS) q.pollFirst(); });
