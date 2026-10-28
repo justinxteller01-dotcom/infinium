@@ -12,7 +12,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import dev.justin.infinium.client.anim.SwordAnimTuning;
 import punchy.client.animation.data.AnimationClip;
 import punchy.client.state.AttackActionTracker;
 import punchy.config.PunchyTuningConfig;
@@ -27,6 +29,18 @@ import punchy.config.PunchyTuningConfig;
 public abstract class PunchyAttackStateMachineMixin {
     @Shadow private int comboIndex;
     private static PunchyTuningConfig.CustomAnimationEntry LAST_ENTRY = null;
+
+    /**
+     * Infinium sword animation override: when Infinium's own sword animations are enabled, Punchy
+     * plays no attack clip for an Infinium sword in the main hand. Energy slashes then fire from
+     * MinecraftAttackMixin's click path (the same path used when Punchy is absent).
+     * Every other item keeps Punchy's normal behaviour.
+     */
+    @Inject(method = "playAttack", at = @At("HEAD"), cancellable = true)
+    private void infinium$skipPunchyForInfiniumSword(Minecraft mc, InteractionHand hand, boolean flag, CallbackInfo ci) {
+        if (!SwordAnimTuning.overridesPunchy() || mc == null || mc.player == null) return;
+        if (hand == InteractionHand.MAIN_HAND && mc.player.getItemInHand(InteractionHand.MAIN_HAND).is(Infinium.SWORD)) ci.cancel();
+    }
 
     /**
      * Intercepts Punchy's crit check inside playAttack.

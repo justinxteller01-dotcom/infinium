@@ -25,7 +25,12 @@
     "TitleScreenFxMixin",
     "ContainerLabelColorMixin",
     "MinecraftAttackMixin",
-    "LightmapRenderStateExtractorMixin"
+    "LightmapRenderStateExtractorMixin",
+    "SwordAnimItemInHandMixin",
+    "SwordAnimSwingMixin",
+    "SwordAnimRenderStateMixin",
+    "SwordAnimAvatarRendererMixin",
+    "SwordAnimHumanoidModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -41,7 +41,8 @@ public abstract class MinecraftAttackMixin {
 
         // When Punchy is loaded, do not fire on click; fire when Punchy plays the clip.
         // Without Punchy loaded, keep firing on click directly.
-        if (!PunchyBridge.isPunchyLoaded()) {
+        // Also fire on click when Infinium's own sword animations replace Punchy for this sword.
+        if (!PunchyBridge.isPunchyLoaded() || dev.justin.infinium.client.anim.SwordAnimTuning.overridesPunchy()) {
             SwordSlashClientHandler.onStartAttackVanilla(p, main);
         }
     }

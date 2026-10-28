@@ -59,6 +59,20 @@
 - `EnergySlashRenderer.java`: Render geometry using RenderTypes.lightning() for lightsaber arc waves and straight cylindrical laser lance beams, with tier-scaled thickness and core/aura alpha.
 - `EnergySlashRenderState.java`: Client render state for energy slash projectiles, including active segments, roll/yaw/pitch, color, isStab flag, age ticks, and tier.
 
+### 3b. Infinium Sword Animations (`dev.justin.infinium.client.anim`, branch `sword-anim`)
+Original, client-only sword animations for the Infinium Sword (main hand) only. Kill switch: JVM arg `-Dinfinium.swordAnim=false`.
+- `SwordAnimTuning.java`: ALL tunable values (swing timing/arc/follow-through, idle breath/sway, equip flourish, third-person arm angles) + `ENABLED`, `OVERRIDE_PUNCHY`, `overridesPunchy()`.
+- `SwordAnimCurves.java`: Pure easing math (windup, strike with damped overshoot, equip easeOutBack, breath/sway).
+- `SwordAnimState.java`: Per-entity weak-map clocks (own swing start/count, equip edge), independent of vanilla `attackAnim` (which Punchy freezes).
+- `InfiniumSwordAnimator.java`: Applies first-person PoseStack transform and third-person arm rotations.
+- `SwordPoseState.java`: Interface stamped onto `HumanoidRenderState`.
+- Mixins (`client.mixin`, in `infinium.client.mixins.json` via `gen_data.py`):
+  - `SwordAnimItemInHandMixin` (priority 500): HEAD of `ItemInHandRenderer.submitHandsWithItems`, cancellable. With an Infinium sword in main hand it draws main hand with our transform, off hand via vanilla `submitArmWithItem`, then cancels (so Punchy's first-person renderer, which also hooks HEAD at default priority, does not run that frame).
+  - `SwordAnimSwingMixin` (priority 500): HEAD of `LivingEntity.swing(hand, boolean)` on client, records our swing clock.
+  - `SwordAnimRenderStateMixin` / `SwordAnimAvatarRendererMixin`: copy clocks into the player render state in `AvatarRenderer.extractRenderState` TAIL.
+  - `SwordAnimHumanoidModelMixin` (priority 1500): TAIL of `HumanoidModel.setupAnim`, overwrites the sword arm's rotations.
+- Punchy: `PunchyAttackStateMachineMixin.infinium$skipPunchyForInfiniumSword` cancels Punchy `playAttack` for main-hand Infinium sword when `overridesPunchy()`; `MinecraftAttackMixin` then fires energy slashes on click (the no-Punchy path).
+
 ### 4. Client Guide (`dev.justin.infinium.client.guide`)
 - `InfiniumGuideScreen.java`: 2-page Informational Crystal guidebook UI.
 - `FlatGuideScreen.java`: 2D fallback guide screen.
