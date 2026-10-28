@@ -34,7 +34,7 @@ import org.joml.Vector3f;
 /**
  * Piercing lightsaber energy wave or straight concentrated stab beam.
  * - Slashes: 15-node arched crescent ~3 blocks wide (u in [-1.4, +1.4]), dealing 50% sword damage (5.5).
- * - Stabs: Straight concentrated laser lance beam along aim, dealing 75% sword damage (8.25).
+ * - Stabs: Straight concentrated laser lance beam along aim, dealing 75/85/95% of the tier base (7.5 / 9.35 / 11.4).
  * - 15 independent collision segments: block impacts only burn out colliding segments.
  * - Leaves color-coded sizzling plasma burn marks on blocks matching the sword's dye/style color.
  * - Surviving segments continue sailing forward until max range or all segments are depleted.
@@ -282,20 +282,20 @@ public class EnergySlashEntity extends Projectile {
         // Per-set sword base: 10 (Tier 1: no set / Astral / Cybernetic), 11 (Tier 2: Singularity / Cyber Psycho), 12 (Tier 3: Infinity).
         float baseDmg = owner instanceof LivingEntity le ? Infinium.swordBaseDamage(le) : Infinium.SWORD_BASE_DAMAGE;
         int tier = getTier();
-        // Slash damage % of sword base: T1 30%, T2 40%, T3 50%.
-        // Crit slash (stab beam): T1 35%, T2 55%, T3 75%.
+        // Slash damage % of tier base (10/11/12): T1 60%, T2 70%, T3 80% = 6 / 7.7 / 9.6.
+        // Crit slash (stab beam): T1 75%, T2 85%, T3 95% = 7.5 / 9.35 / 11.4.
         float pct;
         if (stabMode) {
             pct = switch (tier) {
-                case 1 -> 0.35F;
-                case 2 -> 0.55F;
-                default -> 0.75F; // Tier 3
+                case 1 -> 0.75F;
+                case 2 -> 0.85F;
+                default -> 0.95F; // Tier 3
             };
         } else {
             pct = switch (tier) {
-                case 1 -> 0.30F;
-                case 2 -> 0.40F;
-                default -> 0.50F; // Tier 3
+                case 1 -> 0.60F;
+                case 2 -> 0.70F;
+                default -> 0.80F; // Tier 3
             };
         }
         float damage = baseDmg * pct;

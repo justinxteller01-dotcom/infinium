@@ -44,7 +44,7 @@ public final class GuideNumbers {
             put("slow" + s, () -> pct(PerkValues.slowAmount(c)));
             put("slowdur" + s, () -> String.valueOf(PerkValues.slowDurationTicks(c) / 20));
             put("slowcd" + s, () -> String.valueOf(PerkValues.slowCooldownTicks(c) / 20));
-            put("slash" + s, () -> new String[]{"30%", "40%", "50%"}[t]);   // LITERAL (EnergySlashEntity comment)
+            put("slash" + s, () -> new String[]{"60%", "70%", "80%"}[t]);   // LITERAL (EnergySlashEntity comment)
         }
         put("speed_astral", () -> pct(PerkValues.legSpeed(Family.ASTRAL)));
         put("speed_cyber", () -> pct(PerkValues.legSpeed(Family.CYBERNETIC)));
