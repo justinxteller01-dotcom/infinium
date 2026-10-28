@@ -25,6 +25,9 @@ public final class ModSounds {
 
     /** Spacetime Warp sound events (Batch 01) */
     public static Holder.Reference<SoundEvent> WARP_DEPARTURE, WARP_ARRIVAL;
+    /** batch1: Cyber Psycho three-part thrust audio. sounds.json points these at PLACEHOLDER vanilla events (gen_lang_extra.py)
+     *  until the real clips are dropped in. */
+    public static Holder.Reference<SoundEvent> CP_THRUST_START, CP_THRUST_LOOP, CP_THRUST_STOP;
     /** G4b air jumps: every air jump / the one that uses the last air jump (shared by all tiers). Placeholders until S1. */
     public static Holder.Reference<SoundEvent> BONUS_JUMP, BONUS_JUMP_LAST;
 
@@ -71,6 +74,9 @@ public final class ModSounds {
         FLIGHT_THRUST[3] = FLIGHT_THRUST[2];
         FLIGHT_THRUST[4] = reg("flight_thrust_infinity");
 
+        CP_THRUST_START = reg("cyberpsycho_thrust_start");
+        CP_THRUST_LOOP = reg("cyberpsycho_thrust_loop");
+        CP_THRUST_STOP = reg("cyberpsycho_thrust_stop");
         WARP_DEPARTURE = reg("warp_departure");
         WARP_ARRIVAL = reg("warp_arrival");
         BONUS_JUMP = reg("bonus_jump");
@@ -123,6 +129,7 @@ public final class ModSounds {
     }
     public static Holder<SoundEvent> flightThrust(int family) {
         int fam = Math.max(0, Math.min(4, family));
+        if (fam == 3 && CP_THRUST_LOOP != null) return CP_THRUST_LOOP;   // batch1: Cyber Psycho hum loop
         Holder<SoundEvent> s = FLIGHT_THRUST[fam];
         if (s == null) s = (fam == 3) ? FLIGHT_THRUST[2] : FLIGHT_THRUST[4];
         return s;

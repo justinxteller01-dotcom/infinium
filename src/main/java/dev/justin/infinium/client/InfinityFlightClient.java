@@ -84,12 +84,14 @@ public final class InfinityFlightClient {
                 if (loopEvent != null && loopEvent.value() != null) {
                     activeThrustSound = new FlightThrustSoundInstance(player, fam, loopEvent.value());
                     mc.getSoundManager().play(activeThrustSound);
+                    if (fam == 3) cpCue(mc, player, ModSounds.CP_THRUST_START);   // batch1: ramp-up on press
                 }
             }
         } else {
             if (activeThrustSound != null) {
                 activeThrustSound.stopFlightSound();
                 activeThrustSound = null;
+                if (fam == 3) cpCue(mc, player, ModSounds.CP_THRUST_STOP);    // batch1: power-down on release
             }
         }
     }
@@ -116,12 +118,20 @@ public final class InfinityFlightClient {
             if (ok && REMOTE_THRUST.contains(id)) {
                 if (si == null || si.isStopped()) {
                     Holder<SoundEvent> loop = ModSounds.flightThrust(fam);
-                    if (loop != null) { si = new FlightThrustSoundInstance(o, fam, loop.value()); REMOTE_SOUND.put(id, si); mc.getSoundManager().play(si); }
+                    if (loop != null) { si = new FlightThrustSoundInstance(o, fam, loop.value()); REMOTE_SOUND.put(id, si); mc.getSoundManager().play(si);
+                        if (fam == 3) cpCue(mc, o, ModSounds.CP_THRUST_START); }
                 }
-            } else if (si != null) { si.stopFlightSound(); REMOTE_SOUND.remove(id); }
+            } else if (si != null) { si.stopFlightSound(); REMOTE_SOUND.remove(id); if (fam == 3) cpCue(mc, o, ModSounds.CP_THRUST_STOP); }
         }
         REMOTE_FLYING.retainAll(live);
         REMOTE_SOUND.entrySet().removeIf(e -> { if (!live.contains(e.getKey())) { e.getValue().stopFlightSound(); return true; } return false; });
+    }
+
+    /** batch1: one-shot Cyber Psycho thrust cue (start / stop), positional. */
+    static void cpCue(Minecraft mc, Player p, Holder<SoundEvent> ev) {
+        if (ev == null) return;
+        mc.getSoundManager().play(new SimpleSoundInstance(ev.value(), SoundSource.PLAYERS, 0.6F * InfiniumClientConfig.soundVolumeMaster(), 1.0F,
+            SoundInstance.createUnseededRandom(), p.getX(), p.getY(), p.getZ()));
     }
 
     private InfinityFlightClient() {}

@@ -250,5 +250,32 @@
       "infinium:crystal/infinity_denied"
     ],
     "subtitle": "subtitles.infinium.crystal_denied"
+  },
+  "cyberpsycho_thrust_start": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_thrust_start"
+  },
+  "cyberpsycho_thrust_loop": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.ambient",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_thrust_loop"
+  },
+  "cyberpsycho_thrust_stop": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.deactivate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.infinium.cyberpsycho_thrust_stop"
   }
 }

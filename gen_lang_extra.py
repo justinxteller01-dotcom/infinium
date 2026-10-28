@@ -26,3 +26,15 @@ lang.update({
 })
 json.dump(lang, open(L, 'w'), indent=2)
 print('gen_lang_extra: lang merged')
+
+# ---- batch1: Cyber Psycho thrust sound events (PLACEHOLDERS). Each points at a vanilla event until the real clips
+# exist; to drop real files in, replace the entry with {"sounds": ["infinium:cyberpsycho/thrust_start"], ...}
+# and add assets/infinium/sounds/cyberpsycho/thrust_start.ogg (same for _loop / _stop).
+S = 'src/main/resources/assets/infinium/sounds.json'
+snd = json.load(open(S))
+for ev, vanilla in (('start', 'minecraft:block.beacon.activate'), ('loop', 'minecraft:block.beacon.ambient'),
+                    ('stop', 'minecraft:block.beacon.deactivate')):
+    snd[f'cyberpsycho_thrust_{ev}'] = {"sounds": [{"name": vanilla, "type": "event"}],
+                                       "subtitle": f"subtitles.infinium.cyberpsycho_thrust_{ev}"}
+json.dump(snd, open(S, 'w'), indent=2)
+print('gen_lang_extra: sounds merged')
