@@ -4,7 +4,8 @@ Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / In
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-89b8713` (pre-release, 2026-10-28 3:51 PM ET)
+## 1. Current release: `batch1-8c89f58` (pre-release, 2026-10-28 4:11 PM ET)
+- **Sword damage by 3 tiers**: Tier 1 (no armor, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12. Slash 30/40/50% = 3 / 4.4 / 6; beam 35/55/75% = 3.5 / 6.05 / 9.
 - **Cyberburn**: the Burn DoT display name is now "Cyberburn" (lang, tooltip, guide, docs). Registry id `infinium:burning` is unchanged.
 - **DoT durations** (slash/beam only, by owner set): Astral and Cybernetic 3s, Singularity and Cyber Psycho 4s, Infinity 5s.
 - **DoT ticks never give i-frames**: shared `DotDamage` helper resets `invulnerableTime` and lastHurt for Bleed and Cyberburn ticks.
@@ -67,7 +68,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 18. Slash + melee double hit.
 19. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-89b8713`)
+## 5. In-game test checklist (`batch1-8c89f58`)
+- [ ] Sword hits 10/11/12 by tier; tooltip shows 10 Attack Damage plus the tier line; slash/beam numbers match.
 - [ ] Slash/beam DoT lasts 3/4/5 s by set; plain melee applies none.
 - [ ] Cybernetic and Cyber Psycho show "Cyberburn" (pink embers, no fire); other sets show Bleed.
 - [ ] DoT ticks don't block the next melee hit (no i-frames); stacking with the slash feels fair.
@@ -82,7 +84,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
-- `batch1-SHA` 10-28 TIME: sword damage by 3 tiers, 10/11/12 (Tier 1 no armor/Astral/Cybernetic, Tier 2 Singularity/Cyber Psycho, Tier 3 Infinity); slash/beam scale with it.
+- `batch1-8c89f58` 10-28 4:11 PM: sword damage by 3 tiers, 10/11/12 (Tier 1 no armor/Astral/Cybernetic, Tier 2 Singularity/Cyber Psycho, Tier 3 Infinity); slash/beam scale with it.
 - `batch1-89b8713` 10-28 3:51 PM: Burn DoT renamed to Cyberburn.
 - `batch1-bf0e9a9` 10-28 3:46 PM: DoT duration by set, 3/4/5 s.
 - `batch1-a336ea2` 10-28 3:45 PM: DotDamage helper, so DoT ticks never give i-frames.
