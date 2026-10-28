@@ -35,12 +35,14 @@ public final class CrystalCharge {
     public static final DataComponentType<Integer> FILLED = DataComponentType.<Integer>builder()
             .persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build();
 
-    /** Crystal unlock order. Index 0 is the first perk. Not the piece defaults. */
+    /** Crystal unlock order. Index 0 is the first perk. Not the piece defaults.
+     *  Locked 2026-10-28: Astral/Singularity repair, block saver, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack.
+     *  Infinity: still undecided (unchanged). */
     public static final String[][] ORDER = {
-            {"noconsume", "stacks", "regen", "reach"},
-            {"jump", "slow", "mining", "attack"},
-            {"noconsume", "stacks", "regen", "reach"},
-            {"jump", "slow", "mining", "attack"},
+            {"regen", "noconsume", "stacks", "reach"},
+            {"mining", "jump", "slow", "attack"},
+            {"regen", "noconsume", "stacks", "reach"},
+            {"mining", "jump", "slow", "attack"},
             {"jump", "slow", "mining", "noconsume", "regen", "stacks", "reach", "attack"}
     };
 

@@ -99,11 +99,11 @@ armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor
    "Leggings: move slightly faster. Quantum Tunnel zips you forward in mid-air.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump higher.\n"
-   "Full set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
+   "Full set (charge with crystals), in unlock order: repairs all your gear over time, sometimes gives back a placed block, items stack higher, and longer reach.",
    'Full Astral set, fully charged',
    "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. "
-   "Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Reach +{n:reach_t1}. "
-   "Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}.")
+   "Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. "
+   "Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}. Reach +{n:reach_t1}.")
 armor('cybernetic', 1, 'Cybernetic Armor', 'Tier 1, the fighter line', ['cybernetic', 'armor', 'tier 1', 'fighter'],
    "Fused with cosmic energy. Everything feels a little... faster.\n"
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
@@ -111,10 +111,10 @@ armor('cybernetic', 1, 'Cybernetic Armor', 'Tier 1, the fighter line', ['cyberne
    "Chestplate: built-in jet wings.\n"
    "Leggings: faster running speed (your view won't zoom).\n"
    "Boots: no fall damage.\n"
-   "Full set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
+   "Full set (charge with crystals), in unlock order: mine faster, jump again in mid-air (wings off), nearby mobs slow down when you get hit, and swing swords and draw bows faster.",
    'Full Cybernetic set, fully charged',
    "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_cyber}. Mining +{n:mining_t1}. "
-   "{n:airjumps_t1} air jump. Attack +{n:attack_t1}. Slow {n:slow_t1} for {n:slowdur_t1}s, every {n:slowcd_t1}s, within {n:slow_radius} blocks.")
+   "{n:airjumps_t1} air jump. Slow {n:slow_t1} for {n:slowdur_t1}s, every {n:slowcd_t1}s, within {n:slow_radius} blocks. Attack +{n:attack_t1}.")
 armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor', ['singularity', 'armor', 'tier 2', 'upgrade'],
    "Compressed to the point of collapse, it bends gravity around the wearer.\n"
    "Upgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\n"
@@ -124,11 +124,11 @@ armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor'
    "Leggings: move slightly faster, with a longer Quantum Tunnel.\n"
    "Boots: no fall damage.\n"
    "Hold jump to jump even higher.\n"
-   "Full set: faster repair, gets blocks back more often, more reach, bigger stacks.",
+   "Full set, in unlock order: faster repair, gets blocks back more often, bigger stacks, more reach.",
    'Full Singularity set, fully charged',
    "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. "
-   "Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Reach +{n:reach_t2}. "
-   "Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}.")
+   "Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. "
+   "Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}. Reach +{n:reach_t2}.")
 armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic armor', ['cyber psycho', 'cyberpsycho', 'armor', 'tier 2', 'upgrade'],
    "Putting this much energy into one suit of armor shouldn't be possible. It's like it knows your movements before you do.\n"
    "Upgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\n"
@@ -137,10 +137,10 @@ armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic a
    "Chestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\n"
    "Leggings: super fast running speed.\n"
    "Boots: no fall damage.\n"
-   "Full set: mine faster, more air jumps, much faster attacks, a stronger slow.",
+   "Full set, in unlock order: mine faster, more air jumps, a stronger slow, much faster attacks.",
    'Full Cyber Psycho set, fully charged',
    "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_cp}. Mining +{n:mining_t2}. "
-   "{n:airjumps_t2} air jumps. Attack +{n:attack_t2}. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s.")
+   "{n:airjumps_t2} air jumps. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s. Attack +{n:attack_t2}.")
 armor('infinity', 4, 'Infinity Armor', 'Tier 3, upgrade both lines into one', ['infinity', 'armor', 'tier 3', 'upgrade'],
    "No edge, no limit — it stretches as far as the wearer dares to go.\n"
    "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\n"
