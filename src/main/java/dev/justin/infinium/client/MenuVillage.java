@@ -10,8 +10,9 @@ import net.minecraft.resources.Identifier;
  * split into layers under textures/gui/menu/village_*.png, laid out in a 1920x1080 design space and cover-fit.
  * Python mirror (keep in sync): /workspace/menu_mock/mock.py. Everything is a function of the 120s loop phase
  * with integer frequencies, so frame(T) == frame(0).
- * Layers back to front: sky, galaxy glow (breathing), stars (twinkle), meteors (ShootingStarLook colours, upper sky
- * only, never over the player), far (hills/trees/village), window glow (flicker), near (hill + player), ground
+ * v2 (2026-10-28): meteors are frozen in mid-air (fixed, farther/smaller; twinkle, glow pulse, trail shimmer,
+ * orbiting sparks, glints), fireflies, rising crystal motes, gentle camera sway; sky/galaxy/stars unchanged.
+ * Layers back to front: sky, galaxy glow (breathing), stars (twinkle), frozen meteors (upper sky only), far (hills/trees/village), window glow (flicker), near (hill + player), ground
  * crystal glow (pulse), centre darkening for the buttons. Parallax sway: sky 3, far 5, near 10 design px.
  */
 public final class MenuVillage {
@@ -35,7 +36,9 @@ public final class MenuVillage {
     private static final int N_STARS = 70;
     private static final float[] SU = new float[N_STARS], SV = new float[N_STARS], SB = new float[N_STARS], SP = new float[N_STARS];
     private static final int[] SM = new int[N_STARS];
-    private static final int[] METEOR_K = {8, 9, 10, 11, 12, 10, 9, 8};   // cycles per loop (period 120/k s)
+    // v2 frozen meteors (Fortnite-style, fixed in mid-air, farther/smaller): design x, y, trail angle deg, dir
+    private static final int[][] FROZEN = {{300, 120, 28, 1}, {640, 255, 22, -1}, {1330, 95, 34, -1}, {1585, 300, 20, 1}, {1110, 205, 26, 1}};
+    private static final int HEAD = 0xF0B0FF, TRAIL = 0xB050E0, PINK = 0xFF7AD9;
 
     static {
         java.util.Random r = new java.util.Random(0x51A7L);
@@ -77,35 +80,59 @@ public final class MenuVillage {
             g.fill(x, y, x + 1, y + 1, argb(a, 0xFFEBFF));
         }
 
-        // meteors: sparse (~4-6 visible), design y 40..380 (player's head starts ~500), seamless (integer k per loop)
-        for (int i = 0; i < METEOR_K.length; i++) {
-            int k = METEOR_K[i];
-            double raw = t * k + hash(i, 0, 9);
-            double ph = raw % 1.0;
-            int c = ((int) raw) % k;
-            double D = 0.55;
-            if (ph > D) continue;
-            double q = ph / D, fade = Math.min(1, Math.min(q / 0.15, (1 - q) / 0.2));
-            double sx = 150 + hash(i, c, 1) * 1500, sy = 40 + hash(i, c, 2) * 170;
-            double ang = Math.toRadians(18 + hash(i, c, 3) * 22);
-            int dir = hash(i, c, 4) < 0.5 ? 1 : -1;
-            double len = 420 + hash(i, c, 5) * 200;
-            double cs = Math.cos(ang), sn = Math.sin(ang);
-            double hx = sx + dir * cs * len * q, hy = sy + sn * len * q;
-            for (int j = 0; j < 14; j++) {
-                double f = j / 14.0, tx = hx - dir * cs * f * 70, ty = hy - sn * f * 70;
-                if (ty > 380) continue;
-                int gx = (int) (ox + (tx + skyDx) * s), gy = (int) (oy + ty * s);
-                int sz = j < 2 ? 2 : 1;
-                int col = j == 0 ? ShootingStarLook.HEAD_RGB : ShootingStarLook.TRAIL_RGB;
-                g.fill(gx, gy, gx + sz, gy + sz, argb(fade * (j == 0 ? 1.0 : 0.75 * (1 - f)), col));
+        // v2 meteors: frozen in the sky (no travel); only twinkle, glow pulse, trail shimmer, orbiting sparks, glints
+        for (int i = 0; i < FROZEN.length; i++) {
+            int[] m = FROZEN[i];
+            double p = hash(i, 0, 7) * TAU, ang = Math.toRadians(m[2]), ca = Math.cos(ang), sa = Math.sin(ang);
+            double pulse = 0.5 + 0.5 * Math.sin(TAU * 6 * t + p), tw = 0.5 + 0.5 * Math.sin(TAU * 17 * t + p * 1.7);
+            int gx = (int) (ox + (m[0] + skyDx) * s), gy = (int) (oy + m[1] * s);
+            g.fill(gx - 1, gy - 1, gx + 2, gy + 2, argb(0.10 + 0.12 * pulse, TRAIL));
+            for (int j = 1; j < 10; j++) {
+                double f = j / 10.0, tx = m[0] - m[3] * ca * f * 28, ty = m[1] - sa * f * 28;
+                double a = 0.55 * (1 - f) * (0.7 + 0.3 * Math.sin(TAU * 11 * t - f * 6 + p));
+                int x = (int) (ox + (tx + skyDx) * s), y = (int) (oy + ty * s);
+                g.fill(x, y, x + 1, y + 1, argb(a, TRAIL));
+            }
+            g.fill(gx, gy, gx + 1, gy + 1, argb(0.80 + 0.20 * tw, HEAD));
+            for (int j = 0; j < 2; j++) {
+                double oa = TAU * 10 * t + p + j * Math.PI;
+                int sx = (int) (ox + (m[0] + skyDx + 6 * Math.cos(oa)) * s), sy = (int) (oy + (m[1] + 3.5 * Math.sin(oa)) * s);
+                g.fill(sx, sy, sx + 1, sy + 1, argb(0.45 * (0.5 + 0.5 * Math.sin(TAU * 13 * t + p + j)), PINK));
+            }
+            double gl = Math.pow(Math.max(0, Math.sin(TAU * 4 * t + p)), 8);
+            if (gl > 0.02) for (int d = 1; d <= 2; d++) {
+                int c = argb(0.6 * gl / d, HEAD);
+                g.fill(gx + d, gy, gx + d + 1, gy + 1, c); g.fill(gx - d, gy, gx - d + 1, gy + 1, c);
+                g.fill(gx, gy + d, gx + 1, gy + d + 1, c); g.fill(gx, gy - d, gx + 1, gy - d + 1, c);
             }
         }
 
         layer(g, FAR, s, ox, oy, t, 1.0);
         layer(g, GLOW, s, ox, oy, t, 0.40 + 0.12 * Math.sin(TAU * 7 * t) + 0.07 * Math.sin(TAU * 19 * t + 1.3));
+        // v2 fireflies over the village (mid-field, camera amp 7): gentle bob + soft blink
+        double fdx = camX(7, t), fdy = camY(7, t);
+        for (int i = 0; i < 18; i++) {
+            double u = 60 + hash(i, 1, 21) * 1800, v = 640 + hash(i, 1, 22) * 250, p = hash(i, 1, 26) * TAU;
+            int a1 = 1 + (int) (hash(i, 1, 23) * 3), b1 = 1 + (int) (hash(i, 1, 24) * 3), c1 = 4 + (int) (hash(i, 1, 25) * 6);
+            double x = u + fdx + 14 * Math.sin(TAU * a1 * t + p), y = v + fdy + 8 * Math.sin(TAU * b1 * t + p * 1.3);
+            double gl = Math.pow(Math.max(0, Math.sin(TAU * c1 * t + p)), 2);
+            int gx = (int) (ox + x * s), gy = (int) (oy + y * s);
+            g.fill(gx - 1, gy - 1, gx + 2, gy + 2, argb(0.12 * gl, TRAIL));
+            g.fill(gx, gy, gx + 1, gy + 1, argb(0.15 + 0.65 * gl, (i & 1) == 1 ? PINK : HEAD));
+        }
         layer(g, NEAR, s, ox, oy, t, 1.0);
         layer(g, CRYSTAL, s, ox, oy, t, 0.30 + 0.22 * Math.sin(TAU * 4 * t));
+        // v2 crystal motes rising from the ground crystals (camera amp 10), integer cycles per loop
+        double ndx = camX(10, t), ndy = camY(10, t);
+        for (int i = 0; i < 16; i++) {
+            int k = 6 + (int) (hash(i, 2, 31) * 7);
+            double raw = t * k + hash(i, 2, 32), q = raw % 1.0;
+            int c = ((int) raw) % k;
+            double x = 80 + hash(i, c, 33) * 1760 + ndx + 5 * Math.sin(TAU * q * 2 + i), y = 1040 - hash(i, c, 34) * 60 + ndy - 110 * q;
+            double a = 0.55 * Math.min(1, Math.min(q / 0.2, (1 - q) / 0.3));
+            int gx = (int) (ox + x * s), gy = (int) (oy + y * s);
+            g.fill(gx, gy, gx + 1, gy + 1, argb(a, i % 3 != 0 ? PINK : HEAD));
+        }
 
         // centre darkening so the button column reads
         for (int x = 0; x < w; x += 4) {
@@ -114,9 +141,17 @@ public final class MenuVillage {
         }
     }
 
+    /** v1 sway (sky/galaxy unchanged) plus the v2 gentle camera sway on scene layers (amp >= 5). */
+    private static double camX(double a, double t) {
+        return a * Math.sin(TAU * t) + (a >= 5 ? a * 0.35 * Math.sin(TAU * 3 * t + 0.7) : 0);
+    }
+    private static double camY(double a, double t) {
+        return a * 0.4 * Math.sin(TAU * 2 * t + 1.0) + (a >= 5 ? a * 0.25 * Math.sin(TAU * 5 * t + 2.1) : 0);
+    }
+
     private static void layer(GuiGraphicsExtractor g, Layer l, float s, float ox, float oy, double t, double alpha) {
         if (alpha <= 0.002) return;
-        float dx = (float) (l.amp() * Math.sin(TAU * t)), dy = (float) (l.amp() * 0.4 * Math.sin(TAU * 2 * t + 1.0));
+        float dx = (float) camX(l.amp(), t), dy = (float) camY(l.amp(), t);
         var pose = g.pose();
         pose.pushMatrix();
         pose.translate(ox + (l.x() + dx) * s, oy + (l.y() + dy) * s);
