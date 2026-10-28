@@ -180,6 +180,7 @@ public class Infinium implements ModInitializer {
         ModSounds.register();
         SetBonuses.register();
         Perks.register();
+        UiUnlocks.register();   // batch1 A1/A3 persistent UI unlock flags
         CrystalCharge.register();
         EnchantRules.init();
         // creative tabs (JEI/EMI list registered items anyway; this makes them visible in vanilla creative too)

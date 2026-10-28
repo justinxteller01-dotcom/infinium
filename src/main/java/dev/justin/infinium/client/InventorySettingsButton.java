@@ -31,7 +31,10 @@ import net.minecraft.world.item.ItemStack;
  *    (survival +28,+71; creative Inventory tab +75,+81). Visually fills with the armor set's cosmic color and
  *    opens the Spacetime Crystal Matrix on click. Only visible when wearing a full matching Infinium armor set.
  * 3) Crystal counter (G4): small Spacetime Crystal icon + "x/80" directly right of the gear, display only.
- *    x = CrystalCharge.totalLifetimeCrystals(player). Same visibility as the gear (full matching set worn).
+ *    x = CrystalCharge.totalLifetimeCrystals(player).
+ * batch1 visibility: gear appears the first time ANY Infinium weapon/tool/armor is acquired and stays forever (A1);
+ *    the counter appears after the first full-set equip and stays forever (A3); both via the synced UiUnlocks flags.
+ *    The energy bar shows only while a full matching set is worn (A2).
  *    The old portrait-top "X / 80" counter box was removed (G4); the bottom energy bar is kept.
  */
 public final class InventorySettingsButton extends AbstractButton {
@@ -72,12 +75,15 @@ public final class InventorySettingsButton extends AbstractButton {
         // G4: counter sits immediately right of the gear (gear is 12 wide, 2 px gap).
         counter.setPosition(gear.getX() + gear.getWidth() + 2, gear.getY() + 2);
         Player p = Minecraft.getInstance().player;
-        // M4 (bug 5): gear, counter and energy bar only show while a full matching set is worn.
+        // batch1: gear = forever once ANY Infinium gear was acquired (A1); counter = forever after the first full-set
+        // equip (A3); energy bar = only while a full matching set is worn right now (A2). Flags: dev.justin.infinium.UiUnlocks.
         boolean setEquipped = p != null && Infinium.setWorn(p) && invOpen;
-        gear.visible = setEquipped;
+        boolean gearUnlocked = p != null && invOpen && (dev.justin.infinium.UiUnlocks.has(p, dev.justin.infinium.UiUnlocks.GEAR) || hasGear(p) || setEquipped);
+        boolean counterUnlocked = p != null && invOpen && (dev.justin.infinium.UiUnlocks.has(p, dev.justin.infinium.UiUnlocks.FULL_SET) || setEquipped);
+        gear.visible = gearUnlocked;
         gear.active = gear.visible;
 
-        counter.visible = setEquipped;
+        counter.visible = counterUnlocked;
         counter.active = false; // display only, never clickable
 
         energyBar.visible = setEquipped;
