@@ -251,6 +251,478 @@
     ],
     "subtitle": "subtitles.infinium.crystal_denied"
   },
+  "bonus_jump": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.breeze.jump",
+        "type": "event",
+        "volume": 0.6,
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.infinium.bonus_jump"
+  },
+  "bonus_jump_last": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "volume": 1.0,
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.infinium.bonus_jump_last"
+  },
+  "tool_mode": {
+    "sounds": [
+      "infinium:tools/mode_switch"
+    ],
+    "subtitle": "subtitles.infinium.tool_mode"
+  },
+  "wings_astral_enable": {
+    "sounds": [
+      "infinium:wings/astral_enable"
+    ],
+    "subtitle": "subtitles.infinium.wings_enable"
+  },
+  "wings_astral_disable": {
+    "sounds": [
+      "infinium:wings/astral_disable"
+    ],
+    "subtitle": "subtitles.infinium.wings_disable"
+  },
+  "wings_cybernetic_enable": {
+    "sounds": [
+      "infinium:wings/cybernetic_enable"
+    ],
+    "subtitle": "subtitles.infinium.wings_enable"
+  },
+  "wings_cybernetic_disable": {
+    "sounds": [
+      "infinium:wings/cybernetic_disable"
+    ],
+    "subtitle": "subtitles.infinium.wings_disable"
+  },
+  "wings_singularity_enable": {
+    "sounds": [
+      "infinium:wings/singularity_enable"
+    ],
+    "subtitle": "subtitles.infinium.wings_enable"
+  },
+  "wings_singularity_disable": {
+    "sounds": [
+      "infinium:wings/singularity_disable"
+    ],
+    "subtitle": "subtitles.infinium.wings_disable"
+  },
+  "wings_cyberpsycho_enable": {
+    "sounds": [
+      "infinium:wings/cyberpsycho_enable"
+    ],
+    "subtitle": "subtitles.infinium.wings_enable"
+  },
+  "wings_cyberpsycho_disable": {
+    "sounds": [
+      "infinium:wings/cyberpsycho_disable"
+    ],
+    "subtitle": "subtitles.infinium.wings_disable"
+  },
+  "wings_infinity_enable": {
+    "sounds": [
+      "infinium:wings/infinity_enable"
+    ],
+    "subtitle": "subtitles.infinium.wings_enable"
+  },
+  "wings_infinity_disable": {
+    "sounds": [
+      "infinium:wings/infinity_disable"
+    ],
+    "subtitle": "subtitles.infinium.wings_disable"
+  },
+  "flight_enter_astral": {
+    "sounds": [
+      "infinium:flight/enter_astral"
+    ],
+    "subtitle": "subtitles.infinium.flight_enter"
+  },
+  "flight_enter_singularity": {
+    "sounds": [
+      "infinium:flight/enter_singularity"
+    ],
+    "subtitle": "subtitles.infinium.flight_enter"
+  },
+  "flight_enter_infinity": {
+    "sounds": [
+      "infinium:flight/enter_infinity"
+    ],
+    "subtitle": "subtitles.infinium.flight_enter"
+  },
+  "flight_thrust_astral": {
+    "sounds": [
+      "infinium:flight/thrust_astral"
+    ],
+    "subtitle": "subtitles.infinium.flight_thrust"
+  },
+  "flight_thrust_singularity": {
+    "sounds": [
+      "infinium:flight/thrust_singularity"
+    ],
+    "subtitle": "subtitles.infinium.flight_thrust"
+  },
+  "flight_thrust_infinity": {
+    "sounds": [
+      "infinium:flight/thrust_infinity"
+    ],
+    "subtitle": "subtitles.infinium.flight_thrust"
+  },
+  "warp_departure": {
+    "sounds": [
+      "infinium:warp/warp_departure"
+    ],
+    "subtitle": "subtitles.infinium.warp_departure"
+  },
+  "warp_arrival": {
+    "sounds": [
+      "infinium:warp/warp_arrival"
+    ],
+    "subtitle": "subtitles.infinium.warp_arrival"
+  },
+  "sword_slash_launch": {
+    "sounds": [
+      "infinium:sword/slash_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_launch"
+  },
+  "sword_stab_launch": {
+    "sounds": [
+      "infinium:sword/stab_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_launch"
+  },
+  "sword_slash_charge": {
+    "sounds": [
+      "infinium:sword/slash_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_charge"
+  },
+  "sword_stab_charge": {
+    "sounds": [
+      "infinium:sword/stab_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_charge"
+  },
+  "sword_spin": {
+    "sounds": [
+      "infinium:sword/sword_spin"
+    ],
+    "subtitle": "subtitles.infinium.sword_spin"
+  },
+  "sword_slash_block_hit": {
+    "sounds": [
+      "infinium:sword/slash_block_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_block_hit"
+  },
+  "sword.astral.slash_launch": {
+    "sounds": [
+      "infinium:sword/astral_slash_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_launch"
+  },
+  "sword.astral.stab_launch": {
+    "sounds": [
+      "infinium:sword/astral_stab_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_launch"
+  },
+  "sword.astral.slash_charge": {
+    "sounds": [
+      "infinium:sword/astral_slash_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_charge"
+  },
+  "sword.astral.stab_charge": {
+    "sounds": [
+      "infinium:sword/astral_stab_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_charge"
+  },
+  "sword.astral.spin": {
+    "sounds": [
+      "infinium:sword/astral_spin"
+    ],
+    "subtitle": "subtitles.infinium.sword_spin"
+  },
+  "sword.astral.block_hit": {
+    "sounds": [
+      "infinium:sword/astral_block_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_block_hit"
+  },
+  "sword.astral.crit_twirl": {
+    "sounds": [
+      "infinium:sword/astral_crit_twirl"
+    ],
+    "subtitle": "subtitles.infinium.sword_crit_twirl"
+  },
+  "sword.astral.entity_hit": {
+    "sounds": [
+      "infinium:sword/astral_entity_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_entity_hit"
+  },
+  "sword.astral.mode_toggle": {
+    "sounds": [
+      "infinium:sword/astral_mode_toggle"
+    ],
+    "subtitle": "subtitles.infinium.tool_mode"
+  },
+  "sword.cybernetic.slash_launch": {
+    "sounds": [
+      "infinium:sword/cybernetic_slash_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_launch"
+  },
+  "sword.cybernetic.stab_launch": {
+    "sounds": [
+      "infinium:sword/cybernetic_stab_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_launch"
+  },
+  "sword.cybernetic.slash_charge": {
+    "sounds": [
+      "infinium:sword/cybernetic_slash_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_charge"
+  },
+  "sword.cybernetic.stab_charge": {
+    "sounds": [
+      "infinium:sword/cybernetic_stab_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_charge"
+  },
+  "sword.cybernetic.spin": {
+    "sounds": [
+      "infinium:sword/cybernetic_spin"
+    ],
+    "subtitle": "subtitles.infinium.sword_spin"
+  },
+  "sword.cybernetic.block_hit": {
+    "sounds": [
+      "infinium:sword/cybernetic_block_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_block_hit"
+  },
+  "sword.cybernetic.crit_twirl": {
+    "sounds": [
+      "infinium:sword/cybernetic_crit_twirl"
+    ],
+    "subtitle": "subtitles.infinium.sword_crit_twirl"
+  },
+  "sword.cybernetic.entity_hit": {
+    "sounds": [
+      "infinium:sword/cybernetic_entity_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_entity_hit"
+  },
+  "sword.cybernetic.mode_toggle": {
+    "sounds": [
+      "infinium:sword/cybernetic_mode_toggle"
+    ],
+    "subtitle": "subtitles.infinium.tool_mode"
+  },
+  "sword.singularity.slash_launch": {
+    "sounds": [
+      "infinium:sword/singularity_slash_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_launch"
+  },
+  "sword.singularity.stab_launch": {
+    "sounds": [
+      "infinium:sword/singularity_stab_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_launch"
+  },
+  "sword.singularity.slash_charge": {
+    "sounds": [
+      "infinium:sword/singularity_slash_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_charge"
+  },
+  "sword.singularity.stab_charge": {
+    "sounds": [
+      "infinium:sword/singularity_stab_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_charge"
+  },
+  "sword.singularity.spin": {
+    "sounds": [
+      "infinium:sword/singularity_spin"
+    ],
+    "subtitle": "subtitles.infinium.sword_spin"
+  },
+  "sword.singularity.block_hit": {
+    "sounds": [
+      "infinium:sword/singularity_block_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_block_hit"
+  },
+  "sword.singularity.crit_twirl": {
+    "sounds": [
+      "infinium:sword/singularity_crit_twirl"
+    ],
+    "subtitle": "subtitles.infinium.sword_crit_twirl"
+  },
+  "sword.singularity.entity_hit": {
+    "sounds": [
+      "infinium:sword/singularity_entity_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_entity_hit"
+  },
+  "sword.singularity.mode_toggle": {
+    "sounds": [
+      "infinium:sword/singularity_mode_toggle"
+    ],
+    "subtitle": "subtitles.infinium.tool_mode"
+  },
+  "sword.cyberpsycho.slash_launch": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_slash_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_launch"
+  },
+  "sword.cyberpsycho.stab_launch": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_stab_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_launch"
+  },
+  "sword.cyberpsycho.slash_charge": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_slash_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_charge"
+  },
+  "sword.cyberpsycho.stab_charge": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_stab_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_charge"
+  },
+  "sword.cyberpsycho.spin": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_spin"
+    ],
+    "subtitle": "subtitles.infinium.sword_spin"
+  },
+  "sword.cyberpsycho.block_hit": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_block_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_block_hit"
+  },
+  "sword.cyberpsycho.crit_twirl": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_crit_twirl"
+    ],
+    "subtitle": "subtitles.infinium.sword_crit_twirl"
+  },
+  "sword.cyberpsycho.entity_hit": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_entity_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_entity_hit"
+  },
+  "sword.cyberpsycho.mode_toggle": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_mode_toggle"
+    ],
+    "subtitle": "subtitles.infinium.tool_mode"
+  },
+  "sword.infinity.slash_launch": {
+    "sounds": [
+      "infinium:sword/infinity_slash_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_launch"
+  },
+  "sword.infinity.stab_launch": {
+    "sounds": [
+      "infinium:sword/infinity_stab_launch"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_launch"
+  },
+  "sword.infinity.slash_charge": {
+    "sounds": [
+      "infinium:sword/infinity_slash_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_slash_charge"
+  },
+  "sword.infinity.stab_charge": {
+    "sounds": [
+      "infinium:sword/infinity_stab_charge"
+    ],
+    "subtitle": "subtitles.infinium.sword_stab_charge"
+  },
+  "sword.infinity.spin": {
+    "sounds": [
+      "infinium:sword/infinity_spin"
+    ],
+    "subtitle": "subtitles.infinium.sword_spin"
+  },
+  "sword.infinity.block_hit": {
+    "sounds": [
+      "infinium:sword/infinity_block_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_block_hit"
+  },
+  "sword.infinity.crit_twirl": {
+    "sounds": [
+      "infinium:sword/infinity_crit_twirl"
+    ],
+    "subtitle": "subtitles.infinium.sword_crit_twirl"
+  },
+  "sword.infinity.entity_hit": {
+    "sounds": [
+      "infinium:sword/infinity_entity_hit"
+    ],
+    "subtitle": "subtitles.infinium.sword_entity_hit"
+  },
+  "sword.infinity.mode_toggle": {
+    "sounds": [
+      "infinium:sword/infinity_mode_toggle"
+    ],
+    "subtitle": "subtitles.infinium.tool_mode"
+  },
+  "meteor_falling": {
+    "sounds": [
+      "infinium:event/meteor_falling"
+    ],
+    "subtitle": "subtitles.infinium.meteor_falling"
+  },
+  "meteor_impact": {
+    "sounds": [
+      "infinium:event/meteor_impact"
+    ],
+    "subtitle": "subtitles.infinium.meteor_impact"
+  },
+  "meteor_warning": {
+    "sounds": [
+      "infinium:event/meteor_warning"
+    ],
+    "subtitle": "subtitles.infinium.meteor_warning"
+  },
+  "meteor_countdown": {
+    "sounds": [
+      "infinium:event/meteor_countdown"
+    ],
+    "subtitle": "subtitles.infinium.meteor_countdown"
+  },
+  "meteor_ambient": {
+    "sounds": [
+      "infinium:event/meteor_ambient"
+    ],
+    "subtitle": "subtitles.infinium.meteor_ambient"
+  },
   "cyberpsycho_thrust_start": {
     "sounds": [
       {
@@ -378,4 +850,4 @@
     ],
     "subtitle": "subtitles.infinium.set_maxed_infinity"
   }
-}
+}
