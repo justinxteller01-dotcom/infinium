@@ -6,49 +6,51 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
 /**
- * Out-of-world title backdrop: "village hill" painting (from Justin's gemini_village reference, AI shards removed),
- * split into layers under textures/gui/menu/village_*.png, laid out in a 1920x1080 design space and cover-fit.
- * Python mirror (keep in sync): /workspace/menu_mock/mock.py. Everything is a function of the 120s loop phase
- * with integer frequencies, so frame(T) == frame(0).
- * v3 (2026-10-28): large bright frozen meteors (cluster + strays; glow pulse, trail shimmer, twinkle spikes, orbiting
- * sparks), fireflies, floating crystal sparkles, high camera (hill pushed down, ground crystals removed) with a
- * noticeable gentle sway; sky/galaxy/stars unchanged.
- * Layers back to front: sky, galaxy glow (breathing), stars (twinkle), frozen meteors (upper sky only), far (hills/trees/village), window glow (flicker), near (hill + player), ground
- * crystal glow (pulse), centre darkening for the buttons. Parallax sway: sky 3, far 5, near 10 design px.
+ * Out-of-world title backdrop, menu v4 (2026-10-28, rebuilt from scratch): a figure-free cinematic night landscape
+ * with a village. Procedural layers textures/gui/menu/v4_*.png (built by /workspace/menu_mock/build_layers_v4.py),
+ * 1920x1080 design space, cover-fit; every layer spans x=-60..1980 so the camera can sway.
+ * Back to front: sky gradient + baked stars, nebula (breathing), twinkling stars, 18 frozen meteors spread over the
+ * whole sky on a jittered grid (glow pulse, trail shimmer, twinkle spikes, orbiting sparks), far mountains, drifting
+ * fog, mid hills, fog, village hill + lit windows (flicker), fireflies, foreground tree framing, floating crystal
+ * sparkles, vignette and centre darkening for the buttons. Parallax: camera sway amplitude grows with depth.
+ * Python mirror (keep in sync): /workspace/menu_mock/mock.py. All motion uses integer frequencies of the 120s loop.
  */
 public final class MenuVillage {
     private MenuVillage() {}
 
     private static final long PERIOD_MS = 120_000L;
     private static final double TAU = Math.PI * 2;
+    private static final int HEAD = 0xF0B0FF, CORE = 0xFFE0F6, TRAIL = 0xB050E0, PINK = 0xFF7AD9;
 
-    // name, design x, y, w, h, texture w, h, sway amplitude (design px)
-    private record Layer(Identifier tex, float x, float y, float w, float h, int tw, int th, float amp) {}
-    private static Layer L(String n, float x, float y, float w, float h, int tw, int th, float amp) {
-        return new Layer(Infinium.id("textures/gui/menu/village_" + n + ".png"), x, y, w, h, tw, th, amp);
+    private record Layer(Identifier tex, float y, float h, int tw, int th, float amp) {}
+    private static Layer L(String n, float y, float h, int tw, int th, float amp) {
+        return new Layer(Infinium.id("textures/gui/menu/v4_" + n + ".png"), y, h, tw, th, amp);
     }
-    private static final Layer SKY = L("sky", 0, 0, 1920, 1080, 1280, 720, 3);
-    private static final Layer GALAXY = L("galaxy", 0, 0, 1920, 1080, 960, 540, 3);
-    // v3 high camera: hill/ground pushed down (ground crystals off-screen, crystal glow layer no longer drawn)
-    private static final Layer FAR = L("far", 0, 866, 1920, 414, 1920, 414, 14);
-    private static final Layer GLOW = L("glow", 1141, 1040, 388, 86, 388, 86, 14);
-    private static final Layer NEAR = L("near", 0, 836, 1920, 574, 1920, 574, 20);
+    private static final Layer SKY = L("sky", 0, 1080, 1020, 540, 4);
+    private static final Layer NEBULA = L("nebula", 0, 1080, 510, 270, 4);
+    private static final Layer FAR = L("far", 560, 520, 1020, 260, 8);
+    private static final Layer FOG = L("fog", 0, 120, 510, 60, 0);
+    private static final Layer MID = L("mid", 700, 380, 1020, 190, 12);
+    private static final Layer VILLAGE = L("village", 800, 280, 1020, 140, 18);
+    private static final Layer WINDOWS = L("windows", 800, 280, 1020, 140, 18);
+    private static final Layer FG = L("fg", 760, 320, 1020, 160, 28);
 
-    private static final int N_STARS = 70;
+    private static final int N_STARS = 90;
     private static final float[] SU = new float[N_STARS], SV = new float[N_STARS], SB = new float[N_STARS], SP = new float[N_STARS];
     private static final int[] SM = new int[N_STARS];
-    // v3 frozen meteors: x, y, size, trail angle deg, dir. Tight cluster around (1340,230) + strays
-    private static final double[][] METEORS = {{1340, 230, 1.0, 30, 1}, {1395, 262, 0.8, 30, 1}, {1300, 282, 0.7, 30, 1}, {1420, 205, 0.6, 30, 1},
-        {1362, 318, 0.55, 30, 1}, {1268, 214, 0.5, 30, 1}, {1450, 300, 0.45, 30, 1},
-        {380, 150, 0.8, 24, -1}, {700, 300, 0.55, 26, -1}, {1700, 110, 0.6, 34, 1}, {980, 95, 0.45, 28, 1}};
-    private static final int HEAD = 0xF0B0FF, CORE = 0xFFE0F6, TRAIL = 0xB050E0, PINK = 0xFF7AD9, HAZE = 0x0B0614;
+    private static final double[][] METEORS = new double[18][];
 
     static {
         java.util.Random r = new java.util.Random(0x51A7L);
         for (int i = 0; i < N_STARS; i++) {
-            SU[i] = r.nextFloat(); SV[i] = r.nextFloat() * 0.55F;
+            SU[i] = r.nextFloat(); SV[i] = r.nextFloat() * 0.6F;
             SB[i] = 0.3F + 0.7F * r.nextFloat(); SP[i] = (float) (r.nextFloat() * TAU);
             SM[i] = 3 + r.nextInt(9);
+        }
+        for (int row = 0; row < 3; row++) for (int col = 0; col < 6; col++) {
+            int i = row * 6 + col;
+            METEORS[i] = new double[]{100 + (col + 0.15 + 0.7 * hash(i, 5, 1)) * 1720 / 6.0, 70 + (row + 0.15 + 0.7 * hash(i, 5, 2)) * 490 / 3.0,
+                0.45 + 0.4 * hash(i, 5, 3), 26 + 6 * hash(i, 5, 4)};
         }
     }
 
@@ -63,43 +65,43 @@ public final class MenuVillage {
         return (ai << 24) | (rgb & 0xFFFFFF);
     }
 
+    private static double camX(double a, double t) { return a * Math.sin(TAU * t) + a * 0.4 * Math.sin(TAU * 3 * t + 0.7); }
+    private static double camY(double a, double t) { return a * 0.35 * Math.sin(TAU * 2 * t + 1.0) + a * 0.15 * Math.sin(TAU * 5 * t + 2.1); }
+
     public static void draw(GuiGraphicsExtractor g, int w, int h) {
-        double t = (System.currentTimeMillis() % PERIOD_MS) / (double) PERIOD_MS;
-        draw(g, w, h, t);
+        draw(g, w, h, (System.currentTimeMillis() % PERIOD_MS) / (double) PERIOD_MS);
     }
 
     public static void draw(GuiGraphicsExtractor g, int w, int h, double t) {
         g.fill(0, 0, w, h, 0xFF000000);
         float s = Math.max(w / 1920F, h / 1080F) * 1.02F;
         float ox = (w - 1920 * s) / 2F, oy = (h - 1080 * s) / 2F;
-        double skyDx = 3 * Math.sin(TAU * t);
+        double sdx = camX(4, t), sdy = camY(4, t);
 
-        layer(g, SKY, s, ox, oy, t, 1.0);
-        layer(g, GALAXY, s, ox, oy, t, 0.45 + 0.25 * Math.sin(TAU * 2 * t));
-
+        layer(g, SKY, s, ox, oy, t, 1.0, SKY.y(), 0);
+        layer(g, NEBULA, s, ox, oy, t, 0.55 + 0.25 * Math.sin(TAU * 2 * t), NEBULA.y(), 0);
         for (int i = 0; i < N_STARS; i++) {
-            double a = 0.75 * SB[i] * (0.55 + 0.45 * Math.sin(TAU * SM[i] * t + SP[i]));
-            int x = (int) (ox + (SU[i] * 1920 + skyDx) * s), y = (int) (oy + SV[i] * 1080 * s);
+            double a = 0.8 * SB[i] * (0.55 + 0.45 * Math.sin(TAU * SM[i] * t + SP[i]));
+            int x = (int) (ox + (SU[i] * 1920 + sdx) * s), y = (int) (oy + (SV[i] * 1080 + sdy) * s);
             g.fill(x, y, x + 1, y + 1, argb(a, 0xFFEBFF));
         }
 
-        // v3 frozen meteors (fixed in the sky, sky sway only): glow pulse, trail shimmer, twinkle spikes, orbiting sparks
         for (int i = 0; i < METEORS.length; i++) {
             double[] m = METEORS[i];
-            double sz = m[2], dr = m[4], p = hash(i, 0, 7) * TAU, ca = Math.cos(Math.toRadians(m[3])), sa = Math.sin(Math.toRadians(m[3]));
+            double sz = m[2], p = hash(i, 0, 7) * TAU, ca = Math.cos(Math.toRadians(m[3])), sa = Math.sin(Math.toRadians(m[3]));
             double pulse = 0.5 + 0.5 * Math.sin(TAU * 6 * t + p), tw = 0.5 + 0.5 * Math.sin(TAU * 15 * t + p * 1.7);
-            double cx = ox + (m[0] + skyDx) * s, cy = oy + m[1] * s;
+            double cx = ox + (m[0] + sdx) * s, cy = oy + (m[1] + sdy) * s;
             int icx = (int) cx, icy = (int) cy;
             for (int j = 0; j < 18; j++) {
-                double f = j / 18.0, L = 150 * sz;
-                int x = (int) (cx - dr * ca * f * L * s), y = (int) (cy - sa * f * L * s);
-                int w_ = Math.max(1, (int) Math.round(4 * sz * (1 - f) + 1));
+                double f = j / 18.0, len = 150 * sz;
+                int x = (int) (cx - ca * f * len * s), y = (int) (cy - sa * f * len * s);
+                int ww = Math.max(1, (int) Math.round(4 * sz * (1 - f) + 1));
                 double a = 0.85 * Math.pow(1 - f, 1.3) * (0.65 + 0.35 * Math.sin(TAU * 9 * t - f * 8 + p));
-                int x0 = x - Math.floorDiv(w_, 2), y0 = y - Math.floorDiv(w_, 2);
-                g.fill(x0, y0, x0 + w_, y0 + w_, argb(a, j > 3 ? TRAIL : PINK));
+                int x0 = x - Math.floorDiv(ww, 2), y0 = y - Math.floorDiv(ww, 2);
+                g.fill(x0, y0, x0 + ww, y0 + ww, argb(a, j > 3 ? TRAIL : PINK));
             }
             int[] hr = {(int) (14 * sz) + 3, (int) (9 * sz) + 2, (int) (5 * sz) + 2};
-            double[] ha = {0.10, 0.16, 0.26};
+            double[] ha = {0.06, 0.10, 0.18};
             for (int k = 0; k < 3; k++) g.fill(icx - hr[k], icy - hr[k], icx + hr[k] + 1, icy + hr[k] + 1, argb(ha[k] * (0.5 + pulse), TRAIL));
             int r = (int) (2 * sz) + 1;
             g.fill(icx - r, icy - r, icx + r + 1, icy + r + 1, argb(0.95, HEAD));
@@ -114,28 +116,16 @@ public final class MenuVillage {
             }
         }
 
-        // patch over the hidden player's baked ghost in the sky painting (sky sway)
-        int[] br = {120, 90, 62, 36};
-        double[] ba = {0.30, 0.35, 0.40, 0.45};
-        for (int k = 0; k < 4; k++) {
-            double bx = ox + (935 + skyDx) * s, by = oy + 590 * s;
-            g.fill((int) (bx - br[k] * s), (int) (by - br[k] * 1.4 * s), (int) (bx + br[k] * s), (int) (by + br[k] * 1.4 * s), argb(ba[k], 0x161538));
-        }
-        // high camera: purple-black haze over the lower sky / valley
-        double hy = camY(14, t);
-        for (int y = (int) (oy + (560 + hy) * s); y < h; y += 2) {
-            double d = (y - oy) / s - 560 - hy;
-            g.fill(0, y, w, y + 2, argb(Math.min(1, d / 200) * 0.92, HAZE));
-        }
+        layer(g, FAR, s, ox, oy, t, 1.0, FAR.y(), 0);
+        layer(g, FOG, s, ox, oy, t, 0.8, 640, 60 * Math.sin(TAU * t + 0.3));
+        layer(g, MID, s, ox, oy, t, 1.0, MID.y(), 0);
+        layer(g, FOG, s, ox, oy, t, 0.7, 770, -80 * Math.sin(TAU * t + 1.9));
+        layer(g, VILLAGE, s, ox, oy, t, 1.0, VILLAGE.y(), 0);
+        layer(g, WINDOWS, s, ox, oy, t, 0.55 + 0.15 * Math.sin(TAU * 7 * t) + 0.08 * Math.sin(TAU * 19 * t + 1.3), WINDOWS.y(), 0);
 
-        layer(g, FAR, s, ox, oy, t, 1.0);
-        layer(g, GLOW, s, ox, oy, t, 0.40 + 0.12 * Math.sin(TAU * 7 * t) + 0.07 * Math.sin(TAU * 19 * t + 1.3));
-        layer(g, NEAR, s, ox, oy, t, 1.0);
-
-        // fireflies (drift + blink) and floating crystal sparkles (rise + twinkle), scene sway
-        double fdx = camX(14, t), fdy = camY(14, t);
-        for (int i = 0; i < 28; i++) {
-            double u = 40 + hash(i, 1, 21) * 1840, v = 560 + hash(i, 1, 22) * 440, p = hash(i, 1, 26) * TAU;
+        double fdx = camX(18, t), fdy = camY(18, t);
+        for (int i = 0; i < 26; i++) {
+            double u = 40 + hash(i, 1, 21) * 1840, v = 760 + hash(i, 1, 22) * 220, p = hash(i, 1, 26) * TAU;
             int a1 = 1 + (int) (hash(i, 1, 23) * 3), b1 = 1 + (int) (hash(i, 1, 24) * 3), c1 = 3 + (int) (hash(i, 1, 25) * 5);
             double x = u + fdx + 30 * Math.sin(TAU * a1 * t + p), y = v + fdy + 16 * Math.sin(TAU * b1 * t + p * 1.3);
             double gl = 0.25 + 0.75 * Math.pow(Math.max(0, Math.sin(TAU * c1 * t + p)), 2);
@@ -144,11 +134,15 @@ public final class MenuVillage {
             g.fill(gx - 1, gy - 1, gx + 2, gy + 2, argb(0.35 * gl, (i & 1) == 1 ? PINK : HEAD));
             g.fill(gx, gy, gx + 1, gy + 1, argb(0.95 * gl, CORE));
         }
+
+        layer(g, FG, s, ox, oy, t, 1.0, FG.y(), 0);
+
+        double gdx = camX(28, t), gdy = camY(28, t);
         for (int i = 0; i < 30; i++) {
             int k = 3 + (int) (hash(i, 2, 31) * 5);
             double raw = t * k + hash(i, 2, 32), q = raw % 1.0;
             int c = ((int) raw) % k;
-            double x = 60 + hash(i, c, 33) * 1800 + fdx + 12 * Math.sin(TAU * q * 2 + i), y = 1000 - hash(i, c, 34) * 200 + fdy - 260 * q;
+            double x = 60 + hash(i, c, 33) * 1800 + gdx + 12 * Math.sin(TAU * q * 2 + i), y = 1060 - hash(i, c, 34) * 260 + gdy - 300 * q;
             double a = 0.9 * Math.min(1, Math.min(q / 0.2, (1 - q) / 0.3)), tw = 0.5 + 0.5 * Math.sin(TAU * q * 6 + i);
             int gx = (int) (ox + x * s), gy = (int) (oy + y * s), col = i % 3 != 0 ? PINK : HEAD;
             g.fill(gx, gy, gx + 2, gy + 2, argb(a, col));
@@ -158,28 +152,25 @@ public final class MenuVillage {
             }
         }
 
-        // centre darkening so the button column reads
+        int vc = argb(0.07, 0);
+        for (int k = 0; k < 8; k++) {
+            int e = (int) ((k + 1) * h * 0.03), e2 = (int) ((k + 1) * w * 0.02);
+            g.fill(0, 0, w, e, vc); g.fill(0, h - e, w, h, vc);
+            g.fill(0, 0, e2, h, vc); g.fill(w - e2, 0, w, h, vc);
+        }
         for (int x = 0; x < w; x += 4) {
             double u = (x + 2 - w / 2.0) / (0.20 * w);
-            g.fill(x, 0, Math.min(w, x + 4), h, argb(0.30 * Math.exp(-u * u), 0));
+            g.fill(x, 0, Math.min(w, x + 4), h, argb(0.22 * Math.exp(-u * u), 0));
         }
     }
 
-    /** v1 sway (sky/galaxy unchanged) plus the v2 gentle camera sway on scene layers (amp >= 5). */
-    private static double camX(double a, double t) {
-        return a * Math.sin(TAU * t) + (a >= 5 ? a * 0.4 * Math.sin(TAU * 3 * t + 0.7) : 0);
-    }
-    private static double camY(double a, double t) {
-        return a * 0.4 * Math.sin(TAU * 2 * t + 1.0) + (a >= 5 ? a * 0.3 * Math.sin(TAU * 5 * t + 2.1) : 0);
-    }
-
-    private static void layer(GuiGraphicsExtractor g, Layer l, float s, float ox, float oy, double t, double alpha) {
+    private static void layer(GuiGraphicsExtractor g, Layer l, float s, float ox, float oy, double t, double alpha, double y, double xoff) {
         if (alpha <= 0.002) return;
         float dx = (float) camX(l.amp(), t), dy = (float) camY(l.amp(), t);
         var pose = g.pose();
         pose.pushMatrix();
-        pose.translate(ox + (l.x() + dx) * s, oy + (l.y() + dy) * s);
-        pose.scale(l.w() * s / l.tw(), l.h() * s / l.th());
+        pose.translate(ox + (float) (-60 + dx + xoff) * s, oy + (float) (y + dy) * s);
+        pose.scale(2040 * s / l.tw(), l.h() * s / l.th());
         g.blit(RenderPipelines.GUI_TEXTURED, l.tex(), 0, 0, 0F, 0F, l.tw(), l.th(), l.tw(), l.th(), argb(alpha, 0xFFFFFF));
         pose.popMatrix();
     }
