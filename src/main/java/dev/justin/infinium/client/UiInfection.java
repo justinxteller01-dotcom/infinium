@@ -16,15 +16,15 @@ public final class UiInfection {
 
     // ---------------------------------------------------------------- cosmos (menu + guide)
     private record Profile(long periodMs, int stars, int starAlpha, int bandAlpha, int shards, int maxK, int shardAlpha, float camAmp) {}
-    private static final Profile MENU = new Profile(120_000L, 120, 190, 10, 8, 2, 220, 6F);
-    private static final Profile GUIDE = new Profile(240_000L, 50, 105, 6, 4, 1, 150, 1.5F);
+    private static final Profile MENU = new Profile(120_000L, 120, 190, 10, 4, 2, 170, 0F);
+    private static final Profile GUIDE = new Profile(240_000L, 50, 105, 6, 2, 1, 120, 0F);
 
     private static final int MAX_STARS = 140, MAX_SHARDS = 10;
     private static final float[] SX = new float[MAX_STARS], SY = new float[MAX_STARS], SB = new float[MAX_STARS], SP = new float[MAX_STARS];
     private static final int[] SM = new int[MAX_STARS];
     private static final float[] HU = new float[MAX_SHARDS], HV = new float[MAX_SHARDS], HP = new float[MAX_SHARDS];
     private static final int[] HKX = new int[MAX_SHARDS], HKY = new int[MAX_SHARDS], HM = new int[MAX_SHARDS], HC = new int[MAX_SHARDS];
-    private static final int[] SHARD_COLS = {0xD864FF, 0xB04CFF, 0xFF66E0, 0x9B3BFF};
+    private static final int[] SHARD_COLS = {0xD864FF, 0xFF66E0, 0xB04CFF, 0xE08CFF};
     private static final int[][] DIRS = {{1, 0}, {-1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}, {2, 1}, {-2, 1}, {2, -1}, {-2, -1}, {1, 2}, {-1, -2}, {0, 1}, {0, -1}};
     private static final float BAND_SLOPE = -0.16F;
 
@@ -95,7 +95,7 @@ public final class UiInfection {
 
         // stars: fixed positions, integer-frequency twinkle
         for (int i = 0; i < pf.stars(); i++) {
-            float tw = 0.70F + 0.30F * (float) Math.sin(TAU * SM[i] * t + SP[i]);
+            float tw = 0.92F + 0.08F * (float) Math.sin(TAU * SM[i] * t + SP[i]);
             int a = (int) (pf.starAlpha() * SB[i] * tw);
             if (a < 6) continue;
             int x = x0 + (int) (SX[i] * w + camX * 0.35F), y = y0 + (int) (SY[i] * h + camY * 0.35F);
@@ -104,55 +104,42 @@ public final class UiInfection {
             rect(g, x, y, x + sz, y + sz, (a << 24) | c);
         }
 
-        // shards: edge-to-edge linear traversal. Each shard spawns outside one edge, travels across the entire screen,
-        // and only despawns once it has completely cleared the opposite screen boundary.
-        int margin = 48;
+        // shards (meteor v5, restrained): max 4 visible, all drift slowly left -> right with a slight down-angle,
+        // in the upper (10-28%) and lower (72-90%) bands only, so the button column in the centre stays calm.
+        // Small (2px core, size 1-2), thin faint 10px trail, smooth fade in/out over the first/last 15% of the path.
+        int margin = 24;
         long now = System.currentTimeMillis();
+        // {startY%, endY%, durationMs, offsetMs, size}
         final int[][] PATHS = {
-            {0, 25, 1, 45, 42000, 0},       // Left to Right (slight down-angle)
-            {2, 85, 0, 75, 48000, 17000},   // Top-Right to Bottom-Left
-            {0, 80, 2, 90, 38000, 8500},    // Bottom-Left to Top-Right
-            {1, 60, 0, 35, 52000, 29000},   // Right to Left (slight up-angle)
-            {2, 15, 1, 85, 45000, 12000},   // Top-Left to Bottom-Right
-            {3, 40, 2, 55, 50000, 35000},   // Bottom to Top (near-vertical)
-            {0, 70, 1, 50, 39000, 22000},   // Left to Right (lower half)
-            {1, 20, 0, 30, 46000, 41000},   // Right to Left (upper half)
-            {2, 65, 0, 90, 54000, 6000},    // Top to Bottom-Left
-            {1, 85, 2, 30, 41000, 19000}    // Bottom-Right to Top-Left
+            {12, 20, 78000, 0, 2},
+            {76, 84, 86000, 31000, 1},
+            {22, 28, 92000, 52000, 1},
+            {82, 89, 82000, 14000, 2}
         };
-
-        for (int i = 0; i < pf.shards(); i++) {
-            int[] path = PATHS[i % PATHS.length];
-            long dur = path[4];
-            long off = path[5];
-            double u = ((now + off) % dur) / (double) dur;
-
-            double sx = path[0] == 0 ? -margin : path[0] == 1 ? w + margin : (path[1] / 100.0) * w;
-            double sy = path[0] == 2 ? -margin : path[0] == 3 ? h + margin : (path[1] / 100.0) * h;
-
-            double ex = path[2] == 0 ? -margin : path[2] == 1 ? w + margin : (path[3] / 100.0) * w;
-            double ey = path[2] == 2 ? -margin : path[2] == 3 ? h + margin : (path[3] / 100.0) * h;
-
-            double px = sx + u * (ex - sx) + x0 + camX;
-            double py = sy + u * (ey - sy) + y0 + camY;
-            double vx = ex - sx, vy = ey - sy, vl = Math.max(1e-6, Math.hypot(vx, vy));
+        for (int i = 0; i < Math.min(pf.shards(), PATHS.length); i++) {
+            int[] path = PATHS[i];
+            double u = ((now + path[3]) % path[2]) / (double) path[2];
+            double sx = -margin, ex = w + margin;
+            double sy = path[0] / 100.0 * h, ey = path[1] / 100.0 * h;
+            double px = sx + u * (ex - sx) + x0, py = sy + u * (ey - sy) + y0;
+            double vx = ex - sx, vy = ey - sy, vl = Math.hypot(vx, vy);
             double dx = vx / vl, dy = vy / vl;
-            double pulse = 0.80 + 0.20 * Math.sin(TAU * HM[i] * (now % 60000L / 60000.0) + HP[i]);
+            double fade = Math.min(1.0, Math.min(u, 1.0 - u) / 0.15);
+            fade = fade * fade * (3 - 2 * fade);
             int col = HC[i];
-            int len = 14;
-            for (int s = len; s >= 1; s--) {   // trail, fading away from the head
+            int len = 10;
+            for (int s = len; s >= 1; s--) {
                 double f = 1.0 - s / (double) len;
-                int a = (int) (pf.shardAlpha() * 0.55 * f * f * pulse);
-                if (a < 4) continue;
+                int a = (int) (pf.shardAlpha() * 0.35 * f * f * fade);
+                if (a < 3) continue;
                 int tx = (int) Math.round(px - dx * s), ty = (int) Math.round(py - dy * s);
                 rect(g, tx, ty, tx + 1, ty + 1, (a << 24) | col);
             }
-            int a = (int) (pf.shardAlpha() * pulse);
+            int a = (int) (pf.shardAlpha() * fade);
+            int sz = path[4];
             int hx = (int) Math.round(px), hy = (int) Math.round(py);
-            rect(g, hx - 1, hy, hx + 3, hy + 2, ((a / 3) << 24) | col);       // soft halo
-            rect(g, hx, hy - 1, hx + 2, hy + 3, ((a / 3) << 24) | col);
-            rect(g, hx, hy, hx + 2, hy + 2, (a << 24) | col);                  // crystal core
-            rect(g, hx, hy, hx + 1, hy + 1, ((a * 3 / 4) << 24) | 0xFFD8FF);   // glint
+            if (sz > 1) rect(g, hx - 1, hy - 1, hx + 3, hy + 3, ((a / 5) << 24) | col);   // faint halo
+            rect(g, hx, hy, hx + sz, hy + sz, (a << 24) | col);
         }
     }
 

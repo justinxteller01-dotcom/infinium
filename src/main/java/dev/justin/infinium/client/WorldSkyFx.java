@@ -17,14 +17,14 @@ import net.minecraft.world.phys.Vec3;
  * Daytime ripple: overworld, day time 1000-12000, no rain. Dense purple cosmic ripples expanding across the sky.
  */
 public final class WorldSkyFx {
-    private static final int MAX = 12;
+    private static final int MAX = 5;   // v5: was 12
     private static final boolean[] ON = new boolean[MAX];
     private static final double[] X = new double[MAX], Y = new double[MAX], Z = new double[MAX];
     private static final double[] VX = new double[MAX], VY = new double[MAX], VZ = new double[MAX];
     private static final int[] AGE = new int[MAX], LIFE = new int[MAX];
 
     // Distant horizon shower meteors (>160m bubble)
-    private static final int DISTANT_MAX = 20;
+    private static final int DISTANT_MAX = 3;   // v5: was 20
     private static final boolean[] D_ON = new boolean[DISTANT_MAX];
     private static final double[] D_X = new double[DISTANT_MAX], D_Y = new double[DISTANT_MAX], D_Z = new double[DISTANT_MAX];
     private static final double[] D_VX = new double[DISTANT_MAX], D_VY = new double[DISTANT_MAX], D_VZ = new double[DISTANT_MAX];
@@ -57,8 +57,8 @@ public final class WorldSkyFx {
         boolean showerActive = MeteorShowerClient.isActive();
         float meteorDens = InfiniumClientConfig.meteorDensity();
         boolean meteorsEnabled = InfiniumClientConfig.shootingStars() && meteorDens > 0.001F;
-        if (meteorsEnabled && night && (showerActive ? RNG.nextFloat() < 0.25F * meteorDens : RNG.nextFloat() < (70F / 8400F) * meteorDens)) spawn(at);
-        if (showerActive && meteorsEnabled && RNG.nextFloat() < 0.35F * meteorDens) spawnDistant(at);
+        if (meteorsEnabled && night && (showerActive ? RNG.nextFloat() < 0.03F * meteorDens : RNG.nextFloat() < (70F / 8400F) * meteorDens)) spawn(at);
+        if (showerActive && meteorsEnabled && RNG.nextFloat() < 0.015F * meteorDens) spawnDistant(at);
         shimmer(mc, level, at);
         for (int i = 0; i < MAX; i++) {
             if (!ON[i]) continue;
@@ -90,7 +90,7 @@ public final class WorldSkyFx {
                 continue;
             }
             level.addAlwaysVisibleParticle(dev.justin.infinium.Infinium.STAR_HEAD, D_X[i], D_Y[i], D_Z[i], 0, 0, 0);
-            for (int k = 1; k <= 3; k++) {
+            for (int k = 1; k <= 2; k++) {
                 double f = k * 0.3;
                 level.addAlwaysVisibleParticle(dev.justin.infinium.Infinium.STAR_TRAIL, D_X[i] - D_VX[i] * f, D_Y[i] - D_VY[i] * f, D_Z[i] - D_VZ[i] * f, 0, 0, 0);
             }
@@ -187,9 +187,9 @@ public final class WorldSkyFx {
 
         // Plunging down towards the horizon
         double slantAngle = RNG.nextDouble() * Math.PI * 2;
-        double speedH = 1.4 + RNG.nextDouble() * 0.8;
+        double speedH = 0.9 + RNG.nextDouble() * 0.3;
         D_VX[slot] = Math.cos(slantAngle) * speedH;
-        D_VY[slot] = -(1.8 + RNG.nextDouble() * 0.8);
+        D_VY[slot] = -(0.5 + RNG.nextDouble() * 0.3);
         D_VZ[slot] = Math.sin(slantAngle) * speedH;
 
         D_AGE[slot] = 0;

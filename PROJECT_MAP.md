@@ -49,9 +49,9 @@
 - `InventorySettingsButton.java`: Inventory gear settings gear button and player portrait cosmic energy progress bar.
 - `DungeonHudClient.java`: On-screen minimalistic HUD showing remaining dungeon chest reset time when in dungeon chunks.
 - `InfiniumUiSounds.java`: Sound management for inventory pickup/place/drop and full set equip sound deduplication.
-- `InventoryHudTheme.java`, `UiInfection.java`: Progressive cosmic HUD ambient effects, motes, hairline cracks, and rim energy.
+- `InventoryHudTheme.java`, `UiInfection.java`: Progressive cosmic HUD ambient effects, motes, hairline cracks, and rim energy. Also `menuBackdrop` (title/out-of-world menu void via `mixin/TitleScreenFxMixin`) and `guideBackdrop`; meteor v5: max 4 small purple/pink shards drifting L->R in top/bottom bands only (centre clear), 78-92s crossings, 10px faint trail, fade in/out, static stars with ±8% twinkle, no camera drift. Preview mock: /workspace/meteor_preview/mock.py.
 - `ArmorParticles.java`: First-person and third-person ambient particle emitters for worn gear, held tools, wing deploy/retract bursts, and in-flight wingtip trail ribbons.
-- `WorldSkyFx.java`: Ambient sky effects: daytime spacetime ripples, nighttime shooting stars, and underwater shimmer.
+- `WorldSkyFx.java`: Ambient sky effects: daytime spacetime ripples, nighttime shooting stars, and underwater shimmer. Meteor v5: MAX 5 near / 3 distant, shower spawn 0.03 & 0.015/tick; look constants in `ShootingStarLook.java` (head 0.7 / trail 0.45 blocks, speed 1.1, drop 0.08).
 - `WingFold.java`: Elytra wings transition timing, ground angle lerp, and absorb retraction.
 - `InfiniumWingModels.java`: Custom 3D wing geometries for all 5 styles (Astral crescent, Cybernetic vector thruster, Singularity void scythe, CyberPsycho serrated razor, Infinity divine archangel). Multi-layer piece hierarchy (up to 9 pieces) dynamically toggled per unlocked perk milestone.
 - `InfiniumWingsRenderer.java`: Dedicated wing renderer completely replacing vanilla's flat box ElytraModel; handles sleek non-clipping resting V-pose, 100% walking clearance, dynamic per-crystal opacity scaling (up to 90% at max Infinity), unlocked perk milestone pieces, and synchronized armor-matching glow overlays.
