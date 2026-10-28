@@ -83,7 +83,7 @@ public class Infinium implements ModInitializer {
     public static Item NETHERITE_ROCKET;   // registry id infinium:infinium_rocket (alias infinium:netherite_rocket), name "Infinium Rocket"
     public static Item INF_HELMET, INF_CHESTPLATE, INF_LEGGINGS, INF_BOOTS;
     public static Item BREAD_HELMET, BREAD_CHESTPLATE, BREAD_LEGGINGS, BREAD_BOOTS;
-    public static Holder<MobEffect> BLEEDING, BURNING;
+    public static Holder<MobEffect> BLEEDING, BURNING, COSMIC_RADIATION;
     public static EntityType<EnergySlashEntity> ENERGY_SLASH;
     public static Block INFINIUM_FARMLAND;
     public static Item SPACETIME_FRAGMENTS, SPACETIME_CRYSTAL;
@@ -123,6 +123,8 @@ public class Infinium implements ModInitializer {
         InfiniumSwordItem.registerComponent();
         BLEEDING = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, id("bleeding"), new BleedingEffect());
         BURNING = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, id("burning"), new BleedingEffect(true));
+        // batch1 10-28: Astral-owner DoT "Cosmic Radiation" (same code/visual as Bleed for now); infinium:bleeding unchanged.
+        COSMIC_RADIATION = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, id("cosmic_radiation"), new BleedingEffect());
 
         ResourceKey<EntityType<?>> esk = ResourceKey.create(Registries.ENTITY_TYPE, id("energy_slash"));
         ENERGY_SLASH = Registry.register(BuiltInRegistries.ENTITY_TYPE, esk,

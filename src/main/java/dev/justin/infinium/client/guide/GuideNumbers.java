@@ -73,7 +73,7 @@ public final class GuideNumbers {
         put("sword_dmg", () -> num(dev.justin.infinium.Infinium.SWORD_BASE_DAMAGE));
         put("sword_dmg_t2", () -> num(dev.justin.infinium.Infinium.SWORD_BASE_DAMAGE + dev.justin.infinium.Infinium.swordSetBonus(dev.justin.infinium.SetLook.SINGULARITY)));
         put("sword_dmg_t3", () -> num(dev.justin.infinium.Infinium.SWORD_BASE_DAMAGE + dev.justin.infinium.Infinium.swordSetBonus(dev.justin.infinium.SetLook.INFINITY)));
-        put("bleed_s", () -> "3-5");        // LITERAL (Bleed/Cyberburn, BleedingEffect.durationTicks: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity)
+        put("bleed_s", () -> "3-5");        // LITERAL (Cosmic Radiation/Bleed/Cyberburn, BleedingEffect.durationTicks: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity)
         put("thrust_ramp_s", () -> "2.5");  // LITERAL
     }
 

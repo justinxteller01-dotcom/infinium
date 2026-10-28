@@ -24,7 +24,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 /**
- * Infinium Sword: applies Bleeding on hit, and supports sneak + right-click energy mode toggle.
+ * Infinium Sword: slash/beam apply a DoT (Cosmic Radiation / Cyberburn / Bleed by set), and supports sneak + right-click energy mode toggle.
  * Mode is stored on ItemStack data component (default energy mode = true).
  */
 public class InfiniumSwordItem extends Item {

@@ -6,6 +6,7 @@
   "block.infinium.infinium_farmland": "Infinium Farmland",
   "effect.infinium.bleeding": "Bleeding",
   "effect.infinium.burning": "Cyberburn",
+  "effect.infinium.cosmic_radiation": "Cosmic Radiation",
   "item.infinium.infinium_helmet": "Infinium Helmet",
   "item.infinium.infinium_chestplate": "Infinium Chestplate",
   "item.infinium.infinium_leggings": "Infinium Leggings",
@@ -181,4 +182,4 @@
   "gui.infinium.crystal.insert_count": "Insert Crystal (%s left)",
   "gui.infinium.crystal.none": "No crystals",
   "gui.infinium.crystal.full": "Fully powered"
-}
+}
