@@ -106,15 +106,17 @@ public final class UiInfection {
 
         // shards (meteor v5, restrained): max 4 visible, all drift slowly left -> right with a slight down-angle,
         // in the upper (10-28%) and lower (72-90%) bands only, so the button column in the centre stays calm.
+        // Seamless loop: every duration (60s) divides the profile period (120s menu / 240s guide), offsets are fixed,
+        // band breathing / twinkle use integer multiples of the loop phase, camera drift is off (camAmp 0).
         // Small (2px core, size 1-2), thin faint 10px trail, smooth fade in/out over the first/last 15% of the path.
         int margin = 24;
         long now = System.currentTimeMillis();
         // {startY%, endY%, durationMs, offsetMs, size}
         final int[][] PATHS = {
-            {12, 20, 78000, 0, 2},
-            {76, 84, 86000, 31000, 1},
-            {22, 28, 92000, 52000, 1},
-            {82, 89, 82000, 14000, 2}
+            {12, 20, 60000, 0, 2},
+            {76, 84, 60000, 31000, 1},
+            {22, 28, 60000, 46000, 1},
+            {82, 89, 60000, 15000, 2}
         };
         for (int i = 0; i < Math.min(pf.shards(), PATHS.length); i++) {
             int[] path = PATHS[i];
