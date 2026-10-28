@@ -38,7 +38,7 @@ public class InfiniumPerksScreen extends OptionsSubScreen {
     static String value(Perk p) {
         if (p == Perk.ABILITY_WARP) return "Quantum Tunnel (Astral / Singularity / Infinity leggings): mid-air tunnel + forward launch on " + Info.key("warp", "Quantum Tunnel", null) + ". Needs a full set.";
         if (p == Perk.ABILITY_XRAY_PULSE) return "X-Ray Pulse (every helmet): scans ores, chests, hostiles and players around you (" + Info.key("xray_pulse", "X-Ray Pulse", null) + "). Needs a full set.";
-        if (p.kind.equals("bootjump")) return "Boots jump: " + Info.blocks(p.family == 0 ? 1 : p.family == 2 ? 2 : 3) + " jump height (hold jump for full height; a tap is a normal jump).";
+        if (p.kind.equals("bootjump")) return p.family == 0 ? "Boots jump: tap to jump, hold to jump higher (up to 2 blocks)." : "Boots jump: up to " + Info.blocks(p.family == 2 ? 3 : 4) + " jump height (hold jump for full height; a tap is a normal jump).";
         if (!p.isSet()) return Info.pieceLine(p.family, p.piece);
         if (p.kind.equals("light")) return "Armor light: light level " + (p.family == 4 ? 12 : p.family >= 2 ? 8 : 4) + " around you.";
         for (Object[] e : Info.setLines(p.family)) if (e[1] == p) return (String) e[0];

@@ -33,6 +33,15 @@ public final class PerkValues {
     public static final double JUMP_CYBERPSYCHO = 0.29539;
     public static final double JUMP_INFINITY = 0.41076;
 
+    /** Batch1 in-air forward boost (blocks/tick^2 added along movement input while airborne from a jump, boots family).
+     *  Air drag 0.91 => steady extra speed ~= value/0.09: Astral ~+0.017, Singularity ~+0.033, Infinity ~+0.056 b/t (~20 % of sprint). */
+    public static final double AIR_PUSH_ASTRAL = 0.0015;
+    public static final double AIR_PUSH_SINGULARITY = 0.0030;
+    public static final double AIR_PUSH_INFINITY = 0.0050;
+    public static double airPush(int bootsFamily) {
+        return switch (bootsFamily) { case 0 -> AIR_PUSH_ASTRAL; case 2 -> AIR_PUSH_SINGULARITY; case 4 -> AIR_PUSH_INFINITY; default -> 0; };
+    }
+
     public static final double REACH_ASTRAL = 1.0;
     public static final double REACH_SINGULARITY = 2.0;
     public static final double REACH_INFINITY = 3.0;

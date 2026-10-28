@@ -43,7 +43,12 @@ public final class AirJumps {
     /** Not on the ground, not in water or lava, not fall-flying, not on a ladder, not flying or riding. */
     public static boolean canAirJump(Player p) {
         return p.isAlive() && !p.isSpectator() && !p.onGround() && !p.isInWater() && !p.isInLava() && !p.isFallFlying()
-            && !p.onClimbable() && !p.getAbilities().flying && !p.isPassenger();
+            && !p.onClimbable() && !p.getAbilities().flying && !p.isPassenger() && !elytraOn(p);
+    }
+
+    /** Batch1 (Justin): air jumps only with the Elytra toggled OFF. Toggled on (chest has GLIDER) = jump in air opens the elytra as vanilla. */
+    public static boolean elytraOn(Player p) {
+        return p.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).has(net.minecraft.core.component.DataComponents.GLIDER);
     }
 
     public static void register() {

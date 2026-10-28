@@ -145,7 +145,7 @@ public final class Info {
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";
             };
             default -> switch (fam) {
-                case 0 -> "Boots: No fall damage; +1 jump height.";
+                case 0 -> "Boots: No fall damage; tap to jump, hold to jump higher (up to 2 blocks).";
                 case 1 -> "Boots: No fall damage.";
                 case 2 -> "Boots: No fall damage; Jump Augmentation (+2 blocks height, hold jump).";
                 case 3 -> "Boots: No fall damage.";
@@ -187,7 +187,7 @@ public final class Info {
                 case "reach" -> blocks((int) PerkValues.reach(f)) + " reach (place, break, attack).";
                 case "stacks" -> "Stacks: 64->" + PerkValues.boostedMax(f, 64) + ", 16->" + PerkValues.boostedMax(f, 16) + ", 1->" + PerkValues.boostedMax(f, 1) + ".";
                 case "mining" -> "+" + pct(PerkValues.mining(f)) + " mining speed.";
-                case "jump" -> PerkValues.airJumpsText(f) + " (press jump mid-air).";
+                case "jump" -> PerkValues.airJumpsText(f) + " (press jump mid-air, Elytra off).";
                 case "attack" -> "+" + pct(PerkValues.attackAndBow(f)) + " attack & bow draw speed.";
                 case "slow" -> "Nearby mobs (16m) slowed " + pct(PerkValues.slowAmount(f)) + " on hit for " + PerkValues.slowDurationTicks(f) / 20 + "s (" + PerkValues.slowCooldownTicks(f) / 20 + "s cd).";
                 default -> kind;

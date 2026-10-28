@@ -33,6 +33,7 @@ public final class AirJumpClient {
         Vec3 v = p.getDeltaMovement();
         p.setDeltaMovement(v.x, 0.42, v.z);        // vanilla jump velocity, no hold boost
         VariableJump.cancel();
+        VariableJump.startAir(p, 0.42);   // batch1: Infinity air jumps scale with hold; Cyb/CP stay plain
         p.resetFallDistance();
         p.level().playLocalSound(p.getX(), p.getY(), p.getZ(), (remaining == 0 ? ModSounds.BONUS_JUMP_LAST : ModSounds.BONUS_JUMP).value(),
             SoundSource.PLAYERS, 0.8F, 1.0F, false);
