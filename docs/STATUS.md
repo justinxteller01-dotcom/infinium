@@ -4,7 +4,7 @@ Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / In
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-2f54375` (pre-release, 2026-10-28 6:05 PM ET)
+## 1. Current release: `batch1-2f54375` (pre-release, 2026-10-28 5:49 PM ET)
 - **Custom gap sounds**: the 13 vanilla stand-ins are now real clips (`tools/gen_gap_sounds.py`, mono 48 kHz vorbis, loudness matched to crystal/flight files): Cyber Psycho thrust start (electric zap + charge, not a rocket), seamless 3 s hum loop, smooth power-down stop (`sounds/cyberpsycho/thrust_*.ogg`); per-set perk unlock (short) and set maxed (bigger, 4.4 s) in `sounds/perk/`. Bass "Fire Force" foundation under all; cyber sets electric, Astral/Singularity spacey, Infinity both. `gen_lang_extra.py` now uses setdefault so it can no longer reset these to vanilla. Preview: `/workspace/sound_preview/gap_sounds_preview.ogg`. Remaining stand-ins: `bonus_jump`, `bonus_jump_last`.
 - **Metadata**: fabricloader `>=0.19.5`; all 3 mixin configs `compatibilityLevel` JAVA_25 (highest in bundled Mixin 0.17.4; no JAVA_26, and the game runs Java 25).
 - **Singularity leg speed config** (`batch1-1cfc87a`): own `leg_speed_singularity` (default 0.05) + Mod Menu slider; Singularity leggings used to read Astral's value. No behavior change.
@@ -106,7 +106,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
-- `batch1-2f54375` 10-28 6:05 PM: custom sounds for Cyber Psycho thrust start/loop/stop and the 10 perk-unlock / set-maxed cues.
+- `batch1-2f54375` 10-28 5:49 PM: custom sounds for Cyber Psycho thrust start/loop/stop and the 10 perk-unlock / set-maxed cues.
 - `batch1-06a8938` 10-28 5:47 PM: title menu v4, rebuilt from scratch (figure-free procedural village landscape, evenly spread frozen meteors, fog, fireflies, sparkles, parallax sway).
 - `batch1-f680ee3` 10-28 5:45 PM: fabricloader >=0.19.5; mixin compatibilityLevel JAVA_25.
 - `batch1-1cfc87a` 10-28 5:45 PM: Singularity leg speed config (default 0.05, no behavior change).
