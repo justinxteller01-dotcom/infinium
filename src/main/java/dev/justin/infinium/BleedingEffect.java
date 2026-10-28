@@ -9,8 +9,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Sword slash/beam DoT: 1 magic damage every 20 ticks. Two registrations share this code:
- * "bleeding" (Astral/Singularity/Infinity owners, unchanged) and "burning" (Burn, Cybernetic/Cyber Psycho owners):
- * same damage/timing, plus pink/purple ember dust every 4 ticks. Burn never sets the mob on fire.
+ * "bleeding" (Astral/Singularity/Infinity owners, unchanged) and "burning" (Cyberburn, Cybernetic/Cyber Psycho owners):
+ * same damage/timing, plus pink/purple ember dust every 4 ticks. Cyberburn never sets the mob on fire.
  */
 public class BleedingEffect extends MobEffect {
     private static final DustParticleOptions[] EMBERS = {
@@ -37,7 +37,7 @@ public class BleedingEffect extends MobEffect {
         if (l == null) return 60;
         return switch (l) { case INFINITY -> 100; case SINGULARITY, CYBERPSYCHO -> 80; default -> 60; };
     }
-    /** Bleed, or Burn when the owner wears a full Cybernetic / Cyber Psycho set. */
+    /** Bleed, or Cyberburn when the owner wears a full Cybernetic / Cyber Psycho set. */
     public static net.minecraft.core.Holder<MobEffect> forOwner(net.minecraft.world.entity.Entity owner) {
         SetLook l = owner instanceof LivingEntity le ? SetLook.of(le) : null;
         return (l == SetLook.CYBERNETIC || l == SetLook.CYBERPSYCHO) ? Infinium.BURNING : Infinium.BLEEDING;

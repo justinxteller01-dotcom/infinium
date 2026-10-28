@@ -5,7 +5,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
- * Shared damage-over-time hit. Every DoT effect (Bleed, Burn, any future radiation/DoT) must deal its
+ * Shared damage-over-time hit. Every DoT effect (Bleed, Cyberburn, any future radiation/DoT) must deal its
  * tick damage through here: the tick never grants invincibility frames, so a slash/beam/melee hit right
  * after a DoT tick lands at full damage.
  */

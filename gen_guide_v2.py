@@ -202,15 +202,15 @@ pg('slow', 4, 'Slow Aura', 'Make them back off', ['slow', 'aura', 'mobs', 'cyber
    "every {n:slowcd_t1} / {n:slowcd_t2} / {n:slowcd_t3}s, within {n:slow_radius} blocks.")
 
 # ---- Chapter 5: Tools
-pg('sword', 5, 'Sword & Energy Slash', 'Slash, slash, beam', ['sword', 'slash', 'bleed', 'burn', 'energy'],
-   "The sword hits hard. Its slashes and beam make enemies bleed, or burn if you wear Cybernetic or Cyber Psycho armor.\n"
+pg('sword', 5, 'Sword & Energy Slash', 'Slash, slash, beam', ['sword', 'slash', 'bleed', 'cyberburn', 'burn', 'energy'],
+   "The sword hits hard. Its slashes and beam make enemies bleed, or inflict Cyberburn if you wear Cybernetic or Cyber Psycho armor.\n"
    "Your first two swings send out energy slashes. The third swing fires an energy beam that hits even harder.\n"
    "Energy mode only works while you wear a full Infinium armor set, and each set has its own slash sounds. A fully charged swing then fires a piercing energy slash.\n"
    "Without a full set there's no energy slash. It's just a normal sword.\n"
    "Sneak + Right-Click on air to switch between Energy and Normal mode.\n"
    "Cyber armor lets you swing faster and hit fast enemies again sooner.",
    'recipe:sword', 'Smithing table',
-   "Numbers: {n:sword_dmg} damage, bleed/burn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier.")
+   "Numbers: {n:sword_dmg} damage, bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier.")
 pg('tools', 5, 'Mining Tools', 'Pick, axe and shovel', ['pickaxe', 'axe', 'shovel', 'mode', 'fortune', 'silk'],
    "Pickaxe: switch between Fortune IV and Silk Touch.\n"
    "Axe: logs drop the wood type you choose.\n"

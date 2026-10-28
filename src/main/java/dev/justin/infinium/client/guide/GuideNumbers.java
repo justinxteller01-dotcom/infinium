@@ -71,7 +71,7 @@ public final class GuideNumbers {
         put("meteor_warning_min", () -> "2");   // LITERAL
         put("dungeon_refill_days", () -> String.valueOf(dev.justin.infinium.loot.LootTuning.lootRefreshDays));
         put("sword_dmg", () -> "12");       // LITERAL
-        put("bleed_s", () -> "3-5");        // LITERAL (BleedingEffect.durationTicks: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity)
+        put("bleed_s", () -> "3-5");        // LITERAL (Bleed/Cyberburn, BleedingEffect.durationTicks: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity)
         put("thrust_ramp_s", () -> "2.5");  // LITERAL
     }
 
