@@ -64,7 +64,7 @@ public final class Info {
                 o.add(Component.literal("Spacetime Energy: ").withStyle(ChatFormatting.LIGHT_PURPLE)
                     .append(Component.literal(fil + " / " + cap + " Crystals (" + Math.round(fil * 100.0 / cap) + "%)").withStyle(ChatFormatting.GRAY)));
             }
-            o.add(p(pieceLine(fam, slot), Perk.piece(fam, slot), mask));
+            for (String pl : pieceLine(fam, slot).split("\n")) o.add(p(pl, Perk.piece(fam, slot), mask));
             if (slot == net.minecraft.world.entity.EquipmentSlot.CHEST) o.add(l("Wings: Shift + Right Click on air or " + key("toggle_wings", "Toggle Wings", null) + " to toggle."));
             o.add(h("Full set (" + FN[fam] + ")"));
             if (tierNote(fam) != null) o.add(l(tierNote(fam)));
@@ -137,19 +137,19 @@ public final class Info {
                 default -> "Chestplate: Built-in Elytra (toggleable).";
             };
             case LEGS -> switch (fam) {
-                case 0 -> "Leggings: Run a little faster; Quantum Tunnel zips you " + (int) SpacetimeWarp.DISTANCE[0] + " blocks forward in mid-air (" + key("warp", "Quantum Tunnel", null) + ").";
-                case 1 -> "Leggings: Run faster (your view won't zoom), +10%.";
-                case 2 -> "Leggings: Run faster, +5%. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
-                case 3 -> "Leggings: Run faster (your view won't zoom), +15%.";
-                case 4 -> "Leggings: Run faster, +20%. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
+                case 0 -> "Leggings: A bit faster running speed; Quantum Tunnel zips you " + (int) SpacetimeWarp.DISTANCE[0] + " blocks forward in mid-air (" + key("warp", "Quantum Tunnel", null) + ").";
+                case 1 -> "Leggings: Faster running speed (your view won't zoom), +10%.";
+                case 2 -> "Leggings: Faster running speed, +5%. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
+                case 3 -> "Leggings: Super fast running speed (your view won't zoom), +15%.";
+                case 4 -> "Leggings: The fastest running speed, +20%. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";
             };
             default -> switch (fam) {
-                case 0 -> "Boots: No fall damage; tap to jump, hold to jump higher (up to 2 blocks).";
+                case 0 -> "Boots: No fall damage.\nHold jump to jump higher (up to 2 blocks).";
                 case 1 -> "Boots: No fall damage.";
-                case 2 -> "Boots: No fall damage. Tap jump for 1 block, hold for up to 3.";
+                case 2 -> "Boots: No fall damage.\nHold jump to jump even higher (up to 3 blocks).";
                 case 3 -> "Boots: No fall damage.";
-                case 4 -> "Boots: No fall damage. Tap jump for 1 block, hold for up to 4.";
+                case 4 -> "Boots: No fall damage.\nHold jump to reach ridiculous heights (up to 4 blocks).";
                 default -> "Boots: No fall damage.";
             };
         };

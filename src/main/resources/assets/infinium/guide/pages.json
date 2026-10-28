@@ -225,7 +225,7 @@
     "tier 1",
     "builder"
    ],
-   "body": "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: run a bit faster. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage. Tap jump for 1 block, hold to jump higher.\nFull set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
+   "body": "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: a bit faster running speed. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage.\nHold jump to jump higher.\nFull set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
    "visual": "armor:0",
    "caption": "Full Astral set, fully charged",
    "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Reach +{n:reach_t1}. Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}."
@@ -241,7 +241,7 @@
     "tier 1",
     "fighter"
    ],
-   "body": "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in jet wings.\nLeggings: run faster (your view won't zoom).\nBoots: no fall damage.\nFull set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
+   "body": "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in jet wings.\nLeggings: faster running speed (your view won't zoom).\nBoots: no fall damage.\nFull set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
    "visual": "armor:1",
    "caption": "Full Cybernetic set, fully charged",
    "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_cyber}. Mining +{n:mining_t1}. {n:airjumps_t1} air jump. Attack +{n:attack_t1}. Slow {n:slow_t1} for {n:slowdur_t1}s, every {n:slowcd_t1}s, within {n:slow_radius} blocks."
@@ -257,7 +257,7 @@
     "tier 2",
     "upgrade"
    ],
-   "body": "Upgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: a longer Quantum Tunnel.\nBoots: no fall damage. Hold jump to go higher.\nFull set: faster repair, gets blocks back more often, more reach, bigger stacks.",
+   "body": "Upgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: faster running speed and a longer Quantum Tunnel.\nBoots: no fall damage.\nHold jump to jump even higher.\nFull set: faster repair, gets blocks back more often, more reach, bigger stacks.",
    "visual": "armor:2",
    "caption": "Full Singularity set, fully charged",
    "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Reach +{n:reach_t2}. Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}."
@@ -274,7 +274,7 @@
     "tier 2",
     "upgrade"
    ],
-   "body": "Upgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\nLeggings: run even faster.\nBoots: no fall damage.\nFull set: mine faster, more air jumps, much faster attacks, a stronger slow.",
+   "body": "Upgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\nLeggings: super fast running speed.\nBoots: no fall damage.\nFull set: mine faster, more air jumps, much faster attacks, a stronger slow.",
    "visual": "armor:3",
    "caption": "Full Cyber Psycho set, fully charged",
    "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_cp}. Mining +{n:mining_t2}. {n:airjumps_t2} air jumps. Attack +{n:attack_t2}. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s."
@@ -290,7 +290,7 @@
     "tier 3",
     "upgrade"
    ],
-   "body": "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\nTakes half the damage netherite would. Fire, lava and explosions can't hurt you.\nHelmet: the widest X-Ray.\nChestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\nLeggings: the fastest run and the longest tunnel.\nBoots: no fall damage. Hold jump to go highest.\nFull set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
+   "body": "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\nTakes half the damage netherite would. Fire, lava and explosions can't hurt you.\nHelmet: the widest X-Ray.\nChestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\nLeggings: the fastest running speed and the longest tunnel.\nBoots: no fall damage.\nHold jump to reach ridiculous heights.\nFull set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
    "visual": "armor:4",
    "caption": "Full Infinity set, fully charged",
    "numbers": "Numbers: {n:dmg_t3} of netherite damage. X-Ray {n:xray_t3} blocks. Speed +{n:speed_inf}. Tunnel {n:tunnel_t3} blocks, every {n:tunnel_cd_t3}s. Jump up to {n:jump_inf} blocks. Mining +{n:mining_t3}. {n:airjumps_t3} air jumps. Attack +{n:attack_t3}. Repair every {n:repair_t3}s. Stacks 64 to {n:stack64_t3}, 16 to {n:stack16_t3}, 1 to {n:stack1_t3}. Slow {n:slow_t3} for {n:slowdur_t3}s, every {n:slowcd_t3}s. Block back {n:keep_t3}. Reach +{n:reach_t3}."

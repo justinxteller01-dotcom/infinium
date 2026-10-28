@@ -95,8 +95,9 @@ armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
    "Helmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\n"
    "Chestplate: built-in wings.\n"
-   "Leggings: run a bit faster. Quantum Tunnel zips you forward in mid-air.\n"
-   "Boots: no fall damage. Tap jump for 1 block, hold to jump higher.\n"
+   "Leggings: a bit faster running speed. Quantum Tunnel zips you forward in mid-air.\n"
+   "Boots: no fall damage.\n"
+   "Hold jump to jump higher.\n"
    "Full set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
    'Full Astral set, fully charged',
    "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. "
@@ -106,7 +107,7 @@ armor('cybernetic', 1, 'Cybernetic Armor', 'Tier 1, the fighter line', ['cyberne
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
    "Helmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\n"
    "Chestplate: built-in jet wings.\n"
-   "Leggings: run faster (your view won't zoom).\n"
+   "Leggings: faster running speed (your view won't zoom).\n"
    "Boots: no fall damage.\n"
    "Full set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
    'Full Cybernetic set, fully charged',
@@ -117,8 +118,9 @@ armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor'
    "Takes almost half the damage netherite would.\n"
    "Helmet: X-Ray reaches farther.\n"
    "Chestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\n"
-   "Leggings: a longer Quantum Tunnel.\n"
-   "Boots: no fall damage. Hold jump to go higher.\n"
+   "Leggings: faster running speed and a longer Quantum Tunnel.\n"
+   "Boots: no fall damage.\n"
+   "Hold jump to jump even higher.\n"
    "Full set: faster repair, gets blocks back more often, more reach, bigger stacks.",
    'Full Singularity set, fully charged',
    "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. "
@@ -129,7 +131,7 @@ armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic a
    "Takes almost half the damage netherite would.\n"
    "Helmet: X-Ray reaches farther.\n"
    "Chestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\n"
-   "Leggings: run even faster.\n"
+   "Leggings: super fast running speed.\n"
    "Boots: no fall damage.\n"
    "Full set: mine faster, more air jumps, much faster attacks, a stronger slow.",
    'Full Cyber Psycho set, fully charged',
@@ -140,8 +142,9 @@ armor('infinity', 4, 'Infinity Armor', 'Tier 3, upgrade both lines into one', ['
    "Takes half the damage netherite would. Fire, lava and explosions can't hurt you.\n"
    "Helmet: the widest X-Ray.\n"
    "Chestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\n"
-   "Leggings: the fastest run and the longest tunnel.\n"
-   "Boots: no fall damage. Hold jump to go highest.\n"
+   "Leggings: the fastest running speed and the longest tunnel.\n"
+   "Boots: no fall damage.\n"
+   "Hold jump to reach ridiculous heights.\n"
    "Full set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
    'Full Infinity set, fully charged',
    "Numbers: {n:dmg_t3} of netherite damage. X-Ray {n:xray_t3} blocks. Speed +{n:speed_inf}. Tunnel {n:tunnel_t3} blocks, every {n:tunnel_cd_t3}s. "
