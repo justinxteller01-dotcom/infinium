@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * pass2: UI Effects (gated by InfiniumClientConfig.uiEffects at the call sites).
- * - menuBackdrop: out-of-world screens only (level == null). Deep-space void from the reference image: black, a faint purple
+ * - menuBackdrop: out-of-world screens only (level == null). Now MenuVillage (layered village painting). Old: deep-space void from the reference image: black, a faint purple
  *   galactic band across the middle, twinkling stars, sparse purple crystal shards drifting in random (fixed) directions,
  *   slow camera drift with parallax. Every motion is periodic with the same loop length, so it loops seamlessly.
  * - guideBackdrop: the same scene for the Informational Crystal guide, darker, fewer stars/shards, slower, less camera drift.
@@ -60,8 +60,7 @@ public final class UiInfection {
 
     /** Out-of-world menu background. Only called when uiEffects is on (vanilla otherwise). */
     public static void menuBackdrop(GuiGraphicsExtractor g, int w, int h) {
-        g.fill(0, 0, w, h, 0xFF000000);
-        cosmos(g, 0, 0, w, h, MENU);
+        MenuVillage.draw(g, w, h);   // village-hill painting (layers + parallax + meteors); cosmos() stays for the guide
     }
 
     /** Guide page background (book space). Caller fills the page black first. */
