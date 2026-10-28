@@ -31,18 +31,41 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 2. **Infinity DoT**: name and visual (Bleed for now).
 3. **Infinity crystal order**: the dictation was unclear. Code: jump, slow, mining, no-consume, regen, stacks, reach, attack. Astral, Cybernetic, Singularity and Cyber Psycho orders also don't match code yet (see PERK_VALUES_MASTER).
 4. **Forward push** on Cybernetic and Cyber Psycho jumps: the amounts (Cyber Psycho > Cybernetic). Not implemented yet.
-5. **Rest of his testing list**: batches beyond A–D in `testing/TESTING_LIST_2026-10-28_raw.md`.
+5. **Rest of his testing list**: the raw list (10-28 8:25 AM ET) has only items 1–2, and all of it is already covered by Batches A–D (HUD, warp, ability HUD and keybinds, mob slow). Nothing else is left to copy. Waiting on Justin for any more items.
 6. From the brief and the review: are gold and red-orange accents banned (treated as banned)? Should warp stay on Ctrl (same as Sprint)? Should X-ray show containers on BreadCraft, with a server kill switch? Should auto-repair reach into backpacks and Accessories? Allow solo-chestplate infusion? Overall power level (slash + melee double hit)? Flight sounds for Cybernetic, Singularity, Infinity and Astral.
 
-## 4. Top review findings to fix
-From `review_verification_2026-10-26.md`. The review Page could not be read, so recheck each item against the current code.
-1. **CRITICAL**: `gen_r8.py` overwrites `sounds.json` and drops about 52 events (themed sword, wings, flight, warp, meteor go silent). `gen_r8.py` is also missing from the repo.
-2. **High**: Ctrl detection uses keySprint and hardcoded 341/345. Toggle Sprint triggers warp or sticks thrust, and rebinding is ignored. Use `ABILITY_CONTROL`.
-3. **High**: Solo-chestplate infusion charges only the chest, so crystals are lost once a full set is worn.
-4. **High**: X-ray has no server kill switch.
-5. **High**: Flight Shift/Ctrl client/server mismatch (Shift cruise does nothing).
-6. **Medium**: Boot jump on Cybernetic and Cyber Psycho boots overrides the set jump. Sword Sneak+RMB on a block toggles mode. Non-OP Mod Menu can write server config to disk. Per-block TagKey allocation in the X-ray scan. Vision buttons overlap effects and creative tabs.
-7. **Low**: ToggleGlidePayload has no rate limit. Double slash-launch sound. Loader dep >=0.19.3. Crystal "found in chests" text.
+## 4. Review findings to fix (2026-10-28 review)
+**Build and assets**
+1. `sounds.json` has only 55 entries. 75 of the 117 sound files have no entry, though all of them are registered in code. Add the missing entries; don't delete the files.
+2. `gen_data.py:92` calls `gen_r8.py`, which is missing from the repo.
+3. 400 unused old wing frames (about 1.6 MB; Cybernetic, Cyber Psycho, Infinity) still load at startup. `particle/star.png` is unused. The wings-layer glow frames are probably unused.
+4. Punchy and roguelike are listed as hard dependencies.
+5. The local clone is missing 4 tags, and the `out/` jar is stale.
+
+**Values and text**
+6. The crystal unlock order in `CrystalCharge.java:39-45` doesn't match PERK_VALUES_MASTER on any set.
+7. The guide says 4 crystal slots instead of 8/16/32.
+8. Old slow values are still in `PerkValues` and `InfiniumConfig`.
+9. The guide says the sword does 12 damage, but the code uses 11.
+10. Seven guide numbers are hard-coded. The Quantum Tunnel and X-Ray numbers are defined but not shown.
+
+**Testing**
+11. There are no tests. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
+
+**Unfinished since Oct 11 (modpack)**
+12. Player config bundle.
+13. Spatial GUI tuning for 1080p and other FOVs.
+14. JEI cursor fix and the Accessories+Artifacts backpack slot: both built, neither installed.
+15. Inventory gets bigger but JEI doesn't.
+16. ZGC question.
+
+**Compatibility**
+17. The LowOnFire resource pack may hide Cyberburn visuals.
+
+**Recheck in game (from Oct 26)**
+18. Solo-chestplate infusion bug.
+19. Slash + melee double hit.
+20. Particle-map growth.
 
 ## 5. In-game test checklist (`batch1-89b8713`)
 - [ ] Slash/beam DoT lasts 3/4/5 s by set; plain melee applies none.
