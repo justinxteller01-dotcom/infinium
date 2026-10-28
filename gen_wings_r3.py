@@ -11,7 +11,7 @@ import palette_guard as pg
 
 SRC = 'ref/wings_r3/'
 OUT = 'src/main/resources/assets/infinium/textures/entity/infinium_wings/r3/'
-SETS = {'cybernetic': 'cybernetic', 'cyber_psycho': 'cyberpsycho'}   # source dir -> mod style id
+SETS = {'cybernetic': 'cybernetic'}   # source dir -> mod style id (Cyber Psycho moved to gen_wings_r7_cyberpsycho.py)
 
 def frames(path):
     a = np.array(Image.open(path).convert('RGBA'))

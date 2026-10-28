@@ -170,14 +170,14 @@ public final class InfiniumWingsRenderer {
         // vanilla elytra geometry (box UV; the design stores the back face pre-flipped to match). No thrusters.
         if (fam == 1 || fam == 3) {
             float a1 = Math.max(0.0F, Math.min(1.0F, (0.40F + 0.50F * overallProgress) * InfiniumClientConfig.wingOpacityMultiplier()));
-            renderR3(pose, collector, light, state, chest, fam, a1, WingFold.smooth(foldT));
+            renderR3(pose, collector, light, state, chest, fam, a1, WingFold.smooth(foldT), GlowAnim.speedMul(overallProgress));
             return;
         }
         // batch1: Infinity = round-5 Event Horizon + A1 echo outline on the vanilla elytra geometry (same path as r3),
         // fixed 0.80x scale, same opacity ramp, dye border glow + afterglow (WingThrustTrail) on thrust.
         if (fam == 4) {
             float a4 = Math.max(0.0F, Math.min(1.0F, (0.40F + 0.50F * overallProgress) * InfiniumClientConfig.wingOpacityMultiplier()));
-            renderR3(pose, collector, light, state, chest, fam, a4, WingFold.smooth(foldT));
+            renderR3(pose, collector, light, state, chest, fam, a4, WingFold.smooth(foldT), GlowAnim.speedMul(overallProgress));
             return;
         }
 
@@ -281,9 +281,11 @@ public final class InfiniumWingsRenderer {
         pose.popPose();
     }
 
-    // ---------------- batch1: round-3 option-4 elytra (Cybernetic = 40 frames, Cyber Psycho = 80 frames, ~50 ms) ----------------
+    // ---------------- batch1: elytra on vanilla geometry. Cybernetic = r3 option-4 (40 fr, 50 ms); Cyber Psycho = r7 variant A
+    // "armor_hue" angular plates (80 fr x 100 ms, frame k = armor glow frame k via GlowAnim + same speedMul); Infinity = r5 (100 fr, 50 ms) ----------------
     private static final int[] R3_FRAMES = {0, 40, 0, 80, 100};
     private static final int R3_FRAME_MS = 50;
+    private static final int CP_FRAME_MS = 100;   // = InfiniumStyle.CYBERPSYCHO frameMs (armor glow clock)
     private static final Identifier[][][] R3 = new Identifier[5][][];   // [fam][kind: base, glow, glow_gray][frame]
     private static final Identifier[] R3_BORDER = new Identifier[5];
     private static net.minecraft.client.model.object.equipment.ElytraModel r3Model;
@@ -296,7 +298,7 @@ public final class InfiniumWingsRenderer {
     static {
         for (int f = 0; f < 100; f++) INF_ECHO[f] = Infinium.id("textures/entity/infinium_wings/r5/infinity/echo/" + f + ".png");
         for (int fam : new int[]{1, 3, 4}) {
-            String d = fam == 1 ? "r3/cybernetic" : fam == 3 ? "r3/cyberpsycho" : "r5/infinity";
+            String d = fam == 1 ? "r3/cybernetic" : fam == 3 ? "r7/cyberpsycho" : "r5/infinity";
             R3[fam] = new Identifier[3][R3_FRAMES[fam]];
             String[] kinds = {"base", "glow", "glow_gray"};
             for (int k = 0; k < 3; k++) for (int f = 0; f < R3_FRAMES[fam]; f++)
@@ -306,14 +308,15 @@ public final class InfiniumWingsRenderer {
     }
 
     private static void renderR3(PoseStack pose, SubmitNodeCollector collector, int light, HumanoidRenderState state,
-                                 ItemStack chest, int fam, float alpha, float fold) {
+                                 ItemStack chest, int fam, float alpha, float fold, float speedMul) {
         if (r3Model == null) r3Model = new net.minecraft.client.model.object.equipment.ElytraModel(
             net.minecraft.client.model.object.equipment.ElytraModel.createLayer().bakeRoot());
         // stray-dot fix: at near-zero fold scale the whole wing collapses to a single dot at the pivot; draw nothing then
         if (fold < 0.05F) return;
         r3Model.setupAnim(state);
         int frames = R3_FRAMES[fam];
-        int f = (int) ((net.minecraft.util.Util.getMillis() / R3_FRAME_MS) % frames);
+        int f = fam == 3 ? GlowAnim.frame(frames, CP_FRAME_MS, speedMul)   // synced to the worn armor glow frame
+            : (int) ((net.minecraft.util.Util.getMillis() / R3_FRAME_MS) % frames);
         int dye = GlowColor.argb(chest);
         boolean thrust = false;
         if (state instanceof AvatarRenderState a && state.isFallFlying) {
@@ -321,8 +324,8 @@ public final class InfiniumWingsRenderer {
             if (mc.level != null && mc.level.getEntity(a.id) instanceof net.minecraft.world.entity.player.Player p)
                 thrust = InfinityFlightClient.thrusting(p);
         }
-        // outer pair, then (Cyber Psycho) the smaller, lighter inner pair, mirrored by the elytra's own L/R symmetry
-        int passes = fam == 3 ? 2 : 1;
+        // single pair (r7: Cyber Psycho inner wing pair removed; the angular plates are baked into its texture)
+        int passes = 1;
         for (int pass = 0; pass < passes; pass++) {
             float sc = fold * (pass == 0 ? 1F : 0.62F) * (fam == 4 ? INF_SCALE * InfiniumClientConfig.wingScaleMultiplier() : 1F);
             float a = pass == 0 ? alpha : alpha * 0.6F;
