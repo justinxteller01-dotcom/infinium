@@ -2,7 +2,7 @@
   "required": false,
   "package": "dev.justin.infinium.compat.mixin",
   "plugin": "dev.justin.infinium.compat.CompatMixinPlugin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
     "tb.AttachmentUtilsMixin",
     "tb.StorageOwnerAccessor",
