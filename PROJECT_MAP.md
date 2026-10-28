@@ -114,3 +114,14 @@ Original, client-only sword animations for the Infinium Sword (main hand) only. 
 - `tools/start_telemetry_bridge.bat`: One-click background launcher for the telemetry bridge.
 - `tools/sync_sqlite.py`: Syncs runtime dungeon reset timers, player stats, and refill logs into `breadcraft.sqlite`.
 - `breadcraft.sqlite`: Local SQLite database containing weekly chest resets, refills, and player statistics for the SQLite MCP server.
+
+### 9. Batch 1 additions (branch `batch1`, 2026-10-28)
+- `UiUnlocks` (attachment `infinium:ui_unlocks`, persistent, copyOnDeath, synced to owner): bit 1 = any Infinium gear seen (settings gear button stays), bit 2 = full set seen (x/80 counter stays). Energy bar still needs a full set worn.
+- `SpacetimeWarp` = **Quantum Tunnel**: tunables `DISTANCE {8,12,16}`, `COOLDOWN_SEC {8,6,4}`, `LAUNCH_SPEED`, `CUE_PITCH` (tier 1/2/3 = Astral+Cybernetic / Singularity+CP / Infinity). Placeholder cue = vanilla enderman teleport. Client screen fx: `client/ability/WarpScreenFx`.
+- `PerkValues.SLOW_DURATION_SEC {2,4,6}` / `SLOW_COOLDOWN_SEC {12,10,8}` (ModMenu sliders removed; config fields legacy).
+- `BindKeyHandler.openControls` always opens vanilla KeyBindsScreen; settings screen has an "Open Controls" button.
+- Wings: `InfiniumWingsRenderer.renderR3` = Cybernetic/Cyber Psycho round-3 option-4 elytra on vanilla `ElytraModel` geometry, frames `textures/entity/infinium_wings/r3/<fam>/{base,glow,glow_gray}/N.png` (50 ms/frame), CP inner wing pair (0.62x, 0.6 alpha), CP thrust border glow (`border.png`, dye tint, default pink `CP_THRUST_DEFAULT`). `WingThrustTrail` = CP afterglow ribbon (LevelRenderEvents.COLLECT_SUBMITS). Infinity rig: fixed 0.80 scale, fixed piece set. Opacity = 0.40 + 0.50 * overallProgress (linear, unupgraded tier 1 -> max Infinity). Wings never gain geometry with upgrades.
+- Sounds: `cyberpsycho_thrust_{start,loop,stop}` (placeholders -> vanilla beacon activate/ambient/deactivate via sounds.json; played from `InfinityFlightClient`).
+- Generators: `gen_lang_extra.py` (merges batch lang keys + CP thrust sounds into en_us.json / sounds.json), `gen_wings_r3.py` (r3 elytra frames from `ref/wings_r3`), `palette_guard.py` (shared colour rule helper), `gen_palette_fix.py` (LAST build step: forces every asset PNG to purple/pink/magenta/black; skips `_n`/`_s` PBR maps).
+- **Colour rule**: no cyan/teal, gold, red-orange, green or blue anywhere. Only purple, pink, magenta, black (+ shades). Player dye palette (`GlowColor.RGB`) is exempt.
+- Known gaps: `gen_r8.py` missing from repo (gen_data.py can't fully regenerate); `gen_book.py` not in build.ps1 (guide pages.json edited directly).
