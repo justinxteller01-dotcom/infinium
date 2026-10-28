@@ -162,6 +162,7 @@ LANG = {
     "subtitles.infinium.flight_thrust": "Flight thrusters surging",
     "subtitles.infinium.crystal_insert": "Crystal inserted",
     "subtitles.infinium.crystal_perk": "Crystal perk unlocked",
+    "subtitles.infinium.crystal_perk_upgrade": "Crystal perk upgraded",
     "subtitles.infinium.crystal_full": "Armor fully charged",
     "subtitles.infinium.crystal_denied": "Only spacetime crystals fit",
     "item.infinium.spacetime_fragments": "Spacetime Fragments",

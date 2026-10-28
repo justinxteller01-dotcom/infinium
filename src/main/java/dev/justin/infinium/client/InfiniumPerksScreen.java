@@ -107,6 +107,9 @@ public class InfiniumPerksScreen extends OptionsSubScreen {
         add(row, Perk.bootJump(fam), mask, connected);
         flush(row);
         list.addHeader(Component.literal(Perk.FAMILY_NAMES[fam] + " full set (matrix)").withStyle(ChatFormatting.GRAY));
+        String tierNote = dev.justin.infinium.Info.tierNote(fam);
+        if (tierNote != null)   // two short lines so the centered header never runs off-screen
+            for (String part : tierNote.split("(?<=\\.) ")) list.addHeader(Component.literal(part).withStyle(ChatFormatting.GRAY));
         for (Perk p : Perk.values()) if (p.isSet() && p.family == fam && !hidden(p)) add(row, p, mask, connected);
         flush(row);
     }

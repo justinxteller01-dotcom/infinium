@@ -189,7 +189,7 @@
     "sounds": [
       "infinium:crystal/singularity_perk"
     ],
-    "subtitle": "subtitles.infinium.crystal_perk"
+    "subtitle": "subtitles.infinium.crystal_perk_upgrade"
   },
   "crystal.singularity.full": {
     "sounds": [
@@ -213,7 +213,7 @@
     "sounds": [
       "infinium:crystal/cyberpsycho_perk"
     ],
-    "subtitle": "subtitles.infinium.crystal_perk"
+    "subtitle": "subtitles.infinium.crystal_perk_upgrade"
   },
   "crystal.cyberpsycho.full": {
     "sounds": [
@@ -237,7 +237,7 @@
     "sounds": [
       "infinium:crystal/infinity_perk"
     ],
-    "subtitle": "subtitles.infinium.crystal_perk"
+    "subtitle": "subtitles.infinium.crystal_perk_upgrade"
   },
   "crystal.infinity.full": {
     "sounds": [

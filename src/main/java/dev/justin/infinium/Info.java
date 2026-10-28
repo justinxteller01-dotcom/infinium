@@ -66,7 +66,8 @@ public final class Info {
             }
             o.add(p(pieceLine(fam, slot), Perk.piece(fam, slot), mask));
             if (slot == net.minecraft.world.entity.EquipmentSlot.CHEST) o.add(l("Wings: Shift + Right Click on air or " + key("toggle_wings", "Toggle Wings", null) + " to toggle."));
-            o.add(h("Full set (" + FN[fam] + ")" + (fam == 4 ? " — starts with all lower perks" : fam >= 2 ? " — starts with Tier 1 perks" : "")));
+            o.add(h("Full set (" + FN[fam] + ")"));
+            if (tierNote(fam) != null) o.add(l(tierNote(fam)));
             for (Object[] e : setLines(fam)) o.add(p((String) e[0], (Perk) e[1], mask));
             o.add(Component.literal("Tier: ").withStyle(ChatFormatting.LIGHT_PURPLE)
                 .append(Component.literal(switch (fam) {
@@ -92,6 +93,26 @@ public final class Info {
         o.add(l("Matches the textures & particles of your worn armor (dyed independently)."));
         if (it != Infinium.HOE) o.add(l("Stops working at " + PerkValues.durabilityFloor() + " durability."));
         return o;
+    }
+
+    /** Tier 2/3 explainer: the armor already has every lower-tier perk; crystals UPGRADE them. Null for tier 1. */
+    public static String tierNote(int fam) {
+        return switch (fam) {
+            case 2 -> "This armor keeps every perk from Astral. Add crystals to upgrade them to Singularity strength.";
+            case 3 -> "This armor keeps every perk from Cybernetic. Add crystals to upgrade them to Cyber Psycho strength.";
+            case 4 -> "This armor keeps every perk from the sets below it. Add crystals to upgrade them to Infinity strength.";
+            default -> null;
+        };
+    }
+
+    /** Short form of tierNote for tight spots (matrix sub-header). Null for tier 1. */
+    public static String tierNoteShort(int fam) {
+        return switch (fam) {
+            case 2 -> "Has all Astral perks. Crystals upgrade them.";
+            case 3 -> "Has all Cybernetic perks. Crystals upgrade them.";
+            case 4 -> "Has all lower perks. Crystals upgrade them.";
+            default -> null;
+        };
     }
 
     /** Book-style piece line (also used by the perk settings hover). */

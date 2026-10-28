@@ -217,9 +217,7 @@ public final class CrystalScreen extends Screen {
         // Baseline perk note on sub-header right (scaled cleanly so it never overlaps armor icons)
         String baseNote = (look == null) ? "Chestplate Mode: Elytra wings scale per perk unlock"
             : switch (fam) {
-            case 2 -> "Base: All Astral set perks active (0 Crystals)";
-            case 3 -> "Base: All Cybernetic set perks active (0 Crystals)";
-            case 4 -> "Base: All Singularity & Cyber Psycho perks active (0 Crystals)";
+            case 2, 3, 4 -> dev.justin.infinium.Info.tierNoteShort(fam);
             default -> "Unlock perks to advance set power & wings";
         };
         float bnScale = 0.72f;
@@ -333,7 +331,8 @@ public final class CrystalScreen extends Screen {
             g.fill(cardX + 1, cardY + 1, cardX + cardW - 1, cardY + 11, unlocked ? 0xFF2D1240 : (canAfford ? 0xFF421550 : 0xFF180A22));
 
             String badge = String.valueOf(req);
-            String status = unlocked ? "UNLOCKED" : (canAfford ? (perksGained > 1 ? ("READY (+" + perksGained + ")") : "READY") : ("NEED " + needed));
+            boolean up = fam >= 2;   // tier 2/3: perks are already active, crystals upgrade them (tier 1 keeps "unlock")
+            String status = unlocked ? (up ? "UPGRADED" : "UNLOCKED") : (canAfford ? (perksGained > 1 ? ("READY (+" + perksGained + ")") : "READY") : ("NEED " + needed));
             int statusCol = unlocked ? 0xFFFF7CD3 : (canAfford ? 0xFFFF00AA : 0xFF8E729E);
 
             float bScale = 0.72f;
@@ -357,7 +356,8 @@ public final class CrystalScreen extends Screen {
                 g.fill(btnX, btnY, btnX + btnW, btnY + btnH, bBorder);
                 g.fill(btnX + 1, btnY + 1, btnX + btnW - 1, btnY + btnH - 1, bBg);
 
-                String bLabel = (perksGained > 1) ? ("UNLOCK " + perksGained + " PERKS (-" + needed + ")") : ("UNLOCK PERK (-" + needed + ")");
+                String verb = up ? "UPGRADE" : "UNLOCK";
+                String bLabel = (perksGained > 1) ? (verb + " " + perksGained + " PERKS (-" + needed + ")") : (verb + " PERK (-" + needed + ")");
                 int bCol = (btnHover || hovered) ? 0xFFFFFFFF : 0xFFFFB8E7;
                 float bLabelScale = twoRows ? 0.58f : 0.68f;
                 int blw = (int) (this.font.width(bLabel) * bLabelScale);
@@ -391,9 +391,11 @@ public final class CrystalScreen extends Screen {
             if (hovered) {
                 hoveredTooltipTitle = Perk.FAMILY_NAMES[fam] + " Milestone " + (i + 1) + " (" + req + " / " + cap + " Crystals)";
                 hoveredTooltipDesc = fullPerkDescription(fam, order[i], shortDesc);
-                hoveredTooltipStatus = unlocked ? (lit ? "Status: Unlocked & On. Click to turn the lights off (also in Infinium Perk Settings)."
-                        : "Status: Unlocked, lights off. Click to turn it back on.")
-                        : (canAfford ? ("Status: Ready to Unlock! Click to spend " + needed + " Crystals and unlock " + (perksGained > 1 ? (perksGained + " perks!") : "this perk."))
+                hoveredTooltipStatus = unlocked ? (lit ? (up ? "Status: Upgraded & On. Click to turn the lights off (also in Infinium Perk Settings)."
+                                : "Status: Unlocked & On. Click to turn the lights off (also in Infinium Perk Settings).")
+                        : (up ? "Status: Upgraded, lights off. Click to turn it back on." : "Status: Unlocked, lights off. Click to turn it back on."))
+                        : (canAfford ? (up ? ("Status: Ready to Upgrade! Click to spend " + needed + " Crystals and upgrade " + (perksGained > 1 ? (perksGained + " perks!") : "this perk."))
+                                : ("Status: Ready to Unlock! Click to spend " + needed + " Crystals and unlock " + (perksGained > 1 ? (perksGained + " perks!") : "this perk.")))
                         : ("Status: Locked — Requires " + needed + " more Crystals (You have " + invCrystals + " in inventory)"));
             }
         }
@@ -408,6 +410,11 @@ public final class CrystalScreen extends Screen {
                 ClientTooltipComponent.create(Component.literal(hoveredTooltipDesc).getVisualOrderText()),
                 ClientTooltipComponent.create(Component.literal(hoveredTooltipStatus).getVisualOrderText())
             );
+            String tn = dev.justin.infinium.Info.tierNote(look == null ? -1 : fam);
+            if (tn != null) {
+                tip = new java.util.ArrayList<>(tip);
+                tip.add(ClientTooltipComponent.create(Component.literal(tn).getVisualOrderText()));
+            }
             g.tooltip(this.font, tip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
         }
     }
