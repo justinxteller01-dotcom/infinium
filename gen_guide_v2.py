@@ -202,9 +202,12 @@ pg('slow', 4, 'Slow Aura', 'Make them back off', ['slow', 'aura', 'mobs', 'cyber
    "every {n:slowcd_t1} / {n:slowcd_t2} / {n:slowcd_t3}s, within {n:slow_radius} blocks.")
 
 # ---- Chapter 5: Tools
-pg('sword', 5, 'Sword & Energy Slash', 'Hit hard, cut wide', ['sword', 'slash', 'bleed', 'energy'],
+pg('sword', 5, 'Sword & Energy Slash', 'Slash, slash, stab', ['sword', 'slash', 'bleed', 'energy'],
    "The sword hits hard and makes enemies bleed.\n"
-   "A fully charged swing fires a wide energy slash through every enemy in its path.\n"
+   "It's a combo weapon: slash, slash, then a stab for the crit.\n"
+   "Energy mode only works while you wear a full Infinium armor set, and each set has its own slash sounds. A fully charged swing then fires a piercing energy slash.\n"
+   "Without a full set there's no energy slash. It's a normal sword that still makes enemies bleed.\n"
+   "Sneak + Right-Click on air to switch between Energy and Normal mode.\n"
    "Cyber armor lets you swing faster and hit fast enemies again sooner.",
    'recipe:sword', 'Smithing table',
    "Numbers: {n:sword_dmg} damage, bleed {n:bleed_s}s. Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier.")
@@ -215,7 +218,8 @@ pg('tools', 5, 'Mining Tools', 'Pick, axe and shovel', ['pickaxe', 'axe', 'shove
    "Sneak + Right-Click on air to switch modes. Tools copy your armor's look.",
    'recipe:tools', 'Smithing table: netherite tool + ingot')
 pg('hoe', 5, 'Hoe', 'Perfect farmland', ['hoe', 'farm', 'farmland'],
-   "Farmland you make stays wet and lit, and it can't be trampled.",
+   "Farmland you make stays wet and lit, and it can't be trampled.\n"
+   "Two modes: standard, or hoe a 3x3 area into Infinium farmland at once.",
    'items:infinium:infinium_hoe', 'Infinium Hoe')
 pg('rocket', 5, 'Infinium Rocket', 'One rocket, forever', ['rocket', 'firework', 'netherite rocket', 'elytra'],
    "Put any firework rocket and an ingot in a smithing table.\n"

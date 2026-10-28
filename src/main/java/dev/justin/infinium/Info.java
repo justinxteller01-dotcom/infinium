@@ -82,7 +82,9 @@ public final class Info {
         o.add(h("Tool"));
         if (it == Infinium.SWORD) {
             o.add(l("12 dmg, applies 8s bleed."));
-            o.add(l("100% full attack charge: fires 3-block piercing Energy Slash (5.5 dmg, applies bleed)."));
+            o.add(l("Combo: slash, slash, then a stab for the crit."));
+            o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (5.5 dmg, applies bleed)."));
+            o.add(l("Without a full set it's a normal sword that still applies bleed."));
             o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
         }
         if (it == Infinium.PICKAXE) o.add(l("Toggle between Fortune IV or Silk Touch."));
