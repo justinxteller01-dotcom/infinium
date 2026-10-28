@@ -232,7 +232,7 @@ public final class SetBonuses {
         return ModSounds.equip(fam);
     }
 
-    /** R2: Cybernetic 25 %, Cyber Psycho 50 %, Infinity 75 %: every hostile within 16 blocks, 3 s, when the wearer takes damage; 6 s cooldown. */
+    /** R2: Cybernetic 25 %, Cyber Psycho 50 %, Infinity 75 %: every hostile within 16 blocks when the wearer takes damage; 2/4/6 s, cooldown 12/10/8 s (PerkValues, batch1 D). */
     static void slowAura(ServerPlayer p) {
         SetLook l = SetLook.of(p);
         var f = eff(p, l, "slow");
@@ -241,13 +241,13 @@ public final class SetBonuses {
         if (amt <= 0) return;
         long now = p.level().getGameTime();
         Long last = SLOW_LAST.get(p.getUUID());
-        if (last != null && now - last < PerkValues.slowCooldownTicks()) return;
+        if (last != null && now - last < PerkValues.slowCooldownTicks(f)) return;
         SLOW_LAST.put(p.getUUID(), now);
         int amp = (int) Math.round(amt / 0.25) - 1;   // effect is -25 % movement per level
         int slowRad = PerkValues.slowRadius();
         for (Mob m : p.level().getEntitiesOfClass(Mob.class, p.getBoundingBox().inflate(slowRad),
                 m -> m.isAlive() && m instanceof net.minecraft.world.entity.monster.Enemy && m.distanceToSqr(p) <= slowRad * slowRad))
-            m.addEffect(new MobEffectInstance(CP_SLOW, PerkValues.slowDurationTicks(), amp, true, false, false), p);
+            m.addEffect(new MobEffectInstance(CP_SLOW, PerkValues.slowDurationTicks(f), amp, true, false, false), p);
     }
     private SetBonuses() {}
 }

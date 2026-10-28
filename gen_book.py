@@ -77,7 +77,7 @@ SPREADS = [
     },
     {
         "title": "Cybernetic Armor",
-        "body": "Crafted the same way as Astral, just with a Cybernetic template.\n\nDamage taken is 66.7% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n1{C} +10% mining speed.\n\n2{C} +1 block jump height.\n\n3{C} +20% attack speed and bow draw speed.\n\n4{C} Nearby mobs become slowed by 25% whenever you take damage (6s cooldown).",
+        "body": "Crafted the same way as Astral, just with a Cybernetic template.\n\nDamage taken is 66.7% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n1{C} +10% mining speed.\n\n2{C} +1 block jump height.\n\n3{C} +20% attack speed and bow draw speed.\n\n4{C} Nearby mobs become slowed by 25% for 2s whenever you take damage (12s cooldown).",
         "note": "Helmet: Infinite oxygen; X-Ray Vision 16m (X / button).\nChestplate: Built-in Jet Wings (toggleable).\nLeggings: +10% Speed (No FOV change).\nBoots: No fall damage.",
         "art": "cybernetic",
         "recipe": "cybernetic",
@@ -91,14 +91,14 @@ SPREADS = [
     },
     {
         "title": "Cyber Psycho Armor",
-        "body": "Cyber Psycho armor is obtained only by upgrading Cybernetic gear with a Cyber Psycho Template and 1 Infinium Ingot in a Smithing Table.\n\nDamage taken is 57.1% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} +20% mining speed.\n\n4{C} +2 blocks jump height.\n\n6{C} +50% attack speed and bow draw speed.\n\n8{C} Nearby mobs become slowed by 50% whenever you take damage (6s cooldown).",
+        "body": "Cyber Psycho armor is obtained only by upgrading Cybernetic gear with a Cyber Psycho Template and 1 Infinium Ingot in a Smithing Table.\n\nDamage taken is 57.1% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} +20% mining speed.\n\n4{C} +2 blocks jump height.\n\n6{C} +50% attack speed and bow draw speed.\n\n8{C} Nearby mobs become slowed by 50% for 4s whenever you take damage (10s cooldown).",
         "note": "Helmet: Infinite oxygen; X-Ray Vision 32m (X / button).\nChestplate: Built-in Jet Wings; Flight Thrust (hold Ctrl).\nLeggings: +15% Speed (No FOV change).\nBoots: No fall damage.",
         "art": "cyberpsycho",
         "recipe": "cyberpsycho",
     },
     {
         "title": "Infinity Armor",
-        "body": "Combine a piece of Singularity gear with the same piece of Cyber Psycho gear, plus 1 Infinium Ingot to craft INFINITY ARMOR! It applies all previous bonus perks from all Infinium armor types, with even more unique bonuses!\n\nDamage taken is 50% of netherite.\nFire, lava, and explosion immunity.\nRocket-free flight: Hold Left Ctrl while flying to thrust up to max speed!\n\nFull Set: ({C} = required crystals to activate perk)\n\n4{C} +30% mining speed.\n\n8{C} +3 blocks jump height.\n\n12{C} +75% attack speed and bow draw speed.\n\n16{C} Auto repair: every 2 seconds, all gear in your inventory regains 1 durability.\n\n20{C} Stacks grow from 64 to 256, 16 to 64, and unstackable items to 16.\n\n24{C} Nearby mobs become slowed by 75% whenever you take damage (6s cooldown).\n\n28{C} 33% chance to not consume most building blocks.\n\n32{C} +3 block reach.",
+        "body": "Combine a piece of Singularity gear with the same piece of Cyber Psycho gear, plus 1 Infinium Ingot to craft INFINITY ARMOR! It applies all previous bonus perks from all Infinium armor types, with even more unique bonuses!\n\nDamage taken is 50% of netherite.\nFire, lava, and explosion immunity.\nRocket-free flight: Hold Left Ctrl while flying to thrust up to max speed!\n\nFull Set: ({C} = required crystals to activate perk)\n\n4{C} +30% mining speed.\n\n8{C} +3 blocks jump height.\n\n12{C} +75% attack speed and bow draw speed.\n\n16{C} Auto repair: every 2 seconds, all gear in your inventory regains 1 durability.\n\n20{C} Stacks grow from 64 to 256, 16 to 64, and unstackable items to 16.\n\n24{C} Nearby mobs become slowed by 75% for 6s whenever you take damage (8s cooldown).\n\n28{C} 33% chance to not consume most building blocks.\n\n32{C} +3 block reach.",
         "note": "Helmet: Infinite oxygen; Dual Full Bright & 48m X-Ray.\nChestplate: Hybrid Flight & Surging Thrust (hold Ctrl).\nLeggings: +20% Speed; Quantum Tunnel 16m (ability key, mid-air).\nBoots: No fall damage; +3 blocks jump.",
         "art": "infinity",
         "recipe": "infinity",

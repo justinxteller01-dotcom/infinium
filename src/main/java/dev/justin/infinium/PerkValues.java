@@ -176,13 +176,17 @@ public final class PerkValues {
         };
     }
 
-    public static int slowDurationTicks() {
-        return InfiniumConfig.getSlowDurationTicks();
+    /** batch1 D: slow duration / cooldown in seconds by tier (Cybernetic, Cyber Psycho, Infinity). */
+    public static final int[] SLOW_DURATION_SEC = {2, 4, 6};
+    public static final int[] SLOW_COOLDOWN_SEC = {12, 10, 8};
+
+    static int slowTierIndex(Family family) {
+        return switch (family) { case CYBERPSYCHO -> 1; case INFINITY -> 2; default -> 0; };
     }
 
-    public static int slowCooldownTicks() {
-        return InfiniumConfig.getSlowCooldownTicks();
-    }
+    public static int slowDurationTicks(Family family) { return SLOW_DURATION_SEC[slowTierIndex(family)] * 20; }
+
+    public static int slowCooldownTicks(Family family) { return SLOW_COOLDOWN_SEC[slowTierIndex(family)] * 20; }
 
     public static int slowRadius() {
         return InfiniumConfig.getSlowRadius();

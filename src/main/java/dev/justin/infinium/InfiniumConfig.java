@@ -68,6 +68,7 @@ public final class InfiniumConfig {
     private static double slowAuraT1 = 0.25;
     private static double slowAuraT2 = 0.50;
     private static double slowAuraT3 = 0.75;
+    /** Legacy (pre-batch1); unused, the slow perk now uses PerkValues.SLOW_DURATION_SEC / SLOW_COOLDOWN_SEC by tier. */
     private static int slowDurationTicks = 60;
     private static int slowCooldownTicks = 120;
     private static int slowRadius = 16;

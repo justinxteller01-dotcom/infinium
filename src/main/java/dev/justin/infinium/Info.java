@@ -167,7 +167,7 @@ public final class Info {
                 case "mining" -> "+" + pct(PerkValues.mining(f)) + " mining speed.";
                 case "jump" -> PerkValues.airJumpsText(f) + " (press jump mid-air).";
                 case "attack" -> "+" + pct(PerkValues.attackAndBow(f)) + " attack & bow draw speed.";
-                case "slow" -> "Nearby mobs (16m) slowed " + pct(PerkValues.slowAmount(f)) + " on hit (6s cd).";
+                case "slow" -> "Nearby mobs (16m) slowed " + pct(PerkValues.slowAmount(f)) + " on hit for " + PerkValues.slowDurationTicks(f) / 20 + "s (" + PerkValues.slowCooldownTicks(f) / 20 + "s cd).";
                 default -> kind;
             };
             o.add(new Object[]{prefix + desc, Perk.set(fam, kind)});

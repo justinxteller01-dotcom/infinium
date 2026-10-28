@@ -167,8 +167,6 @@ public class InfiniumModMenuConfigScreen extends OptionsSubScreen {
         combat.add(new NumericSlider(Component.literal("T1 Mob Slow Aura"), "%", 0, 100, 5, 0, InfiniumConfig.getSlowAuraT1() * 100.0, v -> InfiniumConfig.setSlowAuraT1(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("T2 Mob Slow Aura"), "%", 0, 100, 5, 0, InfiniumConfig.getSlowAuraT2() * 100.0, v -> InfiniumConfig.setSlowAuraT2(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("T3 Mob Slow Aura"), "%", 0, 100, 5, 0, InfiniumConfig.getSlowAuraT3() * 100.0, v -> InfiniumConfig.setSlowAuraT3(v / 100.0)));
-        combat.add(new NumericSlider(Component.literal("Mob Slow Duration"), " ticks", 10, 300, 10, 0, InfiniumConfig.getSlowDurationTicks(), v -> InfiniumConfig.setSlowDurationTicks((int) v)));
-        combat.add(new NumericSlider(Component.literal("Mob Slow Cooldown"), " ticks", 20, 600, 20, 0, InfiniumConfig.getSlowCooldownTicks(), v -> InfiniumConfig.setSlowCooldownTicks((int) v)));
         combat.add(new NumericSlider(Component.literal("Mob Slow Radius"), "m", 4, 48, 2, 0, InfiniumConfig.getSlowRadius(), v -> InfiniumConfig.setSlowRadius((int) v)));
         combat.add(new NumericSlider(Component.literal("Astral Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedAstral() * 100.0, v -> InfiniumConfig.setLegSpeedAstral(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("Cybernetic Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedCybernetic() * 100.0, v -> InfiniumConfig.setLegSpeedCybernetic(v / 100.0)));
