@@ -4,8 +4,9 @@ Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / In
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-8c89f58` (pre-release, 2026-10-28 4:11 PM ET)
-- **Sword damage by 3 tiers**: Tier 1 (no armor, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12. Slash 30/40/50% = 3 / 4.4 / 6; beam 35/55/75% = 3.5 / 6.05 / 9.
+## 1. Current release: `batch1-9d9fece` (pre-release, 2026-10-28 4:15 PM ET)
+- **Energy slash / beam**: slash 60/70/80% of the tier base = 6 / 7.7 / 9.6; beam 75/85/95% = 7.5 / 9.35 / 11.4.
+- **Sword damage by 3 tiers**: Tier 1 (no armor, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12. 
 - **Cyberburn**: the Burn DoT display name is now "Cyberburn" (lang, tooltip, guide, docs). Registry id `infinium:burning` is unchanged.
 - **DoT durations** (slash/beam only, by owner set): Astral and Cybernetic 3s, Singularity and Cyber Psycho 4s, Infinity 5s.
 - **DoT ticks never give i-frames**: shared `DotDamage` helper resets `invulnerableTime` and lastHurt for Bleed and Cyberburn ticks.
@@ -24,8 +25,9 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 | HUD | Settings button appears on first Infinium item and stays. Energy bar only with a full set. "x/80" counter appears on first full set and stays. Abilities are named "X-Ray Pulse" and "Quantum Tunnel"; settings has an "Open Controls" button. | 10-28 |
 | Jump + warp | Boots tap/hold height: +1/+2/+3. In-air push tiny/small/largest. Air jumps only with elytra off: Cybernetic 1, Cyber Psycho 2, Infinity 3 (4 jumps total). A warp refunds the 3 air jumps, not the ground jump. Only Infinity has both multi-jump and warp. | 10-28 |
 | Audio | Every set gets its own sound family (flight, slash, mode-switch, air jump). Cyber/Psycho: energy-charge sounds (Cyberpunk + Fire Force flair), not 8-bit electric. Infinity = a blend of Astral + Singularity. Cyber Psycho thrust: ramp-up, then a subtle hum, then a fade. Built one piece at a time, at Justin's PC. | 10-28 |
-| Other values | Mob slow 25/50/75%, 2/4/6 s, cd 12/10/8 s. X-Ray Pulse 10/20/30 blocks, cd 40/30/20 s. Crystal slots 8/16/32. Slash 30/40/50%, crit beam 35/55/75%. Full Bright removed. | 10-26 to 10-28 |
+| Other values | Mob slow 25/50/75%, 2/4/6 s, cd 12/10/8 s. X-Ray Pulse 10/20/30 blocks, cd 40/30/20 s. Crystal slots 8/16/32. Full Bright removed. | 10-26 to 10-28 |
 | Sword damage | Sword damage (2026-10-28): 3 tiers. Tier 1 (no armor, Astral or Cybernetic) 10, Tier 2 (Singularity or Cyber Psycho) 11, Tier 3 (Infinity) 12. Item attribute 10 + set bonus +0/+1/+2 on hit; slash/beam % use the tier value. | 10-28 |
+| Energy slash / beam | Energy slash and beam (2026-10-28): % of the tier base (10/11/12). Slash 60/70/80% = 6 / 7.7 / 9.6. Beam 75/85/95% = 7.5 / 9.35 / 11.4. | 10-28 |
 | GitHub | Push and upload the jar to the private repo after every patch with no need to ask. Public publishing still needs Justin's OK. | 10-28 |
 
 ## 3. Open questions for Justin
@@ -68,7 +70,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 18. Slash + melee double hit.
 19. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-8c89f58`)
+## 5. In-game test checklist (`batch1-9d9fece`)
+- [ ] Slash does 6 / 7.7 / 9.6 and beam 7.5 / 9.35 / 11.4 by tier.
 - [ ] Sword hits 10/11/12 by tier; tooltip shows 10 Attack Damage plus the tier line; slash/beam numbers match.
 - [ ] Slash/beam DoT lasts 3/4/5 s by set; plain melee applies none.
 - [ ] Cybernetic and Cyber Psycho show "Cyberburn" (pink embers, no fire); other sets show Bleed.
@@ -84,6 +87,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-9d9fece` 10-28 4:15 PM: energy slash 60/70/80% (6 / 7.7 / 9.6), beam 75/85/95% (7.5 / 9.35 / 11.4) of the tier base.
 - `batch1-8c89f58` 10-28 4:11 PM: sword damage by 3 tiers, 10/11/12 (Tier 1 no armor/Astral/Cybernetic, Tier 2 Singularity/Cyber Psycho, Tier 3 Infinity); slash/beam scale with it.
 - `batch1-89b8713` 10-28 3:51 PM: Burn DoT renamed to Cyberburn.
 - `batch1-bf0e9a9` 10-28 3:46 PM: DoT duration by set, 3/4/5 s.
