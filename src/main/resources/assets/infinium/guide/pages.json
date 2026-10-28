@@ -58,14 +58,14 @@
     },
     {
       "title": "Astral Armor",
-      "body": "Combine an Astral Template, Netherite armor, and 1 Infinium Ingot in a Smithing Table.\n\nTougher than netherite.\nFire and lava can't hurt you.\n\nFull Set: ({C} = crystals needed to unlock)\n\n1{C} Slowly repairs all gear in your inventory.\n\n2{C} Sometimes doesn't use up the block you place.\n\n3{C} +1 block reach.\n\n4{C} Items stack higher (64 becomes 96).",
+      "body": "Combine an Astral Template, Netherite armor, and 1 Infinium Ingot in a Smithing Table.\n\nTougher than netherite.\nFire and lava can't hurt you.\n\nFull Set: ({C} = crystals needed to unlock)\n\n2{C} Slowly repairs all gear in your inventory.\n\n4{C} Sometimes doesn't use up the block you place.\n\n6{C} +1 block reach.\n\n8{C} Items stack higher (64 becomes 96).",
       "note": "Helmet: Breathe underwater.\nChestplate: Built-in wings you can turn on and off.\nLeggings: Run a little faster; Quantum Tunnel zips you 8 blocks forward in mid-air.\nBoots: No fall damage; tap to jump, hold to jump higher (up to 2 blocks).",
       "art": "astral",
       "recipe": "astral"
     },
     {
       "title": "Cybernetic Armor",
-      "body": "Crafted the same way as Astral, just with a Cybernetic template.\n\nDamage taken is 66.7% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n1{C} +10% mining speed.\n\n2{C} +1 air jump (Elytra off).\n\n3{C} +20% attack speed and bow draw speed.\n\n4{C} Nearby mobs become slowed by 25% for 2s whenever you take damage (12s cooldown).",
+      "body": "Crafted the same way as Astral, just with a Cybernetic template.\n\nDamage taken is 66.7% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} +10% mining speed.\n\n4{C} +1 air jump (Elytra off).\n\n6{C} +20% attack speed and bow draw speed.\n\n8{C} Nearby mobs become slowed by 25% for 2s whenever you take damage (12s cooldown).",
       "note": "Helmet: Infinite oxygen; X-Ray Vision 16m (X / button).\nChestplate: Built-in Jet Wings (toggleable).\nLeggings: +10% Speed (No FOV change).\nBoots: No fall damage.",
       "art": "cybernetic",
       "recipe": "cybernetic"
