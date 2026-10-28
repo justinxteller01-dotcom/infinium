@@ -99,6 +99,8 @@ public final class Info {
         return switch (slot) {
             case HEAD -> switch (fam) {
                 // G4b: X-ray is the M3 pulse ability on every helmet (XrayPulse.radius: r10 / r20 / r30), not a continuous X key.
+                // Astral (0) split from the shared default so only Astral gets the plain wording.
+                case 0 -> "Helmet: Breathe underwater; Full Bright lets you see in the dark (" + fullBright() + "); X-Ray Pulse shows ores within 10 blocks (" + key("xray_pulse", "X-Ray Pulse", null) + ").";
                 case 1 -> "Helmet: Infinite oxygen; " + pulse(10) + ".";
                 case 2 -> "Helmet: Infinite oxygen; Full Bright toggle (" + fullBright() + "); " + pulse(20) + ".";
                 case 3 -> "Helmet: Infinite oxygen; " + pulse(20) + ".";
@@ -106,7 +108,7 @@ public final class Info {
                 default -> "Helmet: Infinite oxygen; Full Bright toggle (" + fullBright() + "); " + pulse(10) + ".";
             };
             case CHEST -> switch (fam) {
-                case 0 -> "Chestplate: Built-in Elytra (toggleable).";
+                case 0 -> "Chestplate: Built-in wings you can turn on and off.";
                 case 1 -> "Chestplate: Built-in Jet Wings (toggleable).";
                 case 2 -> "Chestplate: Built-in Elytra; Flight Thrust (" + thrust() + ").";
                 case 3 -> "Chestplate: Built-in Jet Wings; Flight Thrust (" + thrust() + ").";
@@ -114,7 +116,7 @@ public final class Info {
                 default -> "Chestplate: Built-in Elytra (toggleable).";
             };
             case LEGS -> switch (fam) {
-                case 0 -> "Leggings: +5% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[0]) + ".";
+                case 0 -> "Leggings: Run a little faster; Quantum Tunnel zips you " + (int) SpacetimeWarp.DISTANCE[0] + " blocks forward in mid-air (" + key("warp", "Quantum Tunnel", null) + ").";
                 case 1 -> "Leggings: +10% Speed Bonus (No FOV change).";
                 case 2 -> "Leggings: +5% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
                 case 3 -> "Leggings: +15% Speed Bonus (No FOV change).";
@@ -122,7 +124,7 @@ public final class Info {
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";
             };
             default -> switch (fam) {
-                case 0 -> "Boots: No fall damage; Jump Augmentation (+1 block height, hold jump).";
+                case 0 -> "Boots: No fall damage; +1 jump height.";
                 case 1 -> "Boots: No fall damage.";
                 case 2 -> "Boots: No fall damage; Jump Augmentation (+2 blocks height, hold jump).";
                 case 3 -> "Boots: No fall damage.";
@@ -155,11 +157,11 @@ public final class Info {
     public static List<Object[]> setLines(int fam) {
         PerkValues.Family f = PerkValues.Family.values()[fam];
         List<Object[]> o = new ArrayList<>();
-        o.add(new Object[]{f == PerkValues.Family.INFINITY ? "Passive: -50% netherite dmg; Fire, lava & explosion immune; Rocket-free flight." : "Passive: " + PerkValues.damageTakenText(f) + " dmg vs netherite; Fire & lava immune.", Perk.set(fam, "immune")});
+        o.add(new Object[]{f == PerkValues.Family.ASTRAL ? "Passive: Tougher than netherite; fire and lava can't hurt you." : f == PerkValues.Family.INFINITY ? "Passive: -50% netherite dmg; Fire, lava & explosion immune; Rocket-free flight." : "Passive: " + PerkValues.damageTakenText(f) + " dmg vs netherite; Fire & lava immune.", Perk.set(fam, "immune")});
         for (String kind : CrystalCharge.ORDER[fam]) {
             int req = CrystalCharge.crystalsRequired(fam, kind);
             String prefix = "[" + req + "✦] ";
-            String desc = switch (kind) {
+            String desc = f == PerkValues.Family.ASTRAL ? astralSetLine(kind) : switch (kind) {
                 case "regen" -> "Auto-repair: 1 dur/" + (PerkValues.repairTicks(f) / 20) + "s to all inventory gear.";
                 case "noconsume" -> pct(PerkValues.keepChance(f)) + " chance to not consume building blocks.";
                 case "reach" -> blocks((int) PerkValues.reach(f)) + " reach (place, break, attack).";
@@ -173,6 +175,17 @@ public final class Info {
             o.add(new Object[]{prefix + desc, Perk.set(fam, kind)});
         }
         return o;
+    }
+    /** Astral-only plain-language set lines (text style: what it does, no percentage dumps). Other families use the shared switch. */
+    private static String astralSetLine(String kind) {
+        PerkValues.Family f = PerkValues.Family.ASTRAL;
+        return switch (kind) {
+            case "regen" -> "Slowly repairs all gear in your inventory.";
+            case "noconsume" -> "Sometimes doesn't use up the block you place.";
+            case "reach" -> blocks((int) PerkValues.reach(f)) + " reach.";
+            case "stacks" -> "Items stack higher (64 becomes " + PerkValues.boostedMax(f, 64) + ").";
+            default -> kind;
+        };
     }
     private Info() {}
 }

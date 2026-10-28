@@ -70,8 +70,8 @@ SPREADS = [
     },
     {
         "title": "Astral Armor",
-        "body": "Combine an Astral Template, Netherite armor, and 1 Infinium Ingot in a Smithing Table.\n\nDamage taken is 66.7% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n1{C} Auto repair: every 10 seconds, all gear in your inventory regains 1 durability.\n\n2{C} 11% chance to not consume most building blocks.\n\n3{C} +1 block reach.\n\n4{C} Stacks grow from 64 to 96, 16 to 24, and unstackable items to 2.",
-        "note": "Helmet: Infinite oxygen; Full Bright (B / button).\nChestplate: Built-in Elytra (toggleable).\nLeggings: +5% Speed; Quantum Tunnel 8m (ability key, mid-air).\nBoots: No fall damage; +1 block jump.",
+        "body": "Combine an Astral Template, Netherite armor, and 1 Infinium Ingot in a Smithing Table.\n\nTougher than netherite.\nFire and lava can't hurt you.\n\nFull Set: ({C} = crystals needed to unlock)\n\n1{C} Slowly repairs all gear in your inventory.\n\n2{C} Sometimes doesn't use up the block you place.\n\n3{C} +1 block reach.\n\n4{C} Items stack higher (64 becomes 96).",
+        "note": "Helmet: Breathe underwater; Full Bright to see in the dark (B).\nChestplate: Built-in wings you can turn on and off.\nLeggings: Run a little faster; Quantum Tunnel zips you 8 blocks forward in mid-air.\nBoots: No fall damage; +1 jump height.",
         "art": "astral",
         "recipe": "astral",
     },

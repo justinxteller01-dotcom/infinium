@@ -82,6 +82,16 @@ public final class PerkValues {
     /** Short description of a perk for the Crystal Screen milestone markers. */
     public static String shortPerkDesc(int familyOrd, String kind) {
         Family f = Family.values()[familyOrd];
+        if (f == Family.ASTRAL) {
+            // Astral-only plain wording; other families keep the shared lines below.
+            switch (kind) {
+                case "regen": return "Auto-Repair";
+                case "noconsume": return "Block Saver";
+                case "reach": return "+" + (int) reach(f) + " Block Reach";
+                case "stacks": return "Bigger Stacks";
+                default: break;
+            }
+        }
         return switch (kind) {
             case "regen" -> "Auto-Repair (" + (repairTicks(f) / 20) + "s)";
             case "noconsume" -> Math.round(keepChance(f) * 100) + "% Block Saver";
