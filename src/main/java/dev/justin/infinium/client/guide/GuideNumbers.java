@@ -44,7 +44,10 @@ public final class GuideNumbers {
             put("slow" + s, () -> pct(PerkValues.slowAmount(c)));
             put("slowdur" + s, () -> String.valueOf(PerkValues.slowDurationTicks(c) / 20));
             put("slowcd" + s, () -> String.valueOf(PerkValues.slowCooldownTicks(c) / 20));
-            put("slash" + s, () -> new String[]{"60%", "70%", "80%"}[t]);   // LITERAL (EnergySlashEntity comment)
+            put("slash" + s, () -> pct(dev.justin.infinium.EnergySlashEntity.SLASH_PCT[t]));
+            put("beam" + s, () -> pct(dev.justin.infinium.EnergySlashEntity.BEAM_PCT[t]));
+            put("slashdmg" + s, () -> num2(dev.justin.infinium.EnergySlashEntity.dmg(false, t + 1)));
+            put("beamdmg" + s, () -> num2(dev.justin.infinium.EnergySlashEntity.dmg(true, t + 1)));
         }
         put("speed_astral", () -> pct(PerkValues.legSpeed(Family.ASTRAL)));
         put("speed_cyber", () -> pct(PerkValues.legSpeed(Family.CYBERNETIC)));
@@ -59,6 +62,7 @@ public final class GuideNumbers {
         put("crystals_t1", () -> String.valueOf(CrystalCharge.T1_SLOTS));
         put("crystals_t2", () -> String.valueOf(CrystalCharge.T2_SLOTS));
         put("crystals_t3", () -> String.valueOf(CrystalCharge.T3_SLOTS));
+        put("milestones_cyber", () -> { StringBuilder b = new StringBuilder(); for (int i = 0; i < dev.justin.infinium.CrystalCharge.ORDER[1].length; i++) b.append(i == 0 ? "" : "/").append(dev.justin.infinium.CrystalCharge.crystalsRequired(1, i)); return b.toString(); });
         put("crystals_total", () -> String.valueOf(2 * CrystalCharge.T1_SLOTS + 2 * CrystalCharge.T2_SLOTS + CrystalCharge.T3_SLOTS));
         put("meteor_min_days", () -> String.valueOf(InfiniumConfig.getMeteorMinDays()));
         put("meteor_max_days", () -> String.valueOf(InfiniumConfig.getMeteorMaxDays()));
@@ -84,6 +88,7 @@ public final class GuideNumbers {
         double v = d * 100.0;
         return (Math.abs(v - Math.round(v)) < 0.05 ? String.valueOf(Math.round(v)) : String.format(Locale.ROOT, "%.1f", v)) + "%";
     }
+    static String num2(double d) { return java.math.BigDecimal.valueOf(Math.round(d * 100) / 100.0).stripTrailingZeros().toPlainString(); }
     static String num(double d) { return d == Math.rint(d) ? String.valueOf((long) d) : String.format(Locale.ROOT, "%.1f", d); }
 
     public static String get(String key) {

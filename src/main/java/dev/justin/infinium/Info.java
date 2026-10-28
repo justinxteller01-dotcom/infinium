@@ -83,7 +83,7 @@ public final class Info {
         if (it == Infinium.SWORD) {
             o.add(l("Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12."));
             o.add(l("Your first two swings send out energy slashes. The third fires an energy beam that hits even harder."));
-            o.add(l("Energy mode (full Infinium armor set only; Astral unlocks it with crystals): a fully charged swing fires a piercing Energy Slash (6 / 7.7 / 9.6 dmg by tier); the beam does 7.5 / 9.35 / 11.4. Slashes and the beam apply Cosmic Radiation with Astral armor, Cyberburn with Cyber armor, or bleed otherwise: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
+            o.add(l("Energy mode (full Infinium armor set only; Astral unlocks it with crystals): a fully charged swing fires a piercing Energy Slash (" + dmgs(false) + " dmg by tier); the beam does " + dmgs(true) + ". Slashes and the beam apply Cosmic Radiation with Astral armor, Cyberburn with Cyber armor, or bleed otherwise: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
             o.add(l("Without a full set it's a normal sword."));
             o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
         }
@@ -118,6 +118,13 @@ public final class Info {
     }
 
     /** Book-style piece line (also used by the perk settings hover). */
+    /** "6 / 7.7 / 9.6" style list from EnergySlashEntity (tier sword base x slash/beam %). */
+    static String dmgs(boolean beam) {
+        StringBuilder b = new StringBuilder();
+        for (int t = 1; t <= 3; t++) b.append(t == 1 ? "" : " / ").append(java.math.BigDecimal.valueOf(EnergySlashEntity.dmg(beam, t)).stripTrailingZeros().toPlainString());
+        return b.toString();
+    }
+
     public static String pieceLine(int fam, net.minecraft.world.entity.EquipmentSlot slot) {
         return switch (slot) {
             case HEAD -> switch (fam) {

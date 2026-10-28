@@ -85,7 +85,7 @@ pg('matrix', 3, 'The Crystal Matrix', 'Charge your set', ['matrix', 'crystal', '
    "The counter tracks every crystal you have ever put in.\n"
    "More charge also means a stronger glow.",
    'matrix', 'Tier 1, tier 2 and Infinity milestones',
-   "Numbers: tier 1 holds {n:crystals_t1} crystals, tier 2 holds {n:crystals_t2}, Infinity holds {n:crystals_t3}; milestones are spread evenly along the bar. "
+   "Numbers: tier 1 holds {n:crystals_t1} crystals, tier 2 holds {n:crystals_t2}, Infinity holds {n:crystals_t3}; milestones are spread evenly along the bar (Cybernetic: {n:milestones_cyber}). "
    "{n:crystals_total} for the whole journey.")
 
 def armor(id, fam, title, sub, kw, body, caption, numbers):
@@ -210,7 +210,7 @@ pg('sword', 5, 'Sword & Energy Slash', 'Slash, slash, beam', ['sword', 'slash', 
    "Sneak + Right-Click on air to switch between Energy and Normal mode.\n"
    "Cyber armor lets you swing faster and hit fast enemies again sooner.",
    'recipe:sword', 'Smithing table',
-   "Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) {n:sword_dmg}, Tier 2 (Singularity, Cyber Psycho) {n:sword_dmg_t2}, Tier 3 (Infinity) {n:sword_dmg_t3}. Cosmic Radiation/Bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of the tier damage (6 / 7.7 / 9.6); the beam deals 75% / 85% / 95% (7.5 / 9.35 / 11.4).")
+   "Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) {n:sword_dmg}, Tier 2 (Singularity, Cyber Psycho) {n:sword_dmg_t2}, Tier 3 (Infinity) {n:sword_dmg_t3}. Cosmic Radiation/Bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of the tier damage ({n:slashdmg_t1} / {n:slashdmg_t2} / {n:slashdmg_t3}); the beam deals {n:beam_t1} / {n:beam_t2} / {n:beam_t3} ({n:beamdmg_t1} / {n:beamdmg_t2} / {n:beamdmg_t3}).")
 pg('tools', 5, 'Mining Tools', 'Pick, axe and shovel', ['pickaxe', 'axe', 'shovel', 'mode', 'fortune', 'silk'],
    "Pickaxe: switch between Fortune IV and Silk Touch.\n"
    "Axe: logs drop the wood type you choose.\n"

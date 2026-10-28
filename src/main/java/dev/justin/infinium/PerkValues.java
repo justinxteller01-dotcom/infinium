@@ -55,8 +55,6 @@ public final class PerkValues {
     public static final int REPAIR_SINGULARITY_TICKS = 100;
     public static final int REPAIR_INFINITY_TICKS = 40;
 
-    public static final int SLOW_TICKS = 60;
-    public static final int SLOW_COOLDOWN_TICKS = 120;
     public static final int SLOW_RADIUS = 16;
     public static final double SLOW_CYBERNETIC = 0.25;
     public static final double SLOW_CYBERPSYCHO = 0.50;

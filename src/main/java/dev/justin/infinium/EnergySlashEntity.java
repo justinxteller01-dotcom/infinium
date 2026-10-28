@@ -40,6 +40,17 @@ import org.joml.Vector3f;
  * - Surviving segments continue sailing forward until max range or all segments are depleted.
  */
 public class EnergySlashEntity extends Projectile {
+    /** Slash / beam damage as a fraction of the tier sword base (10/11/12), index = tier-1. Read by the guide too. */
+    public static final float[] SLASH_PCT = {0.60F, 0.70F, 0.80F};
+    public static final float[] BEAM_PCT = {0.75F, 0.85F, 0.95F};
+    /** Damage for display: tier base * pct, rounded to 2 decimals (6 / 7.7 / 9.6 and 7.5 / 9.35 / 11.4). */
+    public static double dmg(boolean beam, int tier) {
+        int t = Math.max(1, Math.min(3, tier));
+        dev.justin.infinium.SetLook l = t == 1 ? dev.justin.infinium.SetLook.ASTRAL : t == 2 ? dev.justin.infinium.SetLook.SINGULARITY : dev.justin.infinium.SetLook.INFINITY;
+        double base = Infinium.SWORD_BASE_DAMAGE + Infinium.swordSetBonus(l);
+        return Math.round(base * (beam ? BEAM_PCT : SLASH_PCT)[t - 1] * 100.0) / 100.0;
+    }
+
     private static final int MAX_AGE_TICKS = 20;
     public static final int SEGMENT_COUNT = 15;
     private static final double[] U_NODES = new double[SEGMENT_COUNT];
@@ -284,20 +295,8 @@ public class EnergySlashEntity extends Projectile {
         int tier = getTier();
         // Slash damage % of tier base (10/11/12): T1 60%, T2 70%, T3 80% = 6 / 7.7 / 9.6.
         // Crit slash (stab beam): T1 75%, T2 85%, T3 95% = 7.5 / 9.35 / 11.4.
-        float pct;
-        if (stabMode) {
-            pct = switch (tier) {
-                case 1 -> 0.75F;
-                case 2 -> 0.85F;
-                default -> 0.95F; // Tier 3
-            };
-        } else {
-            pct = switch (tier) {
-                case 1 -> 0.60F;
-                case 2 -> 0.70F;
-                default -> 0.80F; // Tier 3
-            };
-        }
+        int ti = Math.max(1, Math.min(3, tier)) - 1;
+        float pct = stabMode ? BEAM_PCT[ti] : SLASH_PCT[ti];
         float damage = baseDmg * pct;
 
         for (LivingEntity target : targets) {

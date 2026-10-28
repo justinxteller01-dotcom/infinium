@@ -1,6 +1,10 @@
 import json, os
 R='src/main/resources/'
+# batch1 10-28: these files are hand-maintained now (newer than this script). Never overwrite them if they exist.
+PROTECTED={'fabric.mod.json','infinium.mixins.json','infinium.compat.mixins.json','infinium.client.mixins.json','assets/infinium/sounds.json'}
 def w(p,o):
+    if p in PROTECTED and os.path.exists(R+p):
+        print('skip (hand-maintained):',p); return
     os.makedirs(os.path.dirname(R+p),exist_ok=True); json.dump(o,open(R+p,'w'),indent=2)
 armor=['helmet','chestplate','leggings','boots']; tools=['sword','pickaxe','axe','shovel','hoe']
 items=['infinium_ingot']+['infinium_'+x for x in armor+tools]
@@ -89,7 +93,11 @@ w('data/infinium/loot_table/blocks/infinium_farmland.json',{"type":"minecraft:bl
   "conditions":[{"condition":"minecraft:survives_explosion"}],"entries":[{"type":"minecraft:item","name":"minecraft:dirt"}]}],
   "random_sequence":"infinium:blocks/infinium_farmland"})
 exec(open('gen_bread.py').read())
-exec(open('gen_r8.py').read())
+# gen_r8.py is gone from the repo; old copies overwrite sounds.json with a shorter set. Skip it safely.
+if os.path.exists('gen_r8.py') and os.environ.get('INFINIUM_RUN_GEN_R8') == '1':
+    exec(open('gen_r8.py').read())
+else:
+    print('skip gen_r8.py (missing or disabled; sounds.json is hand-maintained)')
 w('fabric.mod.json',{"schemaVersion":1,"id":"infinium","version":"1.0.0","name":"Infinium",
  "description":"Infinium: a dark purple tier above netherite.","authors":["Justin Teller"],"license":"MIT","environment":"*",
  "entrypoints":{"main":["dev.justin.infinium.Infinium"],"client":["dev.justin.infinium.client.InfiniumClient"],"jei_mod_plugin":["dev.justin.infinium.compat.InfiniumJeiPlugin"],

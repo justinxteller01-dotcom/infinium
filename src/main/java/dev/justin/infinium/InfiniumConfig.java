@@ -68,9 +68,6 @@ public final class InfiniumConfig {
     private static double slowAuraT1 = 0.25;
     private static double slowAuraT2 = 0.50;
     private static double slowAuraT3 = 0.75;
-    /** Legacy (pre-batch1); unused, the slow perk now uses PerkValues.SLOW_DURATION_SEC / SLOW_COOLDOWN_SEC by tier. */
-    private static int slowDurationTicks = 60;
-    private static int slowCooldownTicks = 120;
     private static int slowRadius = 16;
 
     private static double legSpeedAstral = 0.05;
@@ -142,8 +139,6 @@ public final class InfiniumConfig {
         slowAuraT1 = 0.25;
         slowAuraT2 = 0.50;
         slowAuraT3 = 0.75;
-        slowDurationTicks = 60;
-        slowCooldownTicks = 120;
         slowRadius = 16;
 
         legSpeedAstral = 0.05;
@@ -239,8 +234,6 @@ public final class InfiniumConfig {
                 slowAuraT1 = doubleVal(cpo, "slow_aura_t1", slowAuraT1);
                 slowAuraT2 = doubleVal(cpo, "slow_aura_t2", slowAuraT2);
                 slowAuraT3 = doubleVal(cpo, "slow_aura_t3", slowAuraT3);
-                slowDurationTicks = intVal(cpo, "slow_duration_ticks", slowDurationTicks);
-                slowCooldownTicks = intVal(cpo, "slow_cooldown_ticks", slowCooldownTicks);
                 slowRadius = intVal(cpo, "slow_radius", slowRadius);
                 legSpeedAstral = doubleVal(cpo, "leg_speed_astral", legSpeedAstral);
                 legSpeedSingularity = doubleVal(cpo, "leg_speed_singularity", legSpeedSingularity);
@@ -314,8 +307,6 @@ public final class InfiniumConfig {
         cpo.addProperty("slow_aura_t1", slowAuraT1);
         cpo.addProperty("slow_aura_t2", slowAuraT2);
         cpo.addProperty("slow_aura_t3", slowAuraT3);
-        cpo.addProperty("slow_duration_ticks", slowDurationTicks);
-        cpo.addProperty("slow_cooldown_ticks", slowCooldownTicks);
         cpo.addProperty("slow_radius", slowRadius);
         cpo.addProperty("leg_speed_astral", legSpeedAstral);
         cpo.addProperty("leg_speed_singularity", legSpeedSingularity);
@@ -450,11 +441,7 @@ public final class InfiniumConfig {
     public static double getSlowAuraT3() { return Math.max(0.0, Math.min(1.0, slowAuraT3)); }
     public static void setSlowAuraT3(double v) { slowAuraT3 = Math.max(0.0, Math.min(1.0, v)); }
 
-    public static int getSlowDurationTicks() { return Math.max(10, slowDurationTicks); }
-    public static void setSlowDurationTicks(int v) { slowDurationTicks = Math.max(10, v); }
 
-    public static int getSlowCooldownTicks() { return Math.max(10, slowCooldownTicks); }
-    public static void setSlowCooldownTicks(int v) { slowCooldownTicks = Math.max(10, v); }
 
     public static int getSlowRadius() { return Math.max(2, slowRadius); }
     public static void setSlowRadius(int v) { slowRadius = Math.max(2, v); }

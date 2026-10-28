@@ -212,7 +212,7 @@
    "body": "Wear a full set and put crystals {C} into it to unlock its perks one by one. Click a milestone to unlock it.\nThe counter tracks every crystal you have ever put in.\nMore charge also means a stronger glow.",
    "visual": "matrix",
    "caption": "Tier 1, tier 2 and Infinity milestones",
-   "numbers": "Numbers: tier 1 holds {n:crystals_t1} crystals, tier 2 holds {n:crystals_t2}, Infinity holds {n:crystals_t3}; milestones are spread evenly along the bar. {n:crystals_total} for the whole journey."
+   "numbers": "Numbers: tier 1 holds {n:crystals_t1} crystals, tier 2 holds {n:crystals_t2}, Infinity holds {n:crystals_t3}; milestones are spread evenly along the bar (Cybernetic: {n:milestones_cyber}). {n:crystals_total} for the whole journey."
   },
   {
    "id": "astral",
@@ -428,7 +428,7 @@
    "body": "The sword hits hard. Its slashes and beam inflict Cosmic Radiation with Astral armor, Cyberburn with Cybernetic or Cyber Psycho armor, and make enemies bleed with Singularity or Infinity armor.\nYour first two swings send out energy slashes. The third swing fires an energy beam that hits even harder.\nEnergy mode only works while you wear a full Infinium armor set, and each set has its own slash sounds. A fully charged swing then fires a piercing energy slash.\nWithout a full set there's no energy slash. It's just a normal sword.\nSneak + Right-Click on air to switch between Energy and Normal mode.\nCyber armor lets you swing faster and hit fast enemies again sooner.",
    "visual": "recipe:sword",
    "caption": "Smithing table",
-   "numbers": "Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) {n:sword_dmg}, Tier 2 (Singularity, Cyber Psycho) {n:sword_dmg_t2}, Tier 3 (Infinity) {n:sword_dmg_t3}. Cosmic Radiation/Bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of the tier damage (6 / 7.7 / 9.6); the beam deals 75% / 85% / 95% (7.5 / 9.35 / 11.4)."
+   "numbers": "Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) {n:sword_dmg}, Tier 2 (Singularity, Cyber Psycho) {n:sword_dmg_t2}, Tier 3 (Infinity) {n:sword_dmg_t3}. Cosmic Radiation/Bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of the tier damage ({n:slashdmg_t1} / {n:slashdmg_t2} / {n:slashdmg_t3}); the beam deals {n:beam_t1} / {n:beam_t2} / {n:beam_t3} ({n:beamdmg_t1} / {n:beamdmg_t2} / {n:beamdmg_t3})."
   },
   {
    "id": "tools",
