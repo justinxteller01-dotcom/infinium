@@ -4,7 +4,8 @@ Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / In
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-4d3228c` (pre-release, 2026-10-28 5:44 PM ET)
+## 1. Current release: `batch1-1d18d01` (pre-release, 2026-10-28 5:52 PM ET)
+- **sounds.json restored**: 77 missing entries added back from `/workspace/g4work` (132 total). Every event registered in ModSounds has an entry, every referenced .ogg exists, no .ogg unmapped. Cause: the initial import (`6a7f71d`, 10-27 3:55 PM ET) took the 42-entry sounds.json from `/workspace/merge` but ModSounds and the .ogg files from g4work. The 3 `crystal.<set>.perk` entries keep the repo subtitle `crystal_perk_upgrade` (from `7d0a3cc`).
 - **Cosmic Radiation**: Astral-owner slash/beam DoT is now "Cosmic Radiation" (new effect `infinium:cosmic_radiation`, same damage/visual/icon as Bleed for now). Singularity/Infinity keep Bleed (`infinium:bleeding` unchanged). Lang, tooltip, guide updated.
 - **Air-jump forward push** (`batch1-4f00f3d`): every bonus air jump gets the main jump's in-air forward push. Cybernetic uses the tier-1 value (0.0015), Cyber Psycho tier-2 (0.0030), Infinity its own (0.0050). Counts/heights unchanged.
 - **Quantum Tunnel on the ground**: the warp now fires on the ground as well as mid-air (still not in water/lava, on ladders or riding). Same 8/12/16 blocks, 8/6/4 s, forward launch, step-up/no-clip sweep; Infinity still refunds only the 3 air jumps. Guide text updated.
@@ -46,7 +47,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 
 ## 4. Review findings to fix (2026-10-28 review)
 **Build and assets**
-1. `sounds.json` has only 55 entries. 75 of the 117 sound files have no entry, though all of them are registered in code. Add the missing entries; don't delete the files.
+1. ~~`sounds.json` has only 55 entries.~~ Fixed in `batch1-1d18d01` (132 entries). **Warning:** do NOT run old `gen_r8.py` copies (`/workspace/backups/gen_r8.py.20261027_1441`, `/workspace/m1/root/infinium_pass2/gen_r8.py`), and do not restore `gen_r8.py` into the repo for `gen_data.py:92` as-is: they overwrite sounds.json with an old, shorter set. `gen_lang_extra.py` is safe (merges).
 2. `gen_data.py:92` calls `gen_r8.py`, which is missing from the repo.
 3. 400 unused old wing frames (about 1.6 MB; Cybernetic, Cyber Psycho, Infinity) still load at startup. `particle/star.png` is unused. The wings-layer glow frames are probably unused.
 4. Punchy and roguelike are listed as hard dependencies.
@@ -99,6 +100,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-1d18d01` 10-28 5:52 PM: sounds.json restored to 132 entries (77 missing sword, wings, flight, meteor, warp and tool-mode sounds).
 - `batch1-4d3228c` 10-28 5:44 PM: Astral DoT renamed Cosmic Radiation (new id `infinium:cosmic_radiation`; `infinium:bleeding` kept).
 - `batch1-4f00f3d` 10-28 5:44 PM: forward push on every bonus air jump (Cyb/CP tier-matched values).
 - `batch1-019b6a8` 10-28 5:40 PM: Quantum Tunnel works on the ground too (was mid-air only); guide wording.
