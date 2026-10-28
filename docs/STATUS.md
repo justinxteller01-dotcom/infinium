@@ -4,7 +4,8 @@ Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / In
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-9d9fece` (pre-release, 2026-10-28 4:15 PM ET)
+## 1. Current release: `batch1-b1bc2b6` (pre-release, 2026-10-28 4:22 PM ET)
+- **Crystal order**: Astral/Singularity repair, block saver, saber, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack; Infinity repair, mining, block saver, jump, saber, slow, stacks, attack, reach. Saber = energy slash milestone (Astral needs it before slashes fire). Crystal screen lays 5/9 cards in two rows.
 - **Energy slash / beam**: slash 60/70/80% of the tier base = 6 / 7.7 / 9.6; beam 75/85/95% = 7.5 / 9.35 / 11.4.
 - **Sword damage by 3 tiers**: Tier 1 (no armor, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12. 
 - **Cyberburn**: the Burn DoT display name is now "Cyberburn" (lang, tooltip, guide, docs). Registry id `infinium:burning` is unchanged.
@@ -27,15 +28,16 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 | Audio | Every set gets its own sound family (flight, slash, mode-switch, air jump). Cyber/Psycho: energy-charge sounds (Cyberpunk + Fire Force flair), not 8-bit electric. Infinity = a blend of Astral + Singularity. Cyber Psycho thrust: ramp-up, then a subtle hum, then a fade. Built one piece at a time, at Justin's PC. | 10-28 |
 | Other values | Mob slow 25/50/75%, 2/4/6 s, cd 12/10/8 s. X-Ray Pulse 10/20/30 blocks, cd 40/30/20 s. Crystal slots 8/16/32. Full Bright removed. | 10-26 to 10-28 |
 | Sword damage | Sword damage (2026-10-28): 3 tiers. Tier 1 (no armor, Astral or Cybernetic) 10, Tier 2 (Singularity or Cyber Psycho) 11, Tier 3 (Infinity) 12. Item attribute 10 + set bonus +0/+1/+2 on hit; slash/beam % use the tier value. | 10-28 |
+| Crystal order (2026-10-28) | Astral and Singularity: repair, block saver, saber, stacks, reach. Cybernetic and Cyber Psycho: mining, jump, slow, attack. Infinity (alternates the two): repair, mining, block saver, jump, saber, slow, stacks, attack, reach. "Saber" = the sword's energy slash/beam milestone (only gates Astral; tier 2/3 perks are always active). Replaces the older PERK_VALUES_MASTER order. | 10-28 |
 | Energy slash / beam | Energy slash and beam (2026-10-28): % of the tier base (10/11/12). Slash 60/70/80% = 6 / 7.7 / 9.6. Beam 75/85/95% = 7.5 / 9.35 / 11.4. | 10-28 |
 | GitHub | Push and upload the jar to the private repo after every patch with no need to ask. Public publishing still needs Justin's OK. | 10-28 |
 
 ## 3. Open questions for Justin
 1. **Astral and Singularity DoT**: name and visual. He floated "Cosmic Radiation" for Astral. They use Bleed for now.
 2. **Infinity DoT**: name and visual (Bleed for now).
-3. **Infinity crystal order**: the dictation was unclear. Code: jump, slow, mining, no-consume, regen, stacks, reach, attack. Astral, Cybernetic, Singularity and Cyber Psycho orders also don't match code yet (see PERK_VALUES_MASTER).
-4. **Forward push** on Cybernetic and Cyber Psycho jumps: the amounts (Cyber Psycho > Cybernetic). Not implemented yet.
-5. **Rest of his testing list**: the raw list (10-28 8:25 AM ET) has only items 1–2, and all of it is already covered by Batches A–D (HUD, warp, ability HUD and keybinds, mob slow). Nothing else is left to copy. Waiting on Justin for any more items.
+3. **Forward push** on Cybernetic and Cyber Psycho jumps: the amounts (Cyber Psycho > Cybernetic). Not implemented yet.
+4. **Rest of his testing list**: the raw list (10-28 8:25 AM ET) has only items 1–2, and all of it is already covered by Batches A–D (HUD, warp, ability HUD and keybinds, mob slow). Nothing else is left to copy. Waiting on Justin for any more items.
+5. **"Saber" perk**: implemented as the energy slash/beam milestone (no saber perk existed in code). Confirm, or name the perk he meant.
 6. From the brief and the review: are gold and red-orange accents banned (treated as banned)? Should warp stay on Ctrl (same as Sprint)? Should X-ray show containers on BreadCraft, with a server kill switch? Should auto-repair reach into backpacks and Accessories? Allow solo-chestplate infusion? Overall power level (slash + melee double hit)? Flight sounds for Cybernetic, Singularity, Infinity and Astral.
 
 ## 4. Review findings to fix (2026-10-28 review)
@@ -47,30 +49,31 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 5. The local clone is missing 4 tags, and the `out/` jar is stale.
 
 **Values and text**
-6. The crystal unlock order in `CrystalCharge.java:39-45` doesn't match PERK_VALUES_MASTER on any set.
-7. The guide says 4 crystal slots instead of 8/16/32.
-8. Old slow values are still in `PerkValues` and `InfiniumConfig`.
-9. Seven guide numbers are hard-coded. The Quantum Tunnel and X-Ray numbers are defined but not shown.
+6. The guide says 4 crystal slots instead of 8/16/32.
+7. Old slow values are still in `PerkValues` and `InfiniumConfig`.
+8. Seven guide numbers are hard-coded. The Quantum Tunnel and X-Ray numbers are defined but not shown.
 
 **Testing**
-10. There are no tests. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
+9. There are no tests. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
 
 **Unfinished since Oct 11 (modpack)**
-11. Player config bundle.
-12. Spatial GUI tuning for 1080p and other FOVs.
-13. JEI cursor fix and the Accessories+Artifacts backpack slot: both built, neither installed.
-14. Inventory gets bigger but JEI doesn't.
-15. ZGC question.
+10. Player config bundle.
+11. Spatial GUI tuning for 1080p and other FOVs.
+12. JEI cursor fix and the Accessories+Artifacts backpack slot: both built, neither installed.
+13. Inventory gets bigger but JEI doesn't.
+14. ZGC question.
 
 **Compatibility**
-16. The LowOnFire resource pack may hide Cyberburn visuals.
+15. The LowOnFire resource pack may hide Cyberburn visuals.
 
 **Recheck in game (from Oct 26)**
-17. Solo-chestplate infusion bug.
-18. Slash + melee double hit.
-19. Particle-map growth.
+16. Solo-chestplate infusion bug.
+17. Slash + melee double hit.
+18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-9d9fece`)
+## 5. In-game test checklist (`batch1-b1bc2b6`)
+- [ ] Crystal screen: Astral/Singularity 5 cards (3+2), Infinity 9 (5+4), in the new order; saber card icon is a placeholder (attack icon).
+- [ ] Astral: no energy slash until the saber milestone (5 crystals); Cybernetic and tier 2/3 slash from the start.
 - [ ] Slash does 6 / 7.7 / 9.6 and beam 7.5 / 9.35 / 11.4 by tier.
 - [ ] Sword hits 10/11/12 by tier; tooltip shows 10 Attack Damage plus the tier line; slash/beam numbers match.
 - [ ] Slash/beam DoT lasts 3/4/5 s by set; plain melee applies none.
@@ -87,6 +90,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-b1bc2b6` 10-28 4:22 PM: crystal unlock order (Astral/Singularity 5 perks incl. saber, Cyber lines 4, Infinity 9 alternating); supersedes `batch1-aad53c6` (4:20 PM, 4-perk order without saber or Infinity).
 - `batch1-9d9fece` 10-28 4:15 PM: energy slash 60/70/80% (6 / 7.7 / 9.6), beam 75/85/95% (7.5 / 9.35 / 11.4) of the tier base.
 - `batch1-8c89f58` 10-28 4:11 PM: sword damage by 3 tiers, 10/11/12 (Tier 1 no armor/Astral/Cybernetic, Tier 2 Singularity/Cyber Psycho, Tier 3 Infinity); slash/beam scale with it.
 - `batch1-89b8713` 10-28 3:51 PM: Burn DoT renamed to Cyberburn.
