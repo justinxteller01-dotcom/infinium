@@ -1,17 +1,17 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~5:45 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~5:47 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-f680ee3` (pre-release, 2026-10-28 ~5:46 PM ET; includes `batch1-1d18d01` sounds.json restore)
+## 1. Current release: `batch1-06a8938` (pre-release, 2026-10-28 5:47 PM ET; includes everything in `batch1-f680ee3`)
 - **Metadata**: fabricloader `>=0.19.5`; all 3 mixin configs `compatibilityLevel` JAVA_25 (highest in bundled Mixin 0.17.4; no JAVA_26, and the game runs Java 25).
 - **Singularity leg speed config** (`batch1-1cfc87a`): own `leg_speed_singularity` (default 0.05) + Mod Menu slider; Singularity leggings used to read Astral's value. No behavior change.
 - **sounds.json restored**: 77 missing entries added back from `/workspace/g4work` (132 total). Every event registered in ModSounds has an entry, every referenced .ogg exists, no .ogg unmapped. Cause: the initial import (`6a7f71d`, 10-27 3:55 PM ET) took the 42-entry sounds.json from `/workspace/merge` but ModSounds and the .ogg files from g4work. The 3 `crystal.<set>.perk` entries keep the repo subtitle `crystal_perk_upgrade` (from `7d0a3cc`).
 - **Cosmic Radiation**: Astral-owner slash/beam DoT is now "Cosmic Radiation" (new effect `infinium:cosmic_radiation`, same damage/visual/icon as Bleed for now). Singularity/Infinity keep Bleed (`infinium:bleeding` unchanged). Lang, tooltip, guide updated.
 - **Air-jump forward push** (`batch1-4f00f3d`): every bonus air jump gets the main jump's in-air forward push. Cybernetic uses the tier-1 value (0.0015), Cyber Psycho tier-2 (0.0030), Infinity its own (0.0050). Counts/heights unchanged.
 - **Quantum Tunnel on the ground**: the warp now fires on the ground as well as mid-air (still not in water/lava, on ladders or riding). Same 8/12/16 blocks, 8/6/4 s, forward launch, step-up/no-clip sweep; Infinity still refunds only the 3 air jumps. Guide text updated.
-- **Title menu v3**: large bright purple meteors frozen in mid-air (tight cluster upper right + 4 strays; glow pulse, trail shimmer, twinkle spikes, orbiting sparks), fireflies, floating crystal sparkles, high camera (hill lowered, ground crystals gone), noticeable gentle sway; sky unchanged; 120s seamless loop. Preview `/workspace/menu_mock/mock_v3.mp4` (v2 preview was a stale encode).
+- **Title menu v4** (rebuilt from scratch): figure-free cinematic village landscape from new procedural layers (sky + nebula, far/mid mountains, 2 drifting fog bands, village with flickering windows, foreground tree framing), 18 frozen glowing meteors spread evenly over the whole sky, fireflies, floating crystal sparkles, depth-scaled parallax sway, vignette; purple/pink/black; 120s seamless loop. Old `village_*` textures removed. Preview `/workspace/menu_mock/mock_v4.mp4`.
 - **Crystal order**: Astral/Singularity repair, block saver, saber, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack; Infinity repair, mining, block saver, jump, saber, slow, stacks, attack, reach. Saber = energy slash milestone (Astral needs it before slashes fire). Crystal screen lays 5/9 cards in two rows.
 - **Energy slash / beam**: slash 60/70/80% of the tier base = 6 / 7.7 / 9.6; beam 75/85/95% = 7.5 / 9.35 / 11.4.
 - **Sword damage by 3 tiers**: Tier 1 (no armor, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12. 
@@ -78,13 +78,14 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 17. Slash + melee double hit.
 18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-f680ee3`)
+## 5. In-game test checklist (`batch1-06a8938`)
+- [ ] Title menu v4: no character; landscape + village reads well behind the buttons; meteors spread evenly, frozen, with visible twinkle/glow/sparks; fog drifts; parallax sway gentle; no seam at 120s; no FPS drop.
 - [ ] Game boots on Fabric Loader 0.19.5+ with JAVA_25 mixin configs (no mixin errors in log).
 - [ ] Singularity Leg Speed slider changes only Singularity leggings; Astral slider no longer affects Singularity.
 - [ ] Astral slash/beam shows "Cosmic Radiation" (effect list/tooltip/guide); Singularity/Infinity still Bleed; Cyber sets Cyberburn.
 - [ ] Air jumps: holding forward during each bonus air jump pushes forward (Cybernetic < Cyber Psycho < Infinity); jump counts and heights unchanged.
 - [ ] Quantum Tunnel from the ground: fires standing/walking/sprinting, 8/12/16 blocks, no clipping into walls, floors or hills (steps up to 1.9), launch forward, cooldown 8/6/4 s; blocked in water/lava/ladders/riding; Infinity gets 3 air jumps after a ground warp, no extra ground jump; key doesn't clash with sneak/sprint/use.
-- [ ] Title menu v3: meteors clearly visible, frozen in place (cluster + strays) with visible twinkle/glow/sparks; fireflies and sparkles visible; camera high with the hill out of the way; sway noticeable but gentle; no seam at 120s; no FPS drop; no faint dark patch or ghost in the lower-centre sky.
+- [ ] (superseded) Title menu v3: meteors clearly visible, frozen in place (cluster + strays) with visible twinkle/glow/sparks; fireflies and sparkles visible; camera high with the hill out of the way; sway noticeable but gentle; no seam at 120s; no FPS drop; no faint dark patch or ghost in the lower-centre sky.
 - [ ] (superseded) Title menu v2: meteors stay fixed (no travel) and read as far away; twinkle/sparks subtle; fireflies and crystal motes visible but calm; camera sway gentle; no seam at the 120s loop; no FPS drop.
 - [ ] Crystal screen: Astral/Singularity 5 cards (3+2), Infinity 9 (5+4), in the new order; saber card icon is a placeholder (attack icon).
 - [ ] Astral: no energy slash until the saber milestone (5 crystals); Cybernetic and tier 2/3 slash from the start.
@@ -104,6 +105,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-06a8938` 10-28 5:47 PM: title menu v4, rebuilt from scratch (figure-free procedural village landscape, evenly spread frozen meteors, fog, fireflies, sparkles, parallax sway).
 - `batch1-f680ee3` 10-28 5:45 PM: fabricloader >=0.19.5; mixin compatibilityLevel JAVA_25.
 - `batch1-1cfc87a` 10-28 5:45 PM: Singularity leg speed config (default 0.05, no behavior change).
 - `batch1-1d18d01` 10-28 5:52 PM: sounds.json restored to 132 entries (77 missing sword, wings, flight, meteor, warp and tool-mode sounds).
