@@ -356,7 +356,7 @@
     "double jump",
     "boots"
    ],
-   "body": "Astral-line boots: tap jump for 1 block, hold it to go higher.\nCyber-line full sets: jump again in mid-air. This only works with your wings off.\nAstral, Singularity and Infinity also give you a small push forward in the air.",
+   "body": "Astral-line boots: tap jump for 1 block, hold it to go higher.\nCyber-line full sets: jump again in mid-air. This only works with your wings off.\nAstral, Singularity and Infinity also give you a small push forward in the air. Every air jump gets a forward push too.",
    "visual": "items:infinium:infinium_boots",
    "caption": "Boots",
    "numbers": "Numbers: hold-jump up to {n:jump_astral} / {n:jump_sing} / {n:jump_inf} blocks (Astral / Singularity / Infinity). Air jumps {n:airjumps_t1} / {n:airjumps_t2} / {n:airjumps_t3} (Cybernetic / Cyber Psycho / Infinity)."

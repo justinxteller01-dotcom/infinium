@@ -67,10 +67,25 @@ public final class VariableJump {
     public static void startAir(LocalPlayer p, double tapVy) {
         double bonus = SetBonuses.bootJump(p);
         airborneFromJump = true;
-        pushFamily = bootsPushFamily(p);
+        pushFamily = airJumpPushFamily(p);   // batch1: every bonus air jump gets the main jump's forward push
         if (bonus <= 0) { active = false; return; }
         virtualVy = tapVy + bonus;
         active = true;
+    }
+
+    /** Batch1 (Justin 10-28): bonus air jumps always get the main jump's in-air forward push (same airPush code and
+     *  values). Push-capable boots (Astral/Singularity/Infinity) use their own value as before; Cybernetic and Cyber
+     *  Psycho boots have none, so their air jumps use the tier-matched value: Cybernetic = tier 1 (Astral value),
+     *  Cyber Psycho = tier 2 (Singularity value). Jump counts and heights are unchanged. */
+    private static int airJumpPushFamily(LocalPlayer p) {
+        int f = bootsPushFamily(p);
+        if (f >= 0 && dev.justin.infinium.PerkValues.airPush(f) > 0) return f;
+        return switch (dev.justin.infinium.SetLook.of(p)) {
+            case CYBERNETIC -> 0;
+            case CYBERPSYCHO -> 2;
+            case INFINITY -> 4;
+            default -> f;
+        };
     }
 
     private static int bootsPushFamily(LocalPlayer p) {

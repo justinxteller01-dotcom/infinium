@@ -177,7 +177,7 @@ pg('wings', 4, 'Wings & Flight Thrust', 'Fly without rockets', ['wings', 'elytra
 pg('jumping', 4, 'Jumping', 'Higher and again', ['jump', 'air jump', 'double jump', 'boots'],
    "Astral-line boots: tap jump for 1 block, hold it to go higher.\n"
    "Cyber-line full sets: jump again in mid-air. This only works with your wings off.\n"
-   "Astral, Singularity and Infinity also give you a small push forward in the air.",
+   "Astral, Singularity and Infinity also give you a small push forward in the air. Every air jump gets a forward push too.",
    'items:infinium:infinium_boots', 'Boots',
    "Numbers: hold-jump up to {n:jump_astral} / {n:jump_sing} / {n:jump_inf} blocks (Astral / Singularity / Infinity). "
    "Air jumps {n:airjumps_t1} / {n:airjumps_t2} / {n:airjumps_t3} (Cybernetic / Cyber Psycho / Infinity).")
