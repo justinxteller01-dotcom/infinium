@@ -1,5 +1,5 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~5:44 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~5:45 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
@@ -76,7 +76,9 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 17. Slash + melee double hit.
 18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-4d3228c`)
+## 5. In-game test checklist (`batch1-f680ee3`)
+- [ ] Game boots on Fabric Loader 0.19.5+ with JAVA_25 mixin configs (no mixin errors in log).
+- [ ] Singularity Leg Speed slider changes only Singularity leggings; Astral slider no longer affects Singularity.
 - [ ] Astral slash/beam shows "Cosmic Radiation" (effect list/tooltip/guide); Singularity/Infinity still Bleed; Cyber sets Cyberburn.
 - [ ] Air jumps: holding forward during each bonus air jump pushes forward (Cybernetic < Cyber Psycho < Infinity); jump counts and heights unchanged.
 - [ ] Quantum Tunnel from the ground: fires standing/walking/sprinting, 8/12/16 blocks, no clipping into walls, floors or hills (steps up to 1.9), launch forward, cooldown 8/6/4 s; blocked in water/lava/ladders/riding; Infinity gets 3 air jumps after a ground warp, no extra ground jump; key doesn't clash with sneak/sprint/use.
@@ -100,6 +102,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-f680ee3` 10-28 5:45 PM: fabricloader >=0.19.5; mixin compatibilityLevel JAVA_25.
+- `batch1-1cfc87a` 10-28 5:45 PM: Singularity leg speed config (default 0.05, no behavior change).
 - `batch1-1d18d01` 10-28 5:52 PM: sounds.json restored to 132 entries (77 missing sword, wings, flight, meteor, warp and tool-mode sounds).
 - `batch1-4d3228c` 10-28 5:44 PM: Astral DoT renamed Cosmic Radiation (new id `infinium:cosmic_radiation`; `infinium:bleeding` kept).
 - `batch1-4f00f3d` 10-28 5:44 PM: forward push on every bonus air jump (Cyb/CP tier-matched values).
