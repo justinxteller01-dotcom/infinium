@@ -14,12 +14,12 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Spacetime Warp (Batch 01): Directional, non-phasing blink/teleport tied to leggings pieces.
- * - Astral Leggings: 4 blocks forward warp.
- * - Singularity Leggings: 6 blocks forward warp.
- * - Infinity Leggings: 8 blocks forward warp.
+ * Player-facing name: "Quantum Tunnel" (batch1). Tunables: DISTANCE / COOLDOWN_SEC / LAUNCH_SPEED below.
+ * - Astral Leggings: 8 blocks, 8 s.  Singularity: 12 blocks, 6 s.  Infinity: 16 blocks, 4 s.
+ * - Ends with a forward launch along the warp direction (small/medium/large) + placeholder audio cue.
  * - (Cybernetic and CyberPsycho leggings are explicitly excluded).
  * - M2: an ability in the M1 system (id infinium:warp, own key, unbound by default). Mid-air only. Cooldown
- *   12 s Astral / 9 s Singularity / 6 s Infinity (server-authoritative, see ability.Abilities). The player comes
+ *   (see COOLDOWN_SEC; server-authoritative, see ability.Abilities). The player comes
  *   out of the warp sprinting (server + client).
  * - Anti-Phasing: Sweeps the player box along the look vector (blocks only, passes through entities). Obstacles up to
  *   1.9 above the current feet Y are stepped onto (measured from each step); higher ones or no 1.8 headroom stop the warp.
@@ -40,12 +40,33 @@ public final class SpacetimeWarp {
     /** Owned = wearing warp-capable leggings (Astral / Singularity / Infinity), not broken. Same rule as getWarpDistance. */
     public static boolean ownsWarp(Player p) { return getWarpDistance(p) > 0.0; }
 
-    /** Cooldown by the worn leggings: Infinity 6 s, Singularity 9 s, Astral 12 s. */
-    public static int cooldownTicks(Player p) {
+    // ---- Quantum Tunnel tunables (batch1, 2026-10-28). Index 0 = tier 1 (Astral leggings), 1 = tier 2
+    // (Singularity leggings), 2 = tier 3 (Infinity leggings). ----
+    /** Max tunnel distance in blocks (was 4/6/8). */
+    public static final double[] DISTANCE = {8.0, 12.0, 16.0};
+    /** Cooldown in seconds (was 12/9/6). */
+    public static final double[] COOLDOWN_SEC = {8.0, 6.0, 4.0};
+    /** End-of-tunnel forward launch speed in blocks/tick along the warp direction (small / medium / large). */
+    public static final double[] LAUNCH_SPEED = {0.55, 0.85, 1.20};
+    /** Extra upward kick added to the launch so a flat tunnel doesn't dump the player straight down (blocks/tick). */
+    public static final double LAUNCH_LIFT = 0.10;
+    /** PLACEHOLDER cue pitch per tier (vanilla enderman teleport until the real clip exists). */
+    public static final float[] CUE_PITCH = {1.25F, 1.0F, 0.8F};
+
+    /** 1..3 from the worn leggings, 0 if they can't warp. */
+    public static int tier(Player p) {
+        if (p == null) return 0;
         ItemStack legs = p.getItemBySlot(EquipmentSlot.LEGS);
-        if (Infinium.isInfinity(legs)) return 6 * 20;
-        if (InfiniumStyle.get(legs) == InfiniumStyle.SINGULARITY) return 9 * 20;
-        return 12 * 20;
+        if (Infinium.isInfinity(legs)) return 3;
+        InfiniumStyle st = InfiniumStyle.get(legs);
+        if (st == InfiniumStyle.SINGULARITY) return 2;
+        if (st == InfiniumStyle.ASTRAL) return 1;
+        return 0;
+    }
+
+    /** Cooldown by the worn leggings: Astral 8 s, Singularity 6 s, Infinity 4 s. */
+    public static int cooldownTicks(Player p) {
+        return (int) Math.round(COOLDOWN_SEC[Math.max(1, tier(p)) - 1] * 20);
     }
 
     /**
@@ -63,11 +84,8 @@ public final class SpacetimeWarp {
         int fam = Perk.family(legs);
         if (!Perks.on(player, Perk.piece(fam, EquipmentSlot.LEGS))) return 0.0;
 
-        if (Infinium.isInfinity(legs)) return 8.0;
-        InfiniumStyle st = InfiniumStyle.get(legs);
-        if (st == InfiniumStyle.SINGULARITY) return 6.0;
-        if (st == InfiniumStyle.ASTRAL) return 4.0;
-        return 0.0;
+        int t = tier(player);
+        return t == 0 ? 0.0 : DISTANCE[t - 1];
     }
 
     public static boolean canWarp(Player player) {
@@ -145,6 +163,15 @@ public final class SpacetimeWarp {
         player.fallDistance = 0.0F;
         AirJumps.onWarp(player);    // G4b: Infinity refills its air jumps
         player.setSprinting(true);   // M2: come out of the warp sprinting (client mirrors it on the started packet)
+
+        // batch1 B3: launch forward along the warp direction, tiered momentum (tunables above).
+        int t = Math.max(1, tier(player));
+        Vec3 launch = dir.scale(LAUNCH_SPEED[t - 1]).add(0, LAUNCH_LIFT, 0);
+        player.setDeltaMovement(launch);
+        player.hurtMarked = true;    // forces the velocity packet so the client actually gets the push
+
+        // batch1 B4: PLACEHOLDER warp cue (vanilla enderman teleport, pitched by tier). Replace with a real clip later.
+        level.playSound(null, safePos.x, safePos.y, safePos.z, net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 0.7F, CUE_PITCH[t - 1]);
 
         // 6. Audio at arrival point
         level.playSound(null, safePos.x, safePos.y, safePos.z, ModSounds.warpArrival().value(), SoundSource.PLAYERS, 0.95F, 1.0F);

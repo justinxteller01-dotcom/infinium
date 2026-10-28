@@ -21,6 +21,7 @@ public abstract class HudOverlayMixin {
     private void infinium$dungeonHud(net.minecraft.client.gui.GuiGraphicsExtractor g, net.minecraft.client.DeltaTracker dt, CallbackInfo ci) {
         dev.justin.infinium.client.DungeonHudClient.render(g);
         dev.justin.infinium.client.HelmetVisionHud.render(g);
+        dev.justin.infinium.client.ability.WarpScreenFx.render(g);   // batch1: Quantum Tunnel overlay (under the HUD bits)
         dev.justin.infinium.client.ability.AbilityHud.render(g);   // M1 ability bar
     }
 }

@@ -212,6 +212,11 @@ public class InfiniumSettingsScreen extends OptionsSubScreen {
         gesture.active = !unbound;
         if (unbound) gesture.setTooltip(Tooltip.create(Component.literal("Always on while no custom key is set")));
         list.addSmall(keyButton, gesture);
+        // batch1 C3: ability keys (X-Ray Pulse, Quantum Tunnel) and flight thrust live in vanilla Controls.
+        Button controls = Button.builder(Component.translatable("gui.infinium.settings.open_controls"),
+            b -> dev.justin.infinium.client.ability.BindKeyHandler.openControls(minecraft, this)).build();
+        controls.setTooltip(Tooltip.create(Component.literal("Opens Options > Controls > Key Binds at the Infinium section.")));
+        list.addBig(controls);
     }
 
     private Component keyLabel() {

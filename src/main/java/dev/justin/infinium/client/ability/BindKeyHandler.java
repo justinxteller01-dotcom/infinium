@@ -7,7 +7,6 @@ import dev.justin.infinium.client.mixin.KeyBindsScreenAccessor;
 import java.util.List;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,9 +22,8 @@ import net.minecraft.sounds.SoundEvents;
  * (inventory, creative, chests...) or chat. During normal play there is no cursor, so it is display-only; the
  * player opens the inventory (E) or chat (T) and clicks it. No prompt is ever shown.
  *
- * The click opens vanilla Key Binds, scrolled to the Infinium category. If Controlling is installed we try its
- * screen class first (reflection, no compile dependency); otherwise vanilla. Controlling also replaces the
- * vanilla key binds screen on its own in the versions we know of, so the vanilla path still lands in Controlling.
+ * The click opens vanilla Key Binds (KeyBindsScreen), scrolled to the Infinium category. Mods like Controlling
+ * enhance that screen themselves. Also used by the "Open Controls" button in Infinium settings.
  */
 public final class BindKeyHandler {
     private static boolean scrollPending = false;
@@ -60,16 +58,7 @@ public final class BindKeyHandler {
     public static void openControls(Minecraft mc, Screen parent) {
         mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
         Screen parentForControls = parent instanceof ChatScreen ? null : parent;   // don't return into a half-typed chat
-        if (FabricLoader.getInstance().isModLoaded("controlling")) {
-            try {
-                Class<?> c = Class.forName("com.blamejared.controlling.client.NewKeyBindsScreen");
-                Screen s = (Screen) c.getConstructor(Screen.class, net.minecraft.client.Options.class).newInstance(parentForControls, mc.options);
-                mc.gui.setScreen(s);
-                return;
-            } catch (Throwable t) {
-                Infinium.LOG.debug("Controlling screen not reachable by reflection, using vanilla key binds: {}", t.toString());
-            }
-        }
+        // batch1 C3: always the vanilla Key Binds screen; the pack's "Controls"/Controlling mod enhances it itself.
         scrollPending = true;
         mc.gui.setScreen(new KeyBindsScreen(parentForControls, mc.options));
     }

@@ -39,14 +39,24 @@ public final class AbilityHud {
         if (!dev.justin.infinium.Infinium.setWorn(pl)) return out;
         Font font = mc.font;
         int w = mc.getWindow().getGuiScaledWidth(), h = mc.getWindow().getGuiScaledHeight();
-        int x = w / 2 + 91 + 30;    // clear of the hotbar (182 wide) and the right-side offhand / attack indicator
-        int y = h - ICON - 12;      // leaves room for the key label under the icon
+        // batch1 C1: uniform slot pitch. Before, each slot was as wide as its own "Bind key" pill, so icons jumped
+        // sideways when a key was bound, and the untranslated pill text ("hud.infinium.ability.bind_key", ~170 px)
+        // pushed the icons far right / off screen. Now every slot has the same width and the bar is clamped on screen.
+        List<Ability> vis = AbilityClient.visible(pl);
+        if (vis.isEmpty()) return out;
         int bindH = font.lineHeight + 3;
-        for (Ability a : AbilityClient.visible(pl)) {
+        int pillW = Math.min(font.width(BIND) + 6, 60);
+        boolean anyUnbound = false;
+        for (Ability a : vis) { KeyMapping k = AbilityClient.key(a); if (k == null || k.isUnbound()) anyUnbound = true; }
+        int slotW = anyUnbound ? Math.max(ICON, pillW) : ICON;
+        int total = vis.size() * slotW + (vis.size() - 1) * GAP;
+        int x = w / 2 + 91 + 30;    // clear of the hotbar (182 wide) and the right-side offhand / attack indicator
+        if (x + total > w - 4) x = Math.max(w / 2 + 91 + 4, w - 4 - total);
+        int y = h - ICON - 12;      // leaves room for the key label under the icon
+        for (Ability a : vis) {
             KeyMapping k = AbilityClient.key(a);
             boolean unbound = k == null || k.isUnbound();
-            int bindW = unbound ? font.width(BIND) + 6 : 0;
-            int slotW = Math.max(ICON, bindW);
+            int bindW = unbound ? pillW : 0;
             int ix = x + (slotW - ICON) / 2;
             out.add(new Slot(a, ix, y, x + (slotW - bindW) / 2, y - bindH - 2, bindW, bindH));
             x += slotW + GAP;
@@ -84,7 +94,7 @@ public final class AbilityHud {
                 boolean hover = BindKeyHandler.hovered(s);
                 g.fill(s.bindX(), s.bindY(), s.bindX() + s.bindW(), s.bindY() + s.bindH(), hover ? 0xE07A3FD0 : 0xC03A1466);
                 g.fill(s.bindX(), s.bindY() + s.bindH() - 1, s.bindX() + s.bindW(), s.bindY() + s.bindH(), 0xFFB07CFF);
-                g.text(font, BIND, s.bindX() + 3, s.bindY() + 2, 0xFFFFFFFF, true);
+                g.text(font, font.plainSubstrByWidth(BIND.getString(), s.bindW() - 4), s.bindX() + 3, s.bindY() + 2, 0xFFFFFFFF, true);
             }
         }
     }

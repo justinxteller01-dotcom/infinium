@@ -114,11 +114,11 @@ public final class Info {
                 default -> "Chestplate: Built-in Elytra (toggleable).";
             };
             case LEGS -> switch (fam) {
-                case 0 -> "Leggings: +5% Speed Bonus. " + warp(4) + ".";
+                case 0 -> "Leggings: +5% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[0]) + ".";
                 case 1 -> "Leggings: +10% Speed Bonus (No FOV change).";
-                case 2 -> "Leggings: +5% Speed Bonus. " + warp(6) + ".";
+                case 2 -> "Leggings: +5% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
                 case 3 -> "Leggings: +15% Speed Bonus (No FOV change).";
-                case 4 -> "Leggings: +20% Speed Bonus. " + warp(8) + ".";
+                case 4 -> "Leggings: +20% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";
             };
             default -> switch (fam) {
@@ -147,7 +147,7 @@ public final class Info {
     static String thrust() { return "hold " + key("flight_thrust", "Flight Thrust", "Left Ctrl") + " while flying"; }
     static String fullBright() { return key("toggle_fullbright", "Full Bright", "B") + " / button"; }
     static String pulse(int r) { return "X-Ray Pulse " + r + "m (" + key("xray_pulse", "X-Ray Pulse", null) + ")"; }
-    static String warp(int m) { return "Spacetime Warp " + m + "m (" + key("warp", "Spacetime Warp", null) + ", mid-air)"; }
+    static String warp(int m) { return "Quantum Tunnel " + m + "m (" + key("warp", "Quantum Tunnel", null) + ", mid-air)"; }
 
     public static String blocks(int n) { return "+" + n + (n == 1 ? " block" : " blocks"); }
 

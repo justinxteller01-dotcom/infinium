@@ -58,7 +58,7 @@ public final class AbilityClient {
         load();
         // M2: come out of a warp already sprinting (same effect as pressing Sprint right after; vanilla drops it
         // again on its own if forward isn't held, exactly like a real sprint key press).
-        onFired(dev.justin.infinium.SpacetimeWarp.ID, pl -> pl.setSprinting(true));
+        onFired(dev.justin.infinium.SpacetimeWarp.ID, WarpScreenFx::onFired);   // batch1: sprint + launch + screen fx
 
         ClientPlayNetworking.registerGlobalReceiver(AbilityCooldownPayload.TYPE, (p, ctx) -> ctx.client().execute(() -> {
             if (p.started()) {
