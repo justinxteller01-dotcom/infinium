@@ -28,7 +28,7 @@ public class BleedingEffect extends MobEffect {
             MobEffectInstance e = mob.getEffect(Infinium.BURNING);
             if (e == null || e.getDuration() % 20 != 0) return true;   // damage on the same 20-tick beat as Bleed
         }
-        mob.hurtServer(level, mob.damageSources().magic(), 1.0F);
+        DotDamage.hurt(level, mob, mob.damageSources().magic(), 1.0F);   // no i-frames from DoT
         return true;
     }
     /** Bleed, or Burn when the owner wears a full Cybernetic / Cyber Psycho set. */
