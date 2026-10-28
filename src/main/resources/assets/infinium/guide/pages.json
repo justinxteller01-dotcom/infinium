@@ -241,7 +241,7 @@
     "tier 1",
     "fighter"
    ],
-   "body": "Fused with cosmic energy. Everything feels a little faster.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in jet wings.\nLeggings: faster running speed (your view won't zoom).\nBoots: no fall damage.\nFull set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
+   "body": "Fused with cosmic energy. Everything feels a little... faster.\nTakes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in jet wings.\nLeggings: faster running speed (your view won't zoom).\nBoots: no fall damage.\nFull set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
    "visual": "armor:1",
    "caption": "Full Cybernetic set, fully charged",
    "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_cyber}. Mining +{n:mining_t1}. {n:airjumps_t1} air jump. Attack +{n:attack_t1}. Slow {n:slow_t1} for {n:slowdur_t1}s, every {n:slowcd_t1}s, within {n:slow_radius} blocks."
