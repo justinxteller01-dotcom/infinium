@@ -82,7 +82,7 @@ public final class Info {
         o.add(h("Tool"));
         if (it == Infinium.SWORD) {
             o.add(l("12 dmg, applies 8s bleed."));
-            o.add(l("Combo: slash, slash, then a stab for the crit."));
+            o.add(l("Your first two swings send out energy slashes. The third fires an energy beam that hits even harder."));
             o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (5.5 dmg, applies bleed)."));
             o.add(l("Without a full set it's a normal sword that still applies bleed."));
             o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
@@ -90,7 +90,7 @@ public final class Info {
         if (it == Infinium.PICKAXE) o.add(l("Toggle between Fortune IV or Silk Touch."));
         if (it == Infinium.SHOVEL) o.add(l("1x1, 3x3, and 3x1 digging modes."));
         if (it == Infinium.AXE) o.add(l("Make any mined log drop any log of your choice."));
-        if (it == Infinium.HOE) o.add(l("Tills permanently saturated, un-trampleable, 100% lit farmland."));
+        if (it == Infinium.HOE) { o.add(l("Tills permanently saturated, un-trampleable, 100% lit farmland.")); o.add(l("Standard or 3x3 mode. Sneak + Right-Click on air to switch.")); }
         if (it == Infinium.PICKAXE || it == Infinium.SHOVEL || it == Infinium.AXE) o.add(l("Sneak + Right Click on air to change modes."));
         o.add(l("Matches the textures & particles of your worn armor (dyed independently)."));
         if (it != Infinium.HOE) o.add(l("Stops working at " + PerkValues.durabilityFloor() + " durability."));

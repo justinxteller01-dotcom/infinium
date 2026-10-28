@@ -34,7 +34,7 @@
 
 ### 2. Items & Blocks
 - `InfiniumSwordItem.java`: Infinium Sword with bleeding effect, sneak + right-click energy mode toggle (stored in `SWORD_ENERGY_MODE` data component, defaults to energy mode), action bar notifications, and hover tooltip.
-- `InfiniumPickaxeItem.java`, `InfiniumAxeItem.java`, `InfiniumShovelItem.java`, `InfiniumHoeItem.java`: Infinium multi-mode tools.
+- `InfiniumPickaxeItem.java`, `InfiniumAxeItem.java`, `InfiniumShovelItem.java`, `InfiniumHoeItem.java`: Infinium multi-mode tools. Hoe (batch1): `HOE_MODE` component (0 Standard = 1 block, 1 = 3x3 centred on clicked block, each via vanilla HoeItem.useOn so same till rules + per-block durability, skips blocks failing mayInteract/mayUseItemAt), Sneak + Right-Click on air toggles. `ModSounds.modeSwitch(player, mode)` = shared tool mode-switch sound by full set worn (placeholder: set's `ARMOR[fam][2]` equip sound at 0.45 vol / 1.35+ pitch; no set = `TOOL_MODE`); shovel/axe/pick/sword not yet routed through it.
 - `InfiniumFarmlandBlock.java`: Permanent lit, saturated farmland created by the hoe.
 - `NetheriteRocketItem.java`: Netherite firework rocket item.
 - `DungeonFinder.java`: Compass tracking nearby roguelike dungeons.

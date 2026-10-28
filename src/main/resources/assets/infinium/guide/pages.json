@@ -414,14 +414,14 @@
    "id": "sword",
    "chapter": 5,
    "title": "Sword & Energy Slash",
-   "subtitle": "Slash, slash, stab",
+   "subtitle": "Slash, slash, beam",
    "keywords": [
     "sword",
     "slash",
     "bleed",
     "energy"
    ],
-   "body": "The sword hits hard and makes enemies bleed.\nIt's a combo weapon: slash, slash, then a stab for the crit.\nEnergy mode only works while you wear a full Infinium armor set, and each set has its own slash sounds. A fully charged swing then fires a piercing energy slash.\nWithout a full set there's no energy slash. It's a normal sword that still makes enemies bleed.\nSneak + Right-Click on air to switch between Energy and Normal mode.\nCyber armor lets you swing faster and hit fast enemies again sooner.",
+   "body": "The sword hits hard and makes enemies bleed.\nYour first two swings send out energy slashes. The third swing fires an energy beam that hits even harder.\nEnergy mode only works while you wear a full Infinium armor set, and each set has its own slash sounds. A fully charged swing then fires a piercing energy slash.\nWithout a full set there's no energy slash. It's a normal sword that still makes enemies bleed.\nSneak + Right-Click on air to switch between Energy and Normal mode.\nCyber armor lets you swing faster and hit fast enemies again sooner.",
    "visual": "recipe:sword",
    "caption": "Smithing table",
    "numbers": "Numbers: {n:sword_dmg} damage, bleed {n:bleed_s}s. Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier."
@@ -454,7 +454,7 @@
     "farm",
     "farmland"
    ],
-   "body": "Farmland you make stays wet and lit, and it can't be trampled.\nTwo modes: standard, or hoe a 3x3 area into Infinium farmland at once.",
+   "body": "Farmland you make stays wet and lit, and it can't be trampled.\nTwo modes: standard, or hoe a 3x3 area into Infinium farmland at once.\nSneak + Right-Click on air to switch modes.",
    "visual": "items:infinium:infinium_hoe",
    "caption": "Infinium Hoe",
    "numbers": ""

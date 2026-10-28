@@ -121,6 +121,14 @@ public final class ModSounds {
         }
         return fallback;
     }
+    /** Tool mode-switch sound, picked by the full armor set worn (placeholder: that set's equip sound, quiet and pitched up; no set = neutral TOOL_MODE click). Server side. */
+    public static void modeSwitch(net.minecraft.world.entity.player.Player player, int mode) {
+        if (player == null || player.level().isClientSide()) return;
+        SetLook look = SetLook.of(player);
+        Holder<SoundEvent> s = look == null ? TOOL_MODE : ARMOR[look.ordinal()][2];
+        float vol = look == null ? 0.65F : 0.45F, pitch = (look == null ? 0.95F : 1.35F) + 0.10F * mode;
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), s.value(), net.minecraft.sounds.SoundSource.PLAYERS, vol, pitch);
+    }
     public static Holder<SoundEvent> equip(int family) { return ARMOR[Math.max(0, family)][2]; }
     public static Holder<SoundEvent> setEquip(SetLook l) { return ARMOR[l.ordinal()][3]; }
     public static Holder<SoundEvent> crystal(int family, int kind) { return CRYSTAL[Math.max(0, Math.min(4, family))][kind]; }

@@ -112,6 +112,7 @@ public class Infinium implements ModInitializer {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, id("star_head"), STAR_HEAD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, id("star_trail"), STAR_TRAIL);
         InfiniumShovelItem.registerComponent();
+        InfiniumHoeItem.registerComponent();
         InfiniumAxeItem.registerComponent();
         GlowColor.register();
         ArmorRemoval.register();
