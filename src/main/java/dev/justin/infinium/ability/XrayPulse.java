@@ -79,7 +79,9 @@ public final class XrayPulse {
         return 1;   // Astral, Cybernetic (and an unstyled base helmet)
     }
 
-    public static int radius(Player p) { return switch (tier(p)) { case 3 -> 30; case 2 -> 20; case 1 -> 10; default -> 0; }; }
+    /** Pulse radius per tier (T1/T2/T3); also read by the guidebook (GuideNumbers). */
+    public static final int[] RADII = {10, 20, 30};
+    public static int radius(Player p) { int t = tier(p); return t >= 1 && t <= 3 ? RADII[t - 1] : 0; }
 
     static boolean pulse(ServerPlayer sp) {
         int r = radius(sp);

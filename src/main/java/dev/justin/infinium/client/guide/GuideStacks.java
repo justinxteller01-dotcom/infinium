@@ -72,6 +72,19 @@ public final class GuideStacks {
                     armor(Infinium.CHESTPLATE, InfiniumStyle.SINGULARITY),
                     armor(Infinium.CHESTPLATE, InfiniumStyle.CYBERPSYCHO),
                     of(Infinium.INGOT), of(Infinium.INF_CHESTPLATE)));
+            case "first_set" -> List.of(
+                    smithing(template(InfiniumStyle.ASTRAL), of(Items.NETHERITE_CHESTPLATE), of(Infinium.INGOT), armor(Infinium.CHESTPLATE, InfiniumStyle.ASTRAL)),
+                    smithing(template(InfiniumStyle.CYBERNETIC), of(Items.NETHERITE_CHESTPLATE), of(Infinium.INGOT), armor(Infinium.CHESTPLATE, InfiniumStyle.CYBERNETIC)),
+                    smithing(template(InfiniumStyle.ASTRAL), armor(Infinium.CHESTPLATE, InfiniumStyle.CYBERNETIC), ItemStack.EMPTY, armor(Infinium.CHESTPLATE, InfiniumStyle.ASTRAL)));
+            case "tiers" -> List.of(
+                    smithing(template(InfiniumStyle.SINGULARITY), armor(Infinium.CHESTPLATE, InfiniumStyle.ASTRAL), of(Infinium.INGOT), armor(Infinium.CHESTPLATE, InfiniumStyle.SINGULARITY)),
+                    smithing(template(InfiniumStyle.CYBERPSYCHO), armor(Infinium.CHESTPLATE, InfiniumStyle.CYBERNETIC), of(Infinium.INGOT), armor(Infinium.CHESTPLATE, InfiniumStyle.CYBERPSYCHO)),
+                    smithing(armor(Infinium.CHESTPLATE, InfiniumStyle.SINGULARITY), armor(Infinium.CHESTPLATE, InfiniumStyle.CYBERPSYCHO), of(Infinium.INGOT), of(Infinium.INF_CHESTPLATE)));
+            case "bread" -> List.of(crafting(new ItemLike[] {
+                    Items.BREAD, Items.BREAD, Items.BREAD,
+                    Items.BREAD, Items.AIR, Items.BREAD,
+                    Items.AIR, Items.AIR, Items.AIR
+            }, of(Infinium.BREAD_HELMET)));
             case "dyes" -> dyes();
             case "rocket" -> List.of(smithing(
                     ItemStack.EMPTY, of(Items.FIREWORK_ROCKET), of(Infinium.INGOT), infinium("infinium_rocket")));
