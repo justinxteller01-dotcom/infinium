@@ -92,6 +92,7 @@ def armor(id, fam, title, sub, kw, body, caption, numbers):
     pg(id, 3, title, sub, kw, body, 'armor:%d' % fam, caption, numbers)
 
 armor('astral', 0, 'Astral Armor', 'Tier 1, the builder line', ['astral', 'armor', 'tier 1', 'builder'],
+   "Forged from fallen starlight, it hums with the memory of deep space.\n"
    "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\n"
    "Helmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\n"
    "Chestplate: built-in wings.\n"
@@ -114,6 +115,7 @@ armor('cybernetic', 1, 'Cybernetic Armor', 'Tier 1, the fighter line', ['cyberne
    "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_cyber}. Mining +{n:mining_t1}. "
    "{n:airjumps_t1} air jump. Attack +{n:attack_t1}. Slow {n:slow_t1} for {n:slowdur_t1}s, every {n:slowcd_t1}s, within {n:slow_radius} blocks.")
 armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor', ['singularity', 'armor', 'tier 2', 'upgrade'],
+   "Compressed to the point of collapse, it bends gravity around the wearer.\n"
    "Upgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\n"
    "Takes almost half the damage netherite would.\n"
    "Helmet: X-Ray reaches farther.\n"
@@ -127,6 +129,7 @@ armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor'
    "Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Reach +{n:reach_t2}. "
    "Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}.")
 armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic armor', ['cyber psycho', 'cyberpsycho', 'armor', 'tier 2', 'upgrade'],
+   "Half machine, half nerve, it rewires the body to survive what would kill anyone else.\n"
    "Upgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\n"
    "Takes almost half the damage netherite would.\n"
    "Helmet: X-Ray reaches farther.\n"
@@ -138,6 +141,7 @@ armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic a
    "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_cp}. Mining +{n:mining_t2}. "
    "{n:airjumps_t2} air jumps. Attack +{n:attack_t2}. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s.")
 armor('infinity', 4, 'Infinity Armor', 'Tier 3, upgrade both lines into one', ['infinity', 'armor', 'tier 3', 'upgrade'],
+   "No edge, no limit. It stretches as far as the wearer dares to go.\n"
    "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\n"
    "Takes half the damage netherite would. Fire, lava and explosions can't hurt you.\n"
    "Helmet: the widest X-Ray.\n"
