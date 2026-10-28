@@ -4,7 +4,9 @@ Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / In
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-1d18d01` (pre-release, 2026-10-28 5:52 PM ET)
+## 1. Current release: `batch1-f680ee3` (pre-release, 2026-10-28 ~5:46 PM ET; includes `batch1-1d18d01` sounds.json restore)
+- **Metadata**: fabricloader `>=0.19.5`; all 3 mixin configs `compatibilityLevel` JAVA_25 (highest in bundled Mixin 0.17.4; no JAVA_26, and the game runs Java 25).
+- **Singularity leg speed config** (`batch1-1cfc87a`): own `leg_speed_singularity` (default 0.05) + Mod Menu slider; Singularity leggings used to read Astral's value. No behavior change.
 - **sounds.json restored**: 77 missing entries added back from `/workspace/g4work` (132 total). Every event registered in ModSounds has an entry, every referenced .ogg exists, no .ogg unmapped. Cause: the initial import (`6a7f71d`, 10-27 3:55 PM ET) took the 42-entry sounds.json from `/workspace/merge` but ModSounds and the .ogg files from g4work. The 3 `crystal.<set>.perk` entries keep the repo subtitle `crystal_perk_upgrade` (from `7d0a3cc`).
 - **Cosmic Radiation**: Astral-owner slash/beam DoT is now "Cosmic Radiation" (new effect `infinium:cosmic_radiation`, same damage/visual/icon as Bleed for now). Singularity/Infinity keep Bleed (`infinium:bleeding` unchanged). Lang, tooltip, guide updated.
 - **Air-jump forward push** (`batch1-4f00f3d`): every bonus air jump gets the main jump's in-air forward push. Cybernetic uses the tier-1 value (0.0015), Cyber Psycho tier-2 (0.0030), Infinity its own (0.0050). Counts/heights unchanged.
