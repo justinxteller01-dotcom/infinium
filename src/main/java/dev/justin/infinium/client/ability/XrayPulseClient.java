@@ -29,7 +29,7 @@ public final class XrayPulseClient {
     static final long WAVE_MS = 600, HOLD_MS = 4500, FADE_MS = 1500;
     static final int SPARKLES_PER_TICK = 8, RING_PER_TICK = 16, RING_TICKS = 12;
     static final double CULL_SQ = 48 * 48;
-    static final int HOSTILE_COLOR = 0xFFFF30BA, PLAYER_COLOR = 0xFFFF40BF;
+    static final int HOSTILE_COLOR = 0xFFFF0000 /* pure red, X-Ray colour-rule exception */, PLAYER_COLOR = 0xFFFF40BF;
 
     record Block(BlockPos pos, int color, double dist) {}
     record Mob(int id, int color) {}

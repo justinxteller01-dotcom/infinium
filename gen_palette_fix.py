@@ -6,9 +6,13 @@ import glob, sys, numpy as np
 from PIL import Image
 import palette_guard as pg
 
+# Colour-rule exceptions: X-Ray Pulse icons (X-Ray colours are real ore colours by design).
+SKIP = ('xray_pulse',)
+
 changed = 0
 for f in sorted(glob.glob('src/main/resources/assets/**/*.png', recursive=True)):
     if f.endswith(('_n.png', '_s.png')): continue
+    if any(k in f.replace('\\', '/').split('/')[-1] for k in SKIP): continue
     im = Image.open(f); mode = im.mode
     a = np.asarray(im.convert('RGBA'))
     if not pg.banned_mask(a).any(): continue

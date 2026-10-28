@@ -147,7 +147,8 @@ public final class XrayPulse {
     }
 
     public static boolean isOre(BlockState s) {
-        if (s.is(C_ORES) || s.is(Blocks.ANCIENT_DEBRIS) || s.is(Blocks.NETHER_QUARTZ_ORE) || s.is(Blocks.NETHER_GOLD_ORE)) return true;
+        if (s.is(C_ORES) || s.is(Blocks.ANCIENT_DEBRIS) || s.is(Blocks.NETHER_QUARTZ_ORE) || s.is(Blocks.NETHER_GOLD_ORE)
+            || s.is(Blocks.BUDDING_AMETHYST)) return true;
         for (TagKey<Block> t : VANILLA_ORES) if (s.is(t)) return true;
         return false;
     }
@@ -155,19 +156,21 @@ public final class XrayPulse {
     /** ARGB hologram colour, 0 = not a target. Ore colours kept from the old X-ray. */
     public static int color(BlockState s) {
         if (s.isAir()) return 0;
-        if (isChest(s)) return s.is(Blocks.ENDER_CHEST) ? 0xFFE070FF : s.is(BlockTags.SHULKER_BOXES) ? 0xFFFF40B0 : 0xFFFF9AD8;
+        // X-Ray Pulse is an EXCEPTION to the purple/pink/black colour rule: each target glows the colour of what it is.
+        if (isChest(s)) return 0xFFFF00FF;   // all containers (chest/barrel/ender/shulker/Lootr): magenta, unique vs every ore
         if (!isOre(s)) return 0;
-        if (s.is(Blocks.ANCIENT_DEBRIS)) return 0xFFD24CFF;
-        if (s.is(DIAMOND_ORES)) return 0xFF4DF0;
-        if (s.is(EMERALD_ORES)) return 0xFFB040FF;
-        if (s.is(BlockTags.GOLD_ORES) || s.is(Blocks.NETHER_GOLD_ORE)) return 0xFFFF7AC8;
-        if (s.is(BlockTags.IRON_ORES)) return 0xFFE0C0E8;
-        if (s.is(BlockTags.COPPER_ORES)) return 0xFFFF5AA0;
-        if (s.is(REDSTONE_ORES)) return 0xFFE0206E;
-        if (s.is(LAPIS_ORES)) return 0xFF7A40FF;
-        if (s.is(COAL_ORES)) return 0xFF888888;
-        if (s.is(Blocks.NETHER_QUARTZ_ORE)) return 0xFFF0F0F0;
-        return 0xFFC0A0FF;   // any other c:ores (modded)
+        if (s.is(Blocks.ANCIENT_DEBRIS)) return 0xFF6B3A1E;                    // brown
+        if (s.is(DIAMOND_ORES)) return 0xFF4DE8FF;                             // light blue
+        if (s.is(EMERALD_ORES)) return 0xFF00D040;                             // green
+        if (s.is(BlockTags.GOLD_ORES) || s.is(Blocks.NETHER_GOLD_ORE)) return 0xFFFFD700; // gold
+        if (s.is(BlockTags.IRON_ORES)) return 0xFFD8B48C;                      // iron tan
+        if (s.is(BlockTags.COPPER_ORES)) return 0xFFE0702A;                    // copper orange
+        if (s.is(REDSTONE_ORES)) return 0xFFE00000;                            // red
+        if (s.is(LAPIS_ORES)) return 0xFF1A3CC8;                               // deep blue
+        if (s.is(COAL_ORES)) return 0xFF242424;                                // near-black (visible)
+        if (s.is(Blocks.NETHER_QUARTZ_ORE)) return 0xFFFFFFFF;                 // white
+        if (s.is(Blocks.BUDDING_AMETHYST)) return 0xFF9A5CFF;                  // amethyst purple
+        return 0xFFA0A0A0;   // any other c:ores (modded): neutral silver
     }
 
     private XrayPulse() {}
