@@ -124,7 +124,7 @@ public final class PerkValues {
     public static double legSpeed(Family family) {
         return switch (family) {
             case ASTRAL -> InfiniumConfig.getLegSpeedAstral();
-            case SINGULARITY -> InfiniumConfig.getLegSpeedAstral();
+            case SINGULARITY -> InfiniumConfig.getLegSpeedSingularity();
             case CYBERNETIC -> InfiniumConfig.getLegSpeedCybernetic();
             case CYBERPSYCHO -> InfiniumConfig.getLegSpeedCyberpsycho();
             case INFINITY -> InfiniumConfig.getLegSpeedInfinity();

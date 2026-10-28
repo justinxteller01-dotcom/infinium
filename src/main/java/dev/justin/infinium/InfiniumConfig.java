@@ -74,6 +74,7 @@ public final class InfiniumConfig {
     private static int slowRadius = 16;
 
     private static double legSpeedAstral = 0.05;
+    private static double legSpeedSingularity = 0.05;
     private static double legSpeedCybernetic = 0.10;
     private static double legSpeedCyberpsycho = 0.15;
     private static double legSpeedInfinity = 0.20;
@@ -146,6 +147,7 @@ public final class InfiniumConfig {
         slowRadius = 16;
 
         legSpeedAstral = 0.05;
+        legSpeedSingularity = 0.05;
         legSpeedCybernetic = 0.10;
         legSpeedCyberpsycho = 0.15;
         legSpeedInfinity = 0.20;
@@ -241,6 +243,7 @@ public final class InfiniumConfig {
                 slowCooldownTicks = intVal(cpo, "slow_cooldown_ticks", slowCooldownTicks);
                 slowRadius = intVal(cpo, "slow_radius", slowRadius);
                 legSpeedAstral = doubleVal(cpo, "leg_speed_astral", legSpeedAstral);
+                legSpeedSingularity = doubleVal(cpo, "leg_speed_singularity", legSpeedSingularity);
                 legSpeedCybernetic = doubleVal(cpo, "leg_speed_cybernetic", legSpeedCybernetic);
                 legSpeedCyberpsycho = doubleVal(cpo, "leg_speed_cyberpsycho", legSpeedCyberpsycho);
                 legSpeedInfinity = doubleVal(cpo, "leg_speed_infinity", legSpeedInfinity);
@@ -315,6 +318,7 @@ public final class InfiniumConfig {
         cpo.addProperty("slow_cooldown_ticks", slowCooldownTicks);
         cpo.addProperty("slow_radius", slowRadius);
         cpo.addProperty("leg_speed_astral", legSpeedAstral);
+        cpo.addProperty("leg_speed_singularity", legSpeedSingularity);
         cpo.addProperty("leg_speed_cybernetic", legSpeedCybernetic);
         cpo.addProperty("leg_speed_cyberpsycho", legSpeedCyberpsycho);
         cpo.addProperty("leg_speed_infinity", legSpeedInfinity);
@@ -457,6 +461,9 @@ public final class InfiniumConfig {
 
     public static double getLegSpeedAstral() { return Math.max(0.0, legSpeedAstral); }
     public static void setLegSpeedAstral(double v) { legSpeedAstral = Math.max(0.0, v); }
+
+    public static double getLegSpeedSingularity() { return Math.max(0.0, legSpeedSingularity); }
+    public static void setLegSpeedSingularity(double v) { legSpeedSingularity = Math.max(0.0, v); }
 
     public static double getLegSpeedCybernetic() { return Math.max(0.0, legSpeedCybernetic); }
     public static void setLegSpeedCybernetic(double v) { legSpeedCybernetic = Math.max(0.0, v); }

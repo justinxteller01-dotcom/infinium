@@ -180,6 +180,7 @@ public class InfiniumModMenuConfigScreen extends OptionsSubScreen {
         combat.add(new NumericSlider(Component.literal("T3 Mob Slow Aura"), "%", 0, 100, 5, 0, InfiniumConfig.getSlowAuraT3() * 100.0, v -> InfiniumConfig.setSlowAuraT3(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("Mob Slow Radius"), "m", 4, 48, 2, 0, InfiniumConfig.getSlowRadius(), v -> InfiniumConfig.setSlowRadius((int) v)));
         combat.add(new NumericSlider(Component.literal("Astral Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedAstral() * 100.0, v -> InfiniumConfig.setLegSpeedAstral(v / 100.0)));
+        combat.add(new NumericSlider(Component.literal("Singularity Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedSingularity() * 100.0, v -> InfiniumConfig.setLegSpeedSingularity(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("Cybernetic Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedCybernetic() * 100.0, v -> InfiniumConfig.setLegSpeedCybernetic(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("CyberPsycho Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedCyberpsycho() * 100.0, v -> InfiniumConfig.setLegSpeedCyberpsycho(v / 100.0)));
         combat.add(new NumericSlider(Component.literal("Infinity Leg Speed"), "%", 0, 50, 1, 0, InfiniumConfig.getLegSpeedInfinity() * 100.0, v -> InfiniumConfig.setLegSpeedInfinity(v / 100.0)));
