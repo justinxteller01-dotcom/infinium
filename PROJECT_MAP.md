@@ -78,8 +78,10 @@ Original, client-only sword animations for the Infinium Sword (main hand) only. 
 - Punchy: `PunchyAttackStateMachineMixin.infinium$skipPunchyForInfiniumSword` cancels Punchy `playAttack` for main-hand Infinium sword when `overridesPunchy()`; `MinecraftAttackMixin` then fires energy slashes on click (the no-Punchy path).
 
 ### 4. Client Guide (`dev.justin.infinium.client.guide`)
-- `InfiniumGuideScreen.java`: 2-page Informational Crystal guidebook UI.
-- `GuideCards.java`: Right-page card-stack data per guide page (modelled on the Crystal Matrix page's milestone cards). Rendered by `InfiniumGuideScreen#drawCardStack` (area x150 w124 y10-166, auto-shrinks recipe card 42->26, text 0.57->0.45, gap 3->1 to fit). Purple/pink/black only. Matrix page (`drawMatrixShowcase`) is the original; Contents/Intro/flow/Additional Info pages have no right stack.
+- `InfiniumGuideScreen.java` (v2): 2-page book in fixed book units (292x196 + 18px chapter tabs, scaled to fit any GUI scale). Left = centered title/subtitle/body, right = one visual (recipe/items/armor render/flow/matrix/meteor/settings) + caption + "Numbers" paragraph. Overflow paginates into "(cont.)" spreads (`paginate()` -> `View` records); text never shrinks. Clickable contents + keyword search (EditBox; Enter opens first hit), chapter tabs, Back/Contents/Return/Next, scroll/arrow/A/D/PgUp/PgDn, Backspace=Return, Home=Contents. Remembers last page in `config/infinium_guide_last.txt`. No cards: the Crystal Matrix stacked charge display is the only card-style exception.
+- `GuideNumbers.java`: single table for every number shown in the guide; pages.json uses `{n:key}` tokens (`{key:id}` = bound key name, `{C}` = crystal icon). Most values live from PerkValues/InfiniumConfig/etc; some LITERAL. Final perk values pending /home/box/shared/minecraft/PERK_VALUES_MASTER.md -> plug them in here.
+- `GuideArmorRender.java`: live armor-stand render for armor pages (cached client ArmorStand, full charge, wings on/off toggle, slow spin + drag, GUI-drawn sparkles since particles don't spawn in screens).
+- `GuideStacks.java`: recipe/item layouts for visuals. (`GuideCards.java` removed in v2.)
 - `FlatGuideScreen.java`: 2D fallback guide screen.
 
 ### 5. Mixins (`dev.justin.infinium.mixin` & `client.mixin`)
@@ -107,7 +109,7 @@ Original, client-only sword animations for the Infinium Sword (main hand) only. 
 - `gen_crystal_sounds.py`, `gen_flight_sounds.py`, `gen_sword_sounds.py`: Procedural audio suite synthesizers for crystals, flight thrusters, and default/themed sword sound effects.
 - `gen_dye.py`: Grayscale and tinted dye variant texture generators.
 - `white_fix.py`, `hue_fix.py`, `r8_post.py`: Texture safety passes (hue guards, chamfers, corner cuts).
-- `gen_book.py`: Guidebook text, recipe, and page structure generator (`pages.json`).
+- `gen_guide_v2.py`: generates guide `pages.json` (v2 schema: chapters + pages{id,chapter,title,subtitle,keywords,body,visual,caption,numbers}); Intro copied verbatim. Replaces `gen_book.py` for pages.json. Preview mock: /workspace/guide_preview_v2/mock.py.
 - `build.ps1`: Orchestrates all generator scripts, runs `javac`, and packages the JAR.
 
 ### 8. Productivity & QA Tools
