@@ -245,7 +245,9 @@ public class EnergySlashEntity extends Projectile {
     private void spawnSparks(Vec3 pos, Vec3 fwd, Vec3 right, Vec3 up, int active, boolean stabMode) {
         if (!level().isClientSide()) return;
         int tier = getTier();
-        float sparkChance = tier == 1 ? 0.12F : (tier == 2 ? 0.25F : 0.40F);
+        SlashVisuals.Profile prof = SlashVisuals.ENABLED ? SlashVisuals.resolve(getOwner(), tier) : null;
+        float sparkChance = prof != null ? prof.particleChance : (tier == 1 ? 0.12F : (tier == 2 ? 0.25F : 0.40F));
+        double spd = prof != null ? prof.particleSpeed : 0.04;
         for (int i = 0; i < SEGMENT_COUNT; i++) {
             if ((active & (1 << i)) != 0 && random.nextFloat() < sparkChance) {
                 Vec3 nodePos;
@@ -257,9 +259,16 @@ public class EnergySlashEntity extends Projectile {
                     double u = U_NODES[i];
                     nodePos = pos.add(right.scale(u)).subtract(fwd.scale(u * u * 0.22));
                 }
-                level().addParticle(ParticleTypes.ELECTRIC_SPARK,
-                    nodePos.x, nodePos.y, nodePos.z,
-                    -fwd.x * 0.04, -fwd.y * 0.04, -fwd.z * 0.04);
+                net.minecraft.core.particles.ParticleOptions type = ParticleTypes.ELECTRIC_SPARK;
+                double vx = -fwd.x * spd, vy = -fwd.y * spd, vz = -fwd.z * spd;
+                if (prof != null) {
+                    type = random.nextFloat() < prof.secondaryChance ? prof.secondary : prof.primary;
+                    if (prof.particleSpeed < 0) { // gravity warp: pull toward the slash centre
+                        Vec3 in = pos.subtract(nodePos).scale(-prof.particleSpeed * 4.0);
+                        vx = in.x; vy = in.y; vz = in.z;
+                    }
+                }
+                level().addParticle(type, nodePos.x, nodePos.y, nodePos.z, vx, vy, vz);
             }
         }
     }

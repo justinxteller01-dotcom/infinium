@@ -46,6 +46,10 @@ public class EnergySlashRenderer extends EntityRenderer<EnergySlashEntity, Energ
         state.isStab = entity.isStab();
         state.tier = entity.getTier();
         state.ageTicks = entity.getAgeTicks();
+        state.partialTick = partialTick;
+        state.entityId = entity.getId();
+        state.profile = dev.justin.infinium.SlashVisuals.ENABLED
+            ? dev.justin.infinium.SlashVisuals.resolve(entity.getOwner(), state.tier) : null;
     }
 
     @Override
@@ -64,6 +68,10 @@ public class EnergySlashRenderer extends EntityRenderer<EnergySlashEntity, Energ
             int g = (c >> 8) & 0xFF;
             int b = c & 0xFF;
             int tier = state.tier;
+            if (state.profile != null) {
+                renderProfiled(consumer, pose, state, active);
+                return;
+            }
 
             if (state.isStab) {
                 renderLaserLance(consumer, pose, r, g, b, tier);
@@ -169,6 +177,65 @@ public class EnergySlashRenderer extends EntityRenderer<EnergySlashEntity, Energ
                 x2, -auraH, z2, r, g, b, auraAlpha,
                 x2, -0.00F, z2 - tailLen, r, g, b, 0,
                 x1, -0.00F, z1 - tailLen, r, g, b, 0);
+        }
+    }
+
+    // ---- per-armor-set profiled path (SlashVisuals) ----
+    private static int a8(float v) { return Math.max(0, Math.min(255, (int) v)); }
+
+    private void renderProfiled(VertexConsumer consumer, PoseStack.Pose pose, EnergySlashRenderState st, int active) {
+        dev.justin.infinium.SlashVisuals.Profile p = st.profile;
+        int c = p.tint(st.color);
+        int r = (c >> 16) & 0xFF, g = (c >> 8) & 0xFF, b = c & 0xFF;
+        int cr = Math.min(255, r + p.coreLift), cg = Math.min(255, g + p.coreLift), cb = Math.min(255, b + p.coreLift);
+        float t = st.ageTicks + st.partialTick;
+        int tick = st.ageTicks;
+        // global flicker: smooth sine plus hashed per-tick stutter
+        float fl = 1.0F - p.flicker * (0.5F + 0.5F * (float) Math.sin(t * p.flickerSpeed * Math.PI * 2.0))
+                         * (0.4F + 0.6F * dev.justin.infinium.SlashVisuals.hash(st.entityId, tick));
+        float aMul = p.alpha * fl;
+
+        if (st.isStab) {
+            float zBack = -0.4F, zFront = 1.6F + 0.25F * (p.width - 1.0F);
+            float rc = 0.035F * p.width, ra = 0.11F * p.width * p.glow;
+            if (p.glitch > 0 && dev.justin.infinium.SlashVisuals.hash(st.entityId + 7, tick) < p.glitch * 1.5F) rc *= 0.4F;
+            int ac = a8(255 * aMul), aa = a8(200 * aMul);
+            drawRibbonQuad(consumer, pose, -rc, rc, zBack, cr, cg, cb, ac, rc, rc, zBack, cr, cg, cb, ac, rc, rc, zFront, cr, cg, cb, ac, -rc, rc, zFront, cr, cg, cb, ac);
+            drawRibbonQuad(consumer, pose, -rc, -rc, zBack, cr, cg, cb, ac, rc, -rc, zBack, cr, cg, cb, ac, rc, -rc, zFront, cr, cg, cb, ac, -rc, -rc, zFront, cr, cg, cb, ac);
+            for (int h = 0; h <= p.haloLayers; h++) {
+                float rr = ra * (1.0F + 0.8F * h) * (1.0F + p.warp * 0.4F * (float) Math.sin(t * 0.7F + h));
+                int al = a8(aa / (1.0F + 1.2F * h));
+                drawRibbonQuad(consumer, pose, -rr, 0, zBack, r, g, b, 0, rr, 0, zBack, r, g, b, 0, rr, 0, zFront, r, g, b, al, -rr, 0, zFront, r, g, b, al);
+                drawRibbonQuad(consumer, pose, 0, -rr, zBack, r, g, b, 0, 0, rr, zBack, r, g, b, 0, 0, rr, zFront, r, g, b, al, 0, -rr, zFront, r, g, b, al);
+            }
+            return;
+        }
+
+        float coreH = 0.018F * p.width, auraH = 0.05F * p.width * p.glow, tailLen = 0.28F * p.width * p.tail;
+        int coreA = a8(255 * aMul), innerA = a8(220 * aMul), auraA = a8(160 * aMul);
+        for (int i = 0; i < SEGMENT_COUNT - 1; i++) {
+            boolean a1 = (active & (1 << i)) != 0, a2 = (active & (1 << (i + 1))) != 0;
+            if (!a1 && !a2) continue;
+            float gl = p.glitch > 0 ? dev.justin.infinium.SlashVisuals.hash(st.entityId * 31 + i, tick) : 1.0F;
+            if (gl < p.glitch * 0.5F) continue;                 // dropped segment (glitch gap)
+            float yOff = gl < p.glitch ? (gl - p.glitch * 0.75F) * 0.25F : 0.0F; // displaced segment
+            float u1 = U_NODES[i], u2 = U_NODES[i + 1];
+            float x1 = u1, x2 = u2;
+            float z1 = -0.22F * u1 * u1, z2 = -0.22F * u2 * u2;
+            if (p.warp > 0) { // gravity warp: ripple + pinch toward centre
+                z1 += p.warp * 0.12F * (float) Math.sin(u1 * 3.0F + t * 0.9F) - p.warp * 0.08F * (1.0F - Math.abs(u1) / 1.4F);
+                z2 += p.warp * 0.12F * (float) Math.sin(u2 * 3.0F + t * 0.9F) - p.warp * 0.08F * (1.0F - Math.abs(u2) / 1.4F);
+                x1 *= 1.0F - p.warp * 0.10F; x2 *= 1.0F - p.warp * 0.10F;
+            }
+            float y = yOff;
+            drawRibbonQuad(consumer, pose, x1, y + coreH, z1 + 0.02F, cr, cg, cb, coreA, x2, y + coreH, z2 + 0.02F, cr, cg, cb, coreA, x2, y, z2 - 0.12F, r, g, b, innerA, x1, y, z1 - 0.12F, r, g, b, innerA);
+            drawRibbonQuad(consumer, pose, x1, y - coreH, z1 + 0.02F, cr, cg, cb, coreA, x2, y - coreH, z2 + 0.02F, cr, cg, cb, coreA, x2, y, z2 - 0.12F, r, g, b, innerA, x1, y, z1 - 0.12F, r, g, b, innerA);
+            for (int h = 0; h <= p.haloLayers; h++) {
+                float hh = auraH * (1.0F + 0.9F * h), tl = tailLen * (1.0F + 0.35F * h);
+                int al = a8(auraA / (1.0F + 1.3F * h));
+                drawRibbonQuad(consumer, pose, x1, y + hh, z1, r, g, b, al, x2, y + hh, z2, r, g, b, al, x2, y, z2 - tl, r, g, b, 0, x1, y, z1 - tl, r, g, b, 0);
+                drawRibbonQuad(consumer, pose, x1, y - hh, z1, r, g, b, al, x2, y - hh, z2, r, g, b, al, x2, y, z2 - tl, r, g, b, 0, x1, y, z1 - tl, r, g, b, 0);
+            }
         }
     }
 
