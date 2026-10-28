@@ -210,7 +210,7 @@ pg('sword', 5, 'Sword & Energy Slash', 'Slash, slash, beam', ['sword', 'slash', 
    "Sneak + Right-Click on air to switch between Energy and Normal mode.\n"
    "Cyber armor lets you swing faster and hit fast enemies again sooner.",
    'recipe:sword', 'Smithing table',
-   "Numbers: {n:sword_dmg} damage, bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier.")
+   "Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) {n:sword_dmg}, Tier 2 (Singularity, Cyber Psycho) {n:sword_dmg_t2}, Tier 3 (Infinity) {n:sword_dmg_t3}. Bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier.")
 pg('tools', 5, 'Mining Tools', 'Pick, axe and shovel', ['pickaxe', 'axe', 'shovel', 'mode', 'fortune', 'silk'],
    "Pickaxe: switch between Fortune IV and Silk Touch.\n"
    "Axe: logs drop the wood type you choose.\n"

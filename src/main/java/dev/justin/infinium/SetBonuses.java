@@ -30,7 +30,7 @@ import net.minecraft.world.item.ItemStack;
 public final class SetBonuses {
     public static final Identifier REACH_B = Infinium.id("set_reach_block"), REACH_E = Infinium.id("set_reach_entity"),
         ATTACK = Infinium.id("set_attack_speed"), MINING = Infinium.id("set_mining"), JUMP = Infinium.id("set_jump"),
-        SAFE_FALL = Infinium.id("boots_safe_fall"), KB_OFF = Infinium.id("kb_off");
+        SAFE_FALL = Infinium.id("boots_safe_fall"), SWORD_DMG = Infinium.id("set_sword_damage"), KB_OFF = Infinium.id("kb_off");
     public static Holder<MobEffect> CP_SLOW;
     /** Last settled look per player (Optional.empty() = none). Absent = not settled yet (login/respawn: settle silently). */
     private static final java.util.Map<java.util.UUID, java.util.Optional<SetLook>> LAST = new java.util.concurrent.ConcurrentHashMap<>();
@@ -111,6 +111,9 @@ public final class SetBonuses {
         set(p, Attributes.ENTITY_INTERACTION_RANGE, REACH_E, r, AttributeModifier.Operation.ADD_VALUE);
         set(p, Attributes.ATTACK_SPEED, ATTACK, attack(p, l), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         set(p, Attributes.BLOCK_BREAK_SPEED, MINING, mining(p, l), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        // Sword set bonus (+0/+1/+2 by tier), only while the Infinium sword is in the main hand.
+        double sb = p.getMainHandItem().is(Infinium.SWORD) ? Infinium.swordSetBonus(l) : 0;
+        set(p, Attributes.ATTACK_DAMAGE, SWORD_DMG, sb, AttributeModifier.Operation.ADD_VALUE);
         double jb = bootJump(p);   // G4b: height comes from Astral/Singularity/Infinity boots only; the set Jump perk is air jumps
         set(p, Attributes.JUMP_STRENGTH, JUMP, jb, AttributeModifier.Operation.ADD_VALUE);
         set(p, Attributes.SAFE_FALL_DISTANCE, SAFE_FALL, bootSafeFall(p), AttributeModifier.Operation.ADD_VALUE);

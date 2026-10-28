@@ -279,7 +279,8 @@ public class EnergySlashEntity extends Projectile {
             e -> e.isAlive() && !e.isSpectator() && e != getOwner() && !hitEntityIds.contains(e.getId()));
 
         Entity owner = getOwner();
-        float baseDmg = Infinium.getSwordBaseAttackDamageAttribute(); // 11.0F
+        // Per-set sword base: 10 (Tier 1: no set / Astral / Cybernetic), 11 (Tier 2: Singularity / Cyber Psycho), 12 (Tier 3: Infinity).
+        float baseDmg = owner instanceof LivingEntity le ? Infinium.swordBaseDamage(le) : Infinium.SWORD_BASE_DAMAGE;
         int tier = getTier();
         // Slash damage % of sword base: T1 30%, T2 40%, T3 50%.
         // Crit slash (stab beam): T1 35%, T2 55%, T3 75%.

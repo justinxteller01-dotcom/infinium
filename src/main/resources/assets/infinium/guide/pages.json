@@ -426,7 +426,7 @@
    "body": "The sword hits hard. Its slashes and beam make enemies bleed, or inflict Cyberburn if you wear Cybernetic or Cyber Psycho armor.\nYour first two swings send out energy slashes. The third swing fires an energy beam that hits even harder.\nEnergy mode only works while you wear a full Infinium armor set, and each set has its own slash sounds. A fully charged swing then fires a piercing energy slash.\nWithout a full set there's no energy slash. It's just a normal sword.\nSneak + Right-Click on air to switch between Energy and Normal mode.\nCyber armor lets you swing faster and hit fast enemies again sooner.",
    "visual": "recipe:sword",
    "caption": "Smithing table",
-   "numbers": "Numbers: {n:sword_dmg} damage, bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier."
+   "numbers": "Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) {n:sword_dmg}, Tier 2 (Singularity, Cyber Psycho) {n:sword_dmg_t2}, Tier 3 (Infinity) {n:sword_dmg_t3}. Bleed/Cyberburn {n:bleed_s}s (3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity). Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier."
   },
   {
    "id": "tools",

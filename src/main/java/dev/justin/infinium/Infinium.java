@@ -155,7 +155,7 @@ public class Infinium implements ModInitializer {
         INF_BOOTS = reg("infinity_boots", new Item.Properties().humanoidArmor(INFINITY_ARMOR, ArmorType.BOOTS).fireResistant().rarity(Rarity.EPIC));
 
         // tooltip 12 attack damage = 1 (base) + 6 + 5 (material bonus); attack speed 4 - 2.4 = 1.6 (unchanged)
-        SWORD = reg("infinium_sword", InfiniumSwordItem::new, new Item.Properties().sword(MAT, 6.0F, -2.4F).fireResistant());
+        SWORD = reg("infinium_sword", InfiniumSwordItem::new, new Item.Properties().sword(MAT, 4.0F, -2.4F).fireResistant());
         PICKAXE = reg("infinium_pickaxe", InfiniumPickaxeItem::new, new Item.Properties().pickaxe(PICK_MAT, 1.0F, -2.8F).fireResistant());
         AXE = reg("infinium_axe", p -> new InfiniumAxeItem(MAT, 5.0F, -3.0F, p), new Item.Properties().fireResistant());
         SHOVEL = reg("infinium_shovel", p -> new InfiniumShovelItem(SHOVEL_MAT, 1.5F, -3.0F, p), new Item.Properties().fireResistant());
@@ -411,11 +411,21 @@ public class Infinium implements ModInitializer {
 
     /** Legacy single-item check (bread boots). */
     public static boolean wearing(LivingEntity e, EquipmentSlot slot, Item item) { return e.getItemBySlot(slot).is(item); }
+    /** Sword hit damage without a set bonus: item modifier (MAT 5 + 4 = 9) + player base 1 = 10 (shown as "10 Attack Damage"). */
+    public static final float SWORD_BASE_DAMAGE = 10.0F;
     public static float getSwordBaseAttackDamageAttribute() {
-        return MAT.attackDamageBonus() + 6.0F; // 11.0F
+        return 1.0F + MAT.attackDamageBonus() + 4.0F; // 10.0F
     }
 
-    public static float getSlashDamage() {
-        return getSwordBaseAttackDamageAttribute() * 0.5F; // 5.5F
+    /** Sword set bonus (locked 2026-10-28): Tier 1 (no set, Astral, Cybernetic) +0, Tier 2 (Singularity, Cyber Psycho) +1, Tier 3 (Infinity) +2. */
+    public static float swordSetBonus(SetLook l) {
+        if (l == SetLook.INFINITY) return 2.0F;
+        if (l == SetLook.SINGULARITY || l == SetLook.CYBERPSYCHO) return 1.0F;
+        return 0.0F;
+    }
+
+    /** Per-set sword base damage: 10 / 11 / 12. Energy slash and beam percentages use this. */
+    public static float swordBaseDamage(LivingEntity e) {
+        return SWORD_BASE_DAMAGE + swordSetBonus(SetLook.of(e));
     }
 }

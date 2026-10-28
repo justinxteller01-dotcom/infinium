@@ -70,7 +70,9 @@ public final class GuideNumbers {
         put("meteor_tpl_t2", () -> pct1(InfiniumConfig.getMeteorTier2TemplateChance()));
         put("meteor_warning_min", () -> "2");   // LITERAL
         put("dungeon_refill_days", () -> String.valueOf(dev.justin.infinium.loot.LootTuning.lootRefreshDays));
-        put("sword_dmg", () -> "12");       // LITERAL
+        put("sword_dmg", () -> num(dev.justin.infinium.Infinium.SWORD_BASE_DAMAGE));
+        put("sword_dmg_t2", () -> num(dev.justin.infinium.Infinium.SWORD_BASE_DAMAGE + dev.justin.infinium.Infinium.swordSetBonus(dev.justin.infinium.SetLook.SINGULARITY)));
+        put("sword_dmg_t3", () -> num(dev.justin.infinium.Infinium.SWORD_BASE_DAMAGE + dev.justin.infinium.Infinium.swordSetBonus(dev.justin.infinium.SetLook.INFINITY)));
         put("bleed_s", () -> "3-5");        // LITERAL (Bleed/Cyberburn, BleedingEffect.durationTicks: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity)
         put("thrust_ramp_s", () -> "2.5");  // LITERAL
     }

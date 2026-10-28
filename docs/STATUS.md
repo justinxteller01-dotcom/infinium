@@ -24,6 +24,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 | Jump + warp | Boots tap/hold height: +1/+2/+3. In-air push tiny/small/largest. Air jumps only with elytra off: Cybernetic 1, Cyber Psycho 2, Infinity 3 (4 jumps total). A warp refunds the 3 air jumps, not the ground jump. Only Infinity has both multi-jump and warp. | 10-28 |
 | Audio | Every set gets its own sound family (flight, slash, mode-switch, air jump). Cyber/Psycho: energy-charge sounds (Cyberpunk + Fire Force flair), not 8-bit electric. Infinity = a blend of Astral + Singularity. Cyber Psycho thrust: ramp-up, then a subtle hum, then a fade. Built one piece at a time, at Justin's PC. | 10-28 |
 | Other values | Mob slow 25/50/75%, 2/4/6 s, cd 12/10/8 s. X-Ray Pulse 10/20/30 blocks, cd 40/30/20 s. Crystal slots 8/16/32. Slash 30/40/50%, crit beam 35/55/75%. Full Bright removed. | 10-26 to 10-28 |
+| Sword damage | Sword damage (2026-10-28): 3 tiers. Tier 1 (no armor, Astral or Cybernetic) 10, Tier 2 (Singularity or Cyber Psycho) 11, Tier 3 (Infinity) 12. Item attribute 10 + set bonus +0/+1/+2 on hit; slash/beam % use the tier value. | 10-28 |
 | GitHub | Push and upload the jar to the private repo after every patch with no need to ask. Public publishing still needs Justin's OK. | 10-28 |
 
 ## 3. Open questions for Justin
@@ -46,26 +47,25 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 6. The crystal unlock order in `CrystalCharge.java:39-45` doesn't match PERK_VALUES_MASTER on any set.
 7. The guide says 4 crystal slots instead of 8/16/32.
 8. Old slow values are still in `PerkValues` and `InfiniumConfig`.
-9. The guide says the sword does 12 damage, but the code uses 11.
-10. Seven guide numbers are hard-coded. The Quantum Tunnel and X-Ray numbers are defined but not shown.
+9. Seven guide numbers are hard-coded. The Quantum Tunnel and X-Ray numbers are defined but not shown.
 
 **Testing**
-11. There are no tests. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
+10. There are no tests. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
 
 **Unfinished since Oct 11 (modpack)**
-12. Player config bundle.
-13. Spatial GUI tuning for 1080p and other FOVs.
-14. JEI cursor fix and the Accessories+Artifacts backpack slot: both built, neither installed.
-15. Inventory gets bigger but JEI doesn't.
-16. ZGC question.
+11. Player config bundle.
+12. Spatial GUI tuning for 1080p and other FOVs.
+13. JEI cursor fix and the Accessories+Artifacts backpack slot: both built, neither installed.
+14. Inventory gets bigger but JEI doesn't.
+15. ZGC question.
 
 **Compatibility**
-17. The LowOnFire resource pack may hide Cyberburn visuals.
+16. The LowOnFire resource pack may hide Cyberburn visuals.
 
 **Recheck in game (from Oct 26)**
-18. Solo-chestplate infusion bug.
-19. Slash + melee double hit.
-20. Particle-map growth.
+17. Solo-chestplate infusion bug.
+18. Slash + melee double hit.
+19. Particle-map growth.
 
 ## 5. In-game test checklist (`batch1-89b8713`)
 - [ ] Slash/beam DoT lasts 3/4/5 s by set; plain melee applies none.
@@ -82,6 +82,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-SHA` 10-28 TIME: sword damage by 3 tiers, 10/11/12 (Tier 1 no armor/Astral/Cybernetic, Tier 2 Singularity/Cyber Psycho, Tier 3 Infinity); slash/beam scale with it.
 - `batch1-89b8713` 10-28 3:51 PM: Burn DoT renamed to Cyberburn.
 - `batch1-bf0e9a9` 10-28 3:46 PM: DoT duration by set, 3/4/5 s.
 - `batch1-a336ea2` 10-28 3:45 PM: DotDamage helper, so DoT ticks never give i-frames.

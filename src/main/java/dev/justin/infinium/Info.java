@@ -81,9 +81,9 @@ public final class Info {
         }
         o.add(h("Tool"));
         if (it == Infinium.SWORD) {
-            o.add(l("12 dmg."));
+            o.add(l("Damage by armor tier: Tier 1 (no set, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12."));
             o.add(l("Your first two swings send out energy slashes. The third fires an energy beam that hits even harder."));
-            o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (5.5 dmg). Slashes and the beam apply bleed, or Cyberburn with Cyber armor: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
+            o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (3 / 4.4 / 6 dmg by tier). Slashes and the beam apply bleed, or Cyberburn with Cyber armor: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
             o.add(l("Without a full set it's a normal sword."));
             o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
         }
