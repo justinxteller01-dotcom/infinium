@@ -1,10 +1,12 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~5:40 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~5:44 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-019b6a8` (pre-release, 2026-10-28 5:40 PM ET)
+## 1. Current release: `batch1-4d3228c` (pre-release, 2026-10-28 5:44 PM ET)
+- **Cosmic Radiation**: Astral-owner slash/beam DoT is now "Cosmic Radiation" (new effect `infinium:cosmic_radiation`, same damage/visual/icon as Bleed for now). Singularity/Infinity keep Bleed (`infinium:bleeding` unchanged). Lang, tooltip, guide updated.
+- **Air-jump forward push** (`batch1-4f00f3d`): every bonus air jump gets the main jump's in-air forward push. Cybernetic uses the tier-1 value (0.0015), Cyber Psycho tier-2 (0.0030), Infinity its own (0.0050). Counts/heights unchanged.
 - **Quantum Tunnel on the ground**: the warp now fires on the ground as well as mid-air (still not in water/lava, on ladders or riding). Same 8/12/16 blocks, 8/6/4 s, forward launch, step-up/no-clip sweep; Infinity still refunds only the 3 air jumps. Guide text updated.
 - **Title menu v3**: large bright purple meteors frozen in mid-air (tight cluster upper right + 4 strays; glow pulse, trail shimmer, twinkle spikes, orbiting sparks), fireflies, floating crystal sparkles, high camera (hill lowered, ground crystals gone), noticeable gentle sway; sky unchanged; 120s seamless loop. Preview `/workspace/menu_mock/mock_v3.mp4` (v2 preview was a stale encode).
 - **Crystal order**: Astral/Singularity repair, block saver, saber, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack; Infinity repair, mining, block saver, jump, saber, slow, stacks, attack, reach. Saber = energy slash milestone (Astral needs it before slashes fire). Crystal screen lays 5/9 cards in two rows.
@@ -35,9 +37,9 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 | GitHub | Push and upload the jar to the private repo after every patch with no need to ask. Public publishing still needs Justin's OK. | 10-28 |
 
 ## 3. Open questions for Justin
-1. **Astral and Singularity DoT**: name and visual. He floated "Cosmic Radiation" for Astral. They use Bleed for now.
+1. **Astral and Singularity DoT**: Astral is now "Cosmic Radiation" (name only; visual still Bleed's). Singularity name and visual still open (Bleed).
 2. **Infinity DoT**: name and visual (Bleed for now).
-3. **Forward push** on Cybernetic and Cyber Psycho jumps: the amounts (Cyber Psycho > Cybernetic). Not implemented yet.
+3. **Forward push** on Cybernetic and Cyber Psycho jumps: air jumps now use the tier-1/tier-2 push values (placeholder, CP > Cyb); confirm amounts.
 4. **Rest of his testing list**: the raw list (10-28 8:25 AM ET) has only items 1–2, and all of it is already covered by Batches A–D (HUD, warp, ability HUD and keybinds, mob slow). Nothing else is left to copy. Waiting on Justin for any more items.
 5. **"Saber" perk**: implemented as the energy slash/beam milestone (no saber perk existed in code). Confirm, or name the perk he meant.
 6. From the brief and the review: are gold and red-orange accents banned (treated as banned)? Should warp stay on Ctrl (same as Sprint)? Should X-ray show containers on BreadCraft, with a server kill switch? Should auto-repair reach into backpacks and Accessories? Allow solo-chestplate infusion? Overall power level (slash + melee double hit)? Flight sounds for Cybernetic, Singularity, Infinity and Astral.
@@ -73,7 +75,9 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 17. Slash + melee double hit.
 18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-019b6a8`)
+## 5. In-game test checklist (`batch1-4d3228c`)
+- [ ] Astral slash/beam shows "Cosmic Radiation" (effect list/tooltip/guide); Singularity/Infinity still Bleed; Cyber sets Cyberburn.
+- [ ] Air jumps: holding forward during each bonus air jump pushes forward (Cybernetic < Cyber Psycho < Infinity); jump counts and heights unchanged.
 - [ ] Quantum Tunnel from the ground: fires standing/walking/sprinting, 8/12/16 blocks, no clipping into walls, floors or hills (steps up to 1.9), launch forward, cooldown 8/6/4 s; blocked in water/lava/ladders/riding; Infinity gets 3 air jumps after a ground warp, no extra ground jump; key doesn't clash with sneak/sprint/use.
 - [ ] Title menu v3: meteors clearly visible, frozen in place (cluster + strays) with visible twinkle/glow/sparks; fireflies and sparkles visible; camera high with the hill out of the way; sway noticeable but gentle; no seam at 120s; no FPS drop; no faint dark patch or ghost in the lower-centre sky.
 - [ ] (superseded) Title menu v2: meteors stay fixed (no travel) and read as far away; twinkle/sparks subtle; fireflies and crystal motes visible but calm; camera sway gentle; no seam at the 120s loop; no FPS drop.
@@ -95,6 +99,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-4d3228c` 10-28 5:44 PM: Astral DoT renamed Cosmic Radiation (new id `infinium:cosmic_radiation`; `infinium:bleeding` kept).
+- `batch1-4f00f3d` 10-28 5:44 PM: forward push on every bonus air jump (Cyb/CP tier-matched values).
 - `batch1-019b6a8` 10-28 5:40 PM: Quantum Tunnel works on the ground too (was mid-air only); guide wording.
 - `batch1-a8612ee` 10-28 4:31 PM: title menu v3 (large bright frozen meteor cluster + strays, fireflies, crystal sparkles, high camera, ground crystals removed, noticeable sway; sky unchanged).
 - `batch1-c2c2532` 10-28 4:25 PM: title menu v2 (frozen far meteors with twinkle/glow/sparks, fireflies, crystal motes, gentle camera sway; sky unchanged).
