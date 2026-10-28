@@ -25,7 +25,6 @@
     "TitleScreenFxMixin",
     "ContainerLabelColorMixin",
     "MinecraftAttackMixin",
-    "LightmapRenderStateExtractorMixin",
     "SwordAnimItemInHandMixin",
     "SwordAnimSwingMixin",
     "SwordAnimRenderStateMixin",

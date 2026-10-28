@@ -121,12 +121,12 @@ public final class Info {
             case HEAD -> switch (fam) {
                 // G4b: X-ray is the M3 pulse ability on every helmet (XrayPulse.radius: r10 / r20 / r30), not a continuous X key.
                 // Astral (0) split from the shared default so only Astral gets the plain wording.
-                case 0 -> "Helmet: Breathe underwater; Full Bright lets you see in the dark (" + fullBright() + "); X-Ray Pulse shows ores within 10 blocks (" + key("xray_pulse", "X-Ray Pulse", null) + ").";
+                case 0 -> "Helmet: Breathe underwater; X-Ray Pulse shows ores within 10 blocks (" + key("xray_pulse", "X-Ray Pulse", null) + ").";
                 case 1 -> "Helmet: Infinite oxygen; " + pulse(10) + ".";
-                case 2 -> "Helmet: Infinite oxygen; Full Bright toggle (" + fullBright() + "); " + pulse(20) + ".";
+                case 2 -> "Helmet: Infinite oxygen; " + pulse(20) + ".";
                 case 3 -> "Helmet: Infinite oxygen; " + pulse(20) + ".";
-                case 4 -> "Helmet: Infinite oxygen; Full Bright toggle (" + fullBright() + "); " + pulse(30) + ".";
-                default -> "Helmet: Infinite oxygen; Full Bright toggle (" + fullBright() + "); " + pulse(10) + ".";
+                case 4 -> "Helmet: Infinite oxygen; " + pulse(30) + ".";
+                default -> "Helmet: Infinite oxygen; " + pulse(10) + ".";
             };
             case CHEST -> switch (fam) {
                 case 0 -> "Chestplate: Built-in wings you can turn on and off.";
@@ -157,7 +157,7 @@ public final class Info {
     static String pct(double d) { return Math.round(d * 100) + "%"; }
     /**
      * Bound-key name for runtime text. The client sets this (InfiniumClient) to the KeyMapping's translated key message;
-     * ids: flight_thrust, toggle_fullbright, toggle_wings, warp, xray_pulse. Returns null when unknown (server side).
+     * ids: flight_thrust, toggle_wings, warp, xray_pulse. Returns null when unknown (server side).
      */
     public static java.util.function.Function<String, String> keyName = id -> null;
 
@@ -168,7 +168,6 @@ public final class Info {
         return "the " + what + " key (" + (def == null ? "unbound by default" : "default " + def) + ")";
     }
     static String thrust() { return "hold " + key("flight_thrust", "Flight Thrust", "Left Ctrl") + " while flying"; }
-    static String fullBright() { return key("toggle_fullbright", "Full Bright", "B") + " / button"; }
     static String pulse(int r) { return "X-Ray Pulse " + r + "m (" + key("xray_pulse", "X-Ray Pulse", null) + ")"; }
     static String warp(int m) { return "Quantum Tunnel " + m + "m (" + key("warp", "Quantum Tunnel", null) + ", mid-air)"; }
 

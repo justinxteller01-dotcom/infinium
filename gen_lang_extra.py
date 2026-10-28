@@ -13,7 +13,6 @@ lang.update({
     # other Infinium key mappings (InfiniumKeys)
     "key.infinium.toggle_wings": "Toggle wings",
     "key.infinium.flight_thrust": "Flight thrust",
-    "key.infinium.toggle_fullbright": "Toggle Full Bright",
     # category label (KeyMapping.Category infinium:controls -> key.category.infinium.controls)
     "key.category.infinium.controls": "Infinium",
     # ability HUD

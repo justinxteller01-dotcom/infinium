@@ -261,10 +261,6 @@ public class Infinium implements ModInitializer {
                 SwordSlashHandler.handleServerSlash(ctx.player(), payload.yaw(), payload.pitch(), payload.roll(), payload.color(), payload.isStab());
             });
         });
-        PayloadTypeRegistry.serverboundPlay().register(HelmetVisionPayload.TYPE, HelmetVisionPayload.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(HelmetVisionPayload.TYPE, (payload, ctx) -> {
-            // Server acknowledges client vision toggle sync
-        });
         PayloadTypeRegistry.serverboundPlay().register(SwordThemePayload.TYPE, SwordThemePayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(SwordThemePayload.TYPE, (payload, ctx) -> {
             ctx.server().execute(() -> {

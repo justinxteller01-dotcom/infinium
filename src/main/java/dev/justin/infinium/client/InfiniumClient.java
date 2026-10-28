@@ -31,7 +31,6 @@ public class InfiniumClient implements ClientModInitializer {
         dev.justin.infinium.Info.keyName = id -> {
             net.minecraft.client.KeyMapping k = switch (id) {
                 case "flight_thrust" -> InfiniumKeys.ABILITY_CONTROL;
-                case "toggle_fullbright" -> InfiniumKeys.TOGGLE_FULLBRIGHT;
                 case "toggle_wings" -> InfiniumKeys.TOGGLE_WINGS;
                 case "warp" -> dev.justin.infinium.SpacetimeWarp.ABILITY == null ? null : dev.justin.infinium.client.ability.AbilityClient.key(dev.justin.infinium.SpacetimeWarp.ABILITY);
                 case "xray_pulse" -> dev.justin.infinium.ability.XrayPulse.ABILITY == null ? null : dev.justin.infinium.client.ability.AbilityClient.key(dev.justin.infinium.ability.XrayPulse.ABILITY);
@@ -114,8 +113,6 @@ public class InfiniumClient implements ClientModInitializer {
         InfiniumSettingsScreen.registerEntryPoints();
         ChestHintClient.register();
         DungeonHudClient.register();
-        HelmetVisionClient.register();
-        InventoryHelmetVisionButtons.register();
         MeteorShowerClient.register();
         ClientTickEvents.END_LEVEL_TICK.register(level -> {
             Minecraft mc = Minecraft.getInstance();

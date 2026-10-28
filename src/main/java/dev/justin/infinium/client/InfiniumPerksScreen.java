@@ -49,13 +49,12 @@ public class InfiniumPerksScreen extends OptionsSubScreen {
     static boolean hidden(Perk p) { return p.kind.equals("setlegs"); }
 
     private long builtMask;
-    private boolean builtFb;
 
     /** M5: if the toggles change elsewhere (matrix screen, server ack/reject), rebuild so this menu never shows stale state. */
     @Override
     public void tick() {
         super.tick();
-        if (minecraft != null && minecraft.player != null && (ClientPerks.mask(minecraft.player) != builtMask || HelmetVisionClient.isFullBrightActive() != builtFb)) rebuildWidgets();
+        if (minecraft != null && minecraft.player != null && (ClientPerks.mask(minecraft.player) != builtMask)) rebuildWidgets();
     }
 
     @Override
@@ -87,16 +86,6 @@ public class InfiniumPerksScreen extends OptionsSubScreen {
         add(row, Perk.ABILITY_WARP, mask, connected);
         add(row, Perk.ABILITY_XRAY_PULSE, mask, connected);
         flush(row);
-        // M6(b): Full Bright stays a client-side toggle (no server effect) but lives here too, in sync with its key.
-        builtFb = HelmetVisionClient.isFullBrightActive();
-        CycleButton<Boolean> fb = CycleButton.onOffBuilder(builtFb).create(Component.literal("Full Bright"), (btn, v) -> {
-            if (minecraft.player != null && v != HelmetVisionClient.isFullBrightActive()) HelmetVisionClient.toggleFullBright(minecraft.player);
-            builtFb = HelmetVisionClient.isFullBrightActive();
-            if (builtFb != v) rebuildWidgets();   // refused (no eligible helmet): snap back
-        });
-        String fbKey = InfiniumKeys.TOGGLE_FULLBRIGHT == null ? "?" : InfiniumKeys.TOGGLE_FULLBRIGHT.getTranslatedKeyMessage().getString();
-        fb.setTooltip(Tooltip.create(Component.literal("Full Bright (any Infinium helmet). Same toggle as the " + fbKey + " key and the inventory button. Client-side only.")));
-        list.addSmall(fb, (AbstractWidget) null);
 
         list.addHeader(Component.literal(Perk.FAMILY_NAMES[fam] + " pieces").withStyle(ChatFormatting.LIGHT_PURPLE));
         add(row, Perk.piece(fam, EquipmentSlot.HEAD), mask, connected);

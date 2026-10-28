@@ -21,7 +21,6 @@ public final class InfiniumKeys {
     public static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("infinium", "controls"));
     public static KeyMapping TOGGLE_WINGS;
     public static KeyMapping ABILITY_CONTROL;
-    public static KeyMapping TOGGLE_FULLBRIGHT;
 
     private static boolean lastThrustState = false;
 
@@ -30,20 +29,12 @@ public final class InfiniumKeys {
             new KeyMapping("key.infinium.toggle_wings", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), CATEGORY));
         ABILITY_CONTROL = KeyMappingHelper.registerKeyMapping(
             new KeyMapping("key.infinium.flight_thrust", InputConstants.Type.KEYSYM, 341 /* GLFW_KEY_LEFT_CONTROL */, CATEGORY));
-        TOGGLE_FULLBRIGHT = KeyMappingHelper.registerKeyMapping(
-            new KeyMapping("key.infinium.toggle_fullbright", InputConstants.Type.KEYSYM, 66 /* GLFW_KEY_B */, CATEGORY));
         // M3: the old toggle_xray key (X) is removed; X-ray is the pulse ability with its own unbound key.
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (TOGGLE_WINGS.consumeClick()) {
                 if (mc.gui.screen() == null && mc.player != null && ClientPlayNetworking.canSend(WingsKeyPayload.TYPE))
                     ClientPlayNetworking.send(new WingsKeyPayload());
-            }
-
-            while (TOGGLE_FULLBRIGHT.consumeClick()) {
-                if (mc.gui.screen() == null && mc.player != null) {
-                    HelmetVisionClient.toggleFullBright(mc.player);
-                }
             }
 
 

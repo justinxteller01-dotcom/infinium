@@ -59,7 +59,7 @@
     {
       "title": "Astral Armor",
       "body": "Combine an Astral Template, Netherite armor, and 1 Infinium Ingot in a Smithing Table.\n\nTougher than netherite.\nFire and lava can't hurt you.\n\nFull Set: ({C} = crystals needed to unlock)\n\n1{C} Slowly repairs all gear in your inventory.\n\n2{C} Sometimes doesn't use up the block you place.\n\n3{C} +1 block reach.\n\n4{C} Items stack higher (64 becomes 96).",
-      "note": "Helmet: Breathe underwater; Full Bright to see in the dark (B).\nChestplate: Built-in wings you can turn on and off.\nLeggings: Run a little faster; Quantum Tunnel zips you 8 blocks forward in mid-air.\nBoots: No fall damage; +1 jump height.",
+      "note": "Helmet: Breathe underwater.\nChestplate: Built-in wings you can turn on and off.\nLeggings: Run a little faster; Quantum Tunnel zips you 8 blocks forward in mid-air.\nBoots: No fall damage; +1 jump height.",
       "art": "astral",
       "recipe": "astral"
     },
@@ -73,7 +73,7 @@
     {
       "title": "Singularity Armor",
       "body": "Singularity armor is obtained only by upgrading Astral gear with a Singularity Template and 1 Infinium Ingot in a Smithing Table.\n\nDamage taken is 57.1% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} Auto repair: every 5 seconds, all gear in your inventory regains 1 durability.\n\n4{C} 22% chance to not consume most building blocks.\n\n6{C} +2 block reach.\n\n8{C} Stacks grow from 64 to 128, 16 to 32, and unstackable items to 4.",
-      "note": "Helmet: Infinite oxygen; Full Bright (B / button).\nChestplate: Built-in Elytra; Flight Thrust (hold Ctrl).\nLeggings: +5% Speed; Quantum Tunnel 12m (ability key, mid-air).\nBoots: No fall damage; +2 blocks jump.",
+      "note": "Helmet: Infinite oxygen.\nChestplate: Built-in Elytra; Flight Thrust (hold Ctrl).\nLeggings: +5% Speed; Quantum Tunnel 12m (ability key, mid-air).\nBoots: No fall damage; +2 blocks jump.",
       "art": "singularity",
       "recipe": "singularity"
     },
@@ -87,7 +87,7 @@
     {
       "title": "Infinity Armor",
       "body": "Combine a piece of Singularity gear with the same piece of Cyber Psycho gear, plus 1 Infinium Ingot to craft INFINITY ARMOR! It applies all previous bonus perks from all Infinium armor types, with even more unique bonuses!\n\nDamage taken is 50% of netherite.\nFire, lava, and explosion immunity.\nRocket-free flight: Hold Left Ctrl while flying to thrust up to max speed!\n\nFull Set: ({C} = required crystals to activate perk)\n\n4{C} +30% mining speed.\n\n8{C} +3 blocks jump height.\n\n12{C} +75% attack speed and bow draw speed.\n\n16{C} Auto repair: every 2 seconds, all gear in your inventory regains 1 durability.\n\n20{C} Stacks grow from 64 to 256, 16 to 64, and unstackable items to 16.\n\n24{C} Nearby mobs become slowed by 75% for 6s whenever you take damage (8s cooldown).\n\n28{C} 33% chance to not consume most building blocks.\n\n32{C} +3 block reach.",
-      "note": "Helmet: Infinite oxygen; Dual Full Bright & 48m X-Ray.\nChestplate: Hybrid Flight & Surging Thrust (hold Ctrl).\nLeggings: +20% Speed; Quantum Tunnel 16m (ability key, mid-air).\nBoots: No fall damage; +3 blocks jump.",
+      "note": "Helmet: Infinite oxygen; 48m X-Ray.\nChestplate: Hybrid Flight & Surging Thrust (hold Ctrl).\nLeggings: +20% Speed; Quantum Tunnel 16m (ability key, mid-air).\nBoots: No fall damage; +3 blocks jump.",
       "art": "infinity",
       "recipe": "infinity"
     },
