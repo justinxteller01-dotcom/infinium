@@ -130,7 +130,7 @@ armor('singularity', 2, 'Singularity Armor', 'Tier 2, upgrade your Astral armor'
    "Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Reach +{n:reach_t2}. "
    "Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}.")
 armor('cyberpsycho', 3, 'Cyber Psycho Armor', 'Tier 2, upgrade your Cybernetic armor', ['cyber psycho', 'cyberpsycho', 'armor', 'tier 2', 'upgrade'],
-   "Half machine, half nerve, it rewires the body to survive what would kill anyone else.\n"
+   "Putting this much energy into one suit of armor shouldn't be possible.\n"
    "Upgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\n"
    "Takes almost half the damage netherite would.\n"
    "Helmet: X-Ray reaches farther.\n"

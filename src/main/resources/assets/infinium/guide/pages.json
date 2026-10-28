@@ -274,7 +274,7 @@
     "tier 2",
     "upgrade"
    ],
-   "body": "Half machine, half nerve, it rewires the body to survive what would kill anyone else.\nUpgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\nLeggings: super fast running speed.\nBoots: no fall damage.\nFull set: mine faster, more air jumps, much faster attacks, a stronger slow.",
+   "body": "Putting this much energy into one suit of armor shouldn't be possible.\nUpgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\nLeggings: super fast running speed.\nBoots: no fall damage.\nFull set: mine faster, more air jumps, much faster attacks, a stronger slow.",
    "visual": "armor:3",
    "caption": "Full Cyber Psycho set, fully charged",
    "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_cp}. Mining +{n:mining_t2}. {n:airjumps_t2} air jumps. Attack +{n:attack_t2}. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s."
