@@ -166,6 +166,14 @@ public final class InfiniumWingsRenderer {
         // M6: Infinity (4) now also renders its physical booster rig (bigger than Cyber Psycho's) on top of its particles.
         if (fam != 1 && fam != 3 && fam != 4) return;
 
+        // batch1 (ELYTRA_SPEC_LOCKED_2026-10-28): Cybernetic + Cyber Psycho use the round-3 option-4 elytra on the
+        // vanilla elytra geometry (box UV; the design stores the back face pre-flipped to match). No thrusters.
+        if (fam == 1 || fam == 3) {
+            float a1 = Math.max(0.0F, Math.min(1.0F, (0.40F + 0.50F * overallProgress) * InfiniumClientConfig.wingOpacityMultiplier()));
+            renderR3(pose, collector, light, state, chest, fam, a1, WingFold.smooth(foldT));
+            return;
+        }
+
         // 1. Dynamic Opacity: Linear scale from 0.40F (unupgraded Tier 1) up to 0.90F (max Infinity)
         float baseAlpha = 0.40F + 0.50F * overallProgress;
         float alpha = Math.max(0.0F, Math.min(1.0F, baseAlpha * InfiniumClientConfig.wingOpacityMultiplier()));
@@ -178,7 +186,7 @@ public final class InfiniumWingsRenderer {
 
         int totalPieces = InfiniumWingModels.pieceCount(fam);
         for (int i = 0; i < totalPieces; i++) {
-            boolean pieceVis = i <= cumulativePerks;   // M6: Infinity = 0..8 baseline + 1 per Infinity perk (cumulative 8..16)
+            boolean pieceVis = i <= 8;   // batch1: wings never add geometry with upgrades -> fixed Infinity piece set
             leftWing.getChild("piece_" + i).visible = pieceVis;
             rightWing.getChild("piece_" + i).visible = pieceVis;
         }
@@ -200,7 +208,8 @@ public final class InfiniumWingsRenderer {
         float crouchRx = state.isCrouching ? 0.5F : 0.0F;
 
         // Smooth fold scale & continuous progression sizing
-        float baseScale = (0.72F + 0.33F * overallProgress) * (fam == 4 ? 1.12F : 1F) * InfiniumClientConfig.wingScaleMultiplier();   // M6: Infinity rig bigger
+        // batch1: Infinity was oversized ((0.72+0.33)*1.12 = 1.18x at max). Fixed size now, no growth with upgrades.
+        float baseScale = 0.80F * InfiniumClientConfig.wingScaleMultiplier();
         float s = Math.max(0.001F, baseScale * k);
 
         leftWing.xRot = rx + crouchRx;
@@ -263,6 +272,63 @@ public final class InfiniumWingsRenderer {
         }
 
         pose.popPose();
+    }
+
+    // ---------------- batch1: round-3 option-4 elytra (Cybernetic = 40 frames, Cyber Psycho = 80 frames, ~50 ms) ----------------
+    private static final int[] R3_FRAMES = {0, 40, 0, 80, 0};
+    private static final int R3_FRAME_MS = 50;
+    private static final Identifier[][][] R3 = new Identifier[5][][];   // [fam][kind: base, glow, glow_gray][frame]
+    private static final Identifier[] R3_BORDER = new Identifier[5];
+    private static net.minecraft.client.model.object.equipment.ElytraModel r3Model;
+    /** Cyber Psycho thrust border glow + ribbon when undyed (pink; no cyan per the palette rule). */
+    public static final int CP_THRUST_DEFAULT = 0xFF2EA8;
+    static {
+        for (int fam : new int[]{1, 3}) {
+            String d = fam == 1 ? "cybernetic" : "cyberpsycho";
+            R3[fam] = new Identifier[3][R3_FRAMES[fam]];
+            String[] kinds = {"base", "glow", "glow_gray"};
+            for (int k = 0; k < 3; k++) for (int f = 0; f < R3_FRAMES[fam]; f++)
+                R3[fam][k][f] = Infinium.id("textures/entity/infinium_wings/r3/" + d + "/" + kinds[k] + "/" + f + ".png");
+            R3_BORDER[fam] = Infinium.id("textures/entity/infinium_wings/r3/" + d + "/border.png");
+        }
+    }
+
+    private static void renderR3(PoseStack pose, SubmitNodeCollector collector, int light, HumanoidRenderState state,
+                                 ItemStack chest, int fam, float alpha, float fold) {
+        if (r3Model == null) r3Model = new net.minecraft.client.model.object.equipment.ElytraModel(
+            net.minecraft.client.model.object.equipment.ElytraModel.createLayer().bakeRoot());
+        r3Model.setupAnim(state);
+        int frames = R3_FRAMES[fam];
+        int f = (int) ((net.minecraft.util.Util.getMillis() / R3_FRAME_MS) % frames);
+        int dye = GlowColor.argb(chest);
+        boolean thrust = false;
+        if (state instanceof AvatarRenderState a && state.isFallFlying) {
+            var mc = net.minecraft.client.Minecraft.getInstance();
+            if (mc.level != null && mc.level.getEntity(a.id) instanceof net.minecraft.world.entity.player.Player p)
+                thrust = InfinityFlightClient.thrusting(p);
+        }
+        // outer pair, then (Cyber Psycho) the smaller, lighter inner pair, mirrored by the elytra's own L/R symmetry
+        int passes = fam == 3 ? 2 : 1;
+        for (int pass = 0; pass < passes; pass++) {
+            float sc = Math.max(0.001F, fold) * (pass == 0 ? 1F : 0.62F);
+            float a = pass == 0 ? alpha : alpha * 0.6F;
+            int ab = ((int) (a * 255F)) & 0xFF;
+            pose.pushPose();
+            pose.translate(0.0F, pass == 0 ? 0.0F : 0.10F, pass == 0 ? 0.125F : 0.17F);   // vanilla WingsLayer offset; inner pair sits higher/behind
+            pose.scale(sc, sc, sc);
+            collector.order(110 + pass * 10).submitModelPart(r3Model.root(), pose, RenderTypes.armorTranslucent(R3[fam][0][f]),
+                light, OverlayTexture.NO_OVERLAY, null, (ab << 24) | (pass == 0 ? 0xFFFFFF : 0xFFE6F6), null);
+            int prev = IrisGlowCompat.pushGlowId();
+            try {
+                collector.order(115 + pass * 10).submitModelPart(r3Model.root(), pose,
+                    RenderTypes.armorCutoutNoCull(dye != -1 ? R3[fam][2][f] : R3[fam][1][f]),
+                    0xF000F0, OverlayTexture.NO_OVERLAY, null, dye != -1 ? dye : -1, null);
+                if (fam == 3 && thrust && pass == 0)   // thrust: wing border lights up in the armor dye colour
+                    collector.order(118).submitModelPart(r3Model.root(), pose, RenderTypes.armorCutoutNoCull(R3_BORDER[fam]),
+                        0xF000F0, OverlayTexture.NO_OVERLAY, null, 0xFF000000 | (dye != -1 ? dye & 0xFFFFFF : CP_THRUST_DEFAULT), null);
+            } finally { IrisGlowCompat.pop(prev); }
+            pose.popPose();
+        }
     }
 
     private InfiniumWingsRenderer() {}

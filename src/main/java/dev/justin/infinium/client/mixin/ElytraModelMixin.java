@@ -22,9 +22,9 @@ public abstract class ElytraModelMixin {
     @Inject(method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V", at = @At("TAIL"))
     private void infinium$fold(HumanoidRenderState state, CallbackInfo ci) {
         for (ModelPart w : new ModelPart[]{leftWing, rightWing}) {
-            net.minecraft.client.model.geom.PartPose ip = w.getInitialPose();
+            // batch1: scale only. Resetting x/y/z here wiped vanilla's crouch offset and would freeze the round-3
+            // Cybernetic / Cyber Psycho elytra (InfiniumWingsRenderer.renderR3) in their rest position.
             w.xScale = 1F; w.yScale = 1F; w.zScale = 1F;
-            w.x = ip.x(); w.y = ip.y(); w.z = ip.z();
         }
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 /**
  * Custom 3D Wing Geometries for all 5 Infinium Archetypes:
  *  - Astral (0): Celestial feathered wings (scapular bone, secondary plumage fan, crest quill, outer coverts, primary pinions)
+ *  NOTE batch1: fam 1 / 3 builders are no longer rendered (round-3 elytra in InfiniumWingsRenderer.renderR3; CP thrusters scrapped).
  *  - Cybernetic (1): Mecha vector thrusters (titanium chassis, exhaust nozzle, stabilizer fin, vector pod, flare blades)
  *  - Singularity (2): Gravitational void scythes (accretion spine, dark matter plumules, event-horizon blade, warp barbs, void scythe)
  *  - CyberPsycho (3): Overclocked razor mecha (heavy manifold, serrated fin, hazard heatsink teeth, split overdrive flaps, kinetic blades)

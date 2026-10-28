@@ -73,6 +73,7 @@ public class InfiniumClient implements ClientModInitializer {
                 mc.level.addParticle(d, v.x, v.y, v.z, w.x, w.y, w.z); }
         });
         DungeonBeams.register();
+        WingThrustTrail.register();   // batch1: Cyber Psycho thrust afterglow ribbon
         dev.justin.infinium.client.mixin.SelectItemModelPropertiesAccessor.infinium$idMapper().put(Infinium.id("holder_style"), HolderStyleProperty.TYPE);
         dev.justin.infinium.client.mixin.SelectItemModelPropertiesAccessor.infinium$idMapper().put(Infinium.id("preview_color"), PreviewColorProperty.TYPE);
         // tooltips: style line, "Wings: On/Off" on the chestplate, then the "Hold Shift for more" section (same text as JEI)

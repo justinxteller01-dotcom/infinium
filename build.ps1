@@ -9,7 +9,7 @@ $javac = if ($jdk) { Join-Path $jdk 'javac.exe' } else { 'javac' }
 $jarExe = if ($jdk) { Join-Path $jdk 'jar.exe' } elseif (Get-Command jar -ErrorAction SilentlyContinue) { 'jar' } else { 'jar' }
 # gen_all.sh (order matters: gen_cracks overrides the v1 purple art)
 $steps = @('gen_guide_art.py','gen_textures.py','gen_data.py','copy_infinity.py','gen_templates.py','gen_cracks.py','helmet_corners.py','gen_helmet_extra.py',
-  @('gen_dye.py','src/main/resources'),'gen_styles.py','gen_tool_styles.py','gen_wing_styles.py','gen_new_items.py','gen_finder.py','gen_lang_extra.py','gen_rocket_anim.py',
+  @('gen_dye.py','src/main/resources'),'gen_styles.py','gen_tool_styles.py','gen_wing_styles.py','gen_wings_r3.py','gen_new_items.py','gen_finder.py','gen_lang_extra.py','gen_rocket_anim.py',
   'white_fix.py',@('hue_fix.py','--fix'),@('loop_check.py','--fix'),'gen_gui_icons.py','r8_post.py','gen_specular.py','gen_dark_ui.py')
 foreach ($s in $steps) { $a = @($s); & python $a; if ($LASTEXITCODE -ne 0) { throw "generator failed: $($a -join ' ')" } }
 if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
