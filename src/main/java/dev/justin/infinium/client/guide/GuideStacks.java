@@ -121,7 +121,7 @@ public final class GuideStacks {
         return out;
     }
 
-    private static Item dye(String path) {
+    public static Item dye(String path) {
         // DefaultedRegistry.getValue(Identifier) returns the item (26.2 javadoc).
         return BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace(path));
     }

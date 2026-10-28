@@ -77,6 +77,7 @@ Original, client-only sword animations for the Infinium Sword (main hand) only. 
 
 ### 4. Client Guide (`dev.justin.infinium.client.guide`)
 - `InfiniumGuideScreen.java`: 2-page Informational Crystal guidebook UI.
+- `GuideCards.java`: Right-page card-stack data per guide page (modelled on the Crystal Matrix page's milestone cards). Rendered by `InfiniumGuideScreen#drawCardStack` (area x150 w124 y10-166, auto-shrinks recipe card 42->26, text 0.57->0.45, gap 3->1 to fit). Purple/pink/black only. Matrix page (`drawMatrixShowcase`) is the original; Contents/Intro/flow/Additional Info pages have no right stack.
 - `FlatGuideScreen.java`: 2D fallback guide screen.
 
 ### 5. Mixins (`dev.justin.infinium.mixin` & `client.mixin`)

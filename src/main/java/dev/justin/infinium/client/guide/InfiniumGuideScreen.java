@@ -162,7 +162,10 @@ public class InfiniumGuideScreen extends Screen {
             drawAdditionalInfo(graphics, spread, localMouseX, localMouseY);
         } else {
             drawBody(graphics, spread.body, 16, 28, 124);
-            if ("welcome".equals(spread.art)) {
+            List<GuideCards.Card> cards = "meteor".equals(spread.art) ? List.of() : GuideCards.forPage(spread.title, spread.art, spread.recipe, spread.note);
+            if (!cards.isEmpty()) {
+                hovered = drawCardStack(graphics, cards, STACK_X, STACK_TOP, STACK_W, STACK_BOTTOM, localMouseX, localMouseY);
+            } else if ("welcome".equals(spread.art)) {
                 blitArt(graphics, spread.art, 168, 18, 100);
             } else if ("settings".equals(spread.art)) {
                 drawSettings(graphics, 152, 16);
@@ -528,14 +531,14 @@ public class InfiniumGuideScreen extends Screen {
         var pose = graphics.pose();
 
         // 1. Animated Night Sky Celestial Event Window (124 x 56)
-        int skyW = 124, skyH = 56;
+        int skyW = 124, skyH = 46;
         graphics.fill(x, y, x + skyW, y + skyH, 0xFF8A1061);
         graphics.fill(x + 1, y + 1, x + skyW - 1, y + skyH - 1, 0xFF06030A);
 
         // Twinkling stars
         for (int i = 0; i < 14; i++) {
             int sx = x + 6 + Math.abs(hash(i, 42) % 110);
-            int sy = y + 4 + Math.abs(hash(i, 99) % 36);
+            int sy = y + 4 + Math.abs(hash(i, 99) % 26);
             float twinkle = (float) (0.4 + 0.6 * Math.sin(ms / 300.0 + i * 1.7));
             int alpha = (int) (180 * twinkle);
             graphics.fill(sx, sy, sx + 1, sy + 1, (alpha << 24) | 0xFFE0E0);
@@ -545,7 +548,7 @@ public class InfiniumGuideScreen extends Screen {
         for (int m = 0; m < 2; m++) {
             float phase = ((ms + m * 900L) % 1800L) / 1800.0f;
             float mx = x + 110 - phase * 100;
-            float my = y + 4 + phase * 38;
+            float my = y + 4 + phase * 28;
             if (my < y + skyH - 14) {
                 for (int t = 1; t <= 5; t++) {
                     float tx = mx + t * 3.5f;
@@ -584,43 +587,132 @@ public class InfiniumGuideScreen extends Screen {
         graphics.text(this.font, "CELESTIAL IMPACT EVENT", 0, 0, 0xFFFF66CC, false);
         pose.popMatrix();
 
-        // 2. Event Intel & Survival Briefing Box (124 x 84)
-        int boxY = y + 59, boxH = 84;
-        graphics.fill(x, boxY, x + skyW, boxY + boxH, 0xFF6A104C);
-        graphics.fill(x + 1, boxY + 1, x + skyW - 1, boxY + boxH - 1, 0xEE140608);
+        // 2. Event facts as a card stack (same style as the Crystal Matrix page)
+        List<GuideCards.Card> facts = List.of(
+                GuideCards.info("When", GuideCards.PURPLE, (net.minecraft.world.level.ItemLike) null, "At night, every 10-15 days"),
+                GuideCards.info("Warning", GuideCards.VIOLET, (net.minecraft.world.level.ItemLike) null, "2 minute countdown on screen"),
+                GuideCards.info("Where", GuideCards.ROSE, (net.minecraft.world.level.ItemLike) null, "Within 10 chunks of players"),
+                GuideCards.bar("Danger", GuideCards.PINK, ItemStack.EMPTY, 1f, "1 heart, ignores armor. Hide under a roof!"),
+                GuideCards.info("Loot", GuideCards.HOT, Infinium.SPACETIME_FRAGMENTS, "About 8-10 fragments, rare template"));
+        drawCardStack(graphics, facts, x, y + skyH + 3, skyW, STACK_BOTTOM, -1, -1);
+    }
 
-        pose.pushMatrix();
-        pose.translate(x + 5, boxY + 4);
-        pose.scale(0.66f, 0.66f);
-        graphics.text(this.font, "Event Intel & Hazards", 0, 0, 0xFFFF33BB, false);
-        pose.popMatrix();
+    /** Right-page stack area (book units). BOOK_H - 28 = 168 is the divider end; buttons start at BOOK_H - 24. */
+    private static final int STACK_X = 150, STACK_W = 124, STACK_TOP = 10, STACK_BOTTOM = 166;
+    private static final int CARD_EDGE = 0xFF4A1A5A, CARD_FILL = 0xDD12061A, CARD_SUB = 0xFFB898C8;
+    private static final float CARD_TITLE_SCALE = 0.65f;
 
-        String[] intel = {
-                "• Timing: Night only (10–15 days)",
-                "• Warning: 2m Alert & Countdown",
-                "• Scope: 10-Chunk Player Bubble",
-                "• Danger: 1 Heart (True Piercing!)",
-                "• Yield: ~8–10 Spacetime Fragments",
-                "• Bonus: Ultra-rare Template (<1%)",
-        };
-        int ly = boxY + 13;
-        for (String line : intel) {
-            pose.pushMatrix();
-            pose.translate(x + 5, ly);
-            pose.scale(0.58f, 0.58f);
-            int col = line.contains("Danger") ? 0xFFFF66CC : 0xFFD8C4C0;
-            graphics.text(this.font, line, 0, 0, col, false);
-            pose.popMatrix();
-            ly += 8;
+    private record CardMetrics(float lineScale, int gap, int recipeH, List<List<FormattedCharSequence>> wrapped, int[] heights, int total) {}
+
+    private CardMetrics measureCards(List<GuideCards.Card> cards, int w, float lineScale, int gap, int recipeH) {
+        int lineH = (int) Math.ceil(this.font.lineHeight * lineScale) + 1;
+        int[] hs = new int[cards.size()];
+        List<List<FormattedCharSequence>> wrapped = new ArrayList<>();
+        int total = 0;
+        for (int i = 0; i < cards.size(); i++) {
+            GuideCards.Card c = cards.get(i);
+            List<FormattedCharSequence> lines = new ArrayList<>();
+            if (c.isRecipe()) {
+                hs[i] = recipeH;
+            } else {
+                int textW = w - 8 - (c.icon().isEmpty() ? 0 : 14);
+                int wrap = Math.max(20, (int) (textW / lineScale));
+                for (String ln : c.lines()) lines.addAll(this.font.split(FormattedText.of(ln), wrap));
+                int h = 3 + (c.title().isEmpty() ? 0 : 7) + lines.size() * lineH + ((c.bar() >= 0 || c.pips() > 0) ? 6 : 0) + 2;
+                if (!c.icon().isEmpty()) h = Math.max(h, 16);
+                hs[i] = h;
+            }
+            wrapped.add(lines);
+            total += hs[i];
         }
+        total += gap * Math.max(0, cards.size() - 1);
+        return new CardMetrics(lineScale, gap, recipeH, wrapped, hs, total);
+    }
 
-        int alertY = boxY + boxH - 17;
-        graphics.fill(x + 4, alertY, x + skyW - 4, alertY + 13, 0x884A0A35);
-        pose.pushMatrix();
-        pose.translate(x + 8, alertY + 3);
-        pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "⚠ Take cover under solid roofs!", 0, 0, 0xFFFF55C6, false);
-        pose.popMatrix();
+    /** Fits the stack into [top, bottom]: shrink recipe card, then text, then gaps. Vertically centred. */
+    private ItemStack drawCardStack(GuiGraphicsExtractor g, List<GuideCards.Card> cards, int x, int top, int w, int bottom, int mx, int my) {
+        int avail = bottom - top;
+        float ls = 0.57f; int gap = 3; int rh = 42;
+        CardMetrics m = measureCards(cards, w, ls, gap, rh);
+        while (m.total() > avail && rh > 26) { rh -= 2; m = measureCards(cards, w, ls, gap, rh); }
+        while (m.total() > avail && ls > 0.45f) { ls -= 0.03f; m = measureCards(cards, w, ls, gap, rh); }
+        while (m.total() > avail && gap > 1) { gap--; m = measureCards(cards, w, ls, gap, rh); }
+        int y = top + Math.max(0, (avail - m.total()) / 2);
+        long ms = System.currentTimeMillis();
+        var pose = g.pose();
+        ItemStack hovered = ItemStack.EMPTY;
+        int lineH = (int) Math.ceil(this.font.lineHeight * ls) + 1;
+        for (int i = 0; i < cards.size(); i++) {
+            GuideCards.Card c = cards.get(i);
+            int ch = m.heights()[i];
+            if (y + ch > bottom + 1) break; // never draw past the page
+            g.fill(x, y, x + w, y + ch, c.isRecipe() ? 0xFF5A246E : CARD_EDGE);
+            g.fill(x + 1, y + 1, x + w - 1, y + ch - 1, CARD_FILL);
+            if (c.isRecipe()) {
+                List<GuideStacks.Layout> ls2 = GuideStacks.layouts(c.recipe());
+                if (!ls2.isEmpty()) {
+                    int idx = (int) ((ms / 2200L) % ls2.size());
+                    ItemStack hit = drawStation(g, ls2.get(idx), x + 3, y + 3, w - 6, ch - 6, mx, my);
+                    if (!hit.isEmpty()) hovered = hit;
+                }
+            } else {
+                int tx = x + 4;
+                if (!c.icon().isEmpty()) {
+                    int iy = y + (ch - 12) / 2;
+                    pose.pushMatrix();
+                    pose.translate(x + 3, iy);
+                    pose.scale(0.75f, 0.75f);
+                    g.item(c.icon(), 0, 0);
+                    pose.popMatrix();
+                    if (mx >= x + 3 && mx < x + 15 && my >= iy && my < iy + 12) hovered = c.icon();
+                    tx = x + 18;
+                }
+                int ty = y + 3;
+                if (!c.title().isEmpty()) {
+                    pose.pushMatrix();
+                    pose.translate(tx, ty);
+                    pose.scale(CARD_TITLE_SCALE, CARD_TITLE_SCALE);
+                    g.text(this.font, c.title(), 0, 0, c.titleCol(), false);
+                    pose.popMatrix();
+                    ty += 7;
+                }
+                for (FormattedCharSequence ln : m.wrapped().get(i)) {
+                    pose.pushMatrix();
+                    pose.translate(tx, ty);
+                    pose.scale(ls, ls);
+                    g.text(this.font, ln, 0, 0, CARD_SUB, false);
+                    pose.popMatrix();
+                    ty += lineH;
+                }
+                int barX = tx, barW = x + w - 4 - tx, barY = y + ch - 6;
+                if (c.bar() >= 0) {
+                    g.fill(barX, barY, barX + barW, barY + 4, 0xFF3A1248);
+                    g.fill(barX + 1, barY + 1, barX + barW - 1, barY + 3, 0xFF0D0312);
+                    int fillW = (int) ((barW - 2) * Math.min(1f, c.bar()));
+                    for (int px = 0; px < fillW; px++) {
+                        float u = (float) px / Math.max(1, barW - 2);
+                        float wave = (float) (0.5 + 0.5 * Math.sin(u * 6.0 + ms / 350.0));
+                        int col = 0xFF000000 | ((int) (180 + 75 * wave) << 16) | ((int) (40 + 50 * wave) << 8) | (int) (200 + 55 * wave);
+                        g.fill(barX + 1 + px, barY + 1, barX + 2 + px, barY + 3, col);
+                    }
+                } else if (c.pips() > 0) {
+                    int pipGap = 2;
+                    int pipW = Math.max(6, (barW - (c.pips() - 1) * pipGap) / c.pips());
+                    for (int p = 0; p < c.pips(); p++) {
+                        int px = barX + p * (pipW + pipGap);
+                        g.fill(px, barY, px + pipW, barY + 4, 0xFF30103A);
+                        if (p < c.pipsOn()) {
+                            float wave = (float) (0.8 + 0.2 * Math.sin(ms / 250.0 + p * 0.8));
+                            int pc = c.titleCol();
+                            int col = 0xFF000000 | ((int) (((pc >> 16) & 0xFF) * wave) << 16) | ((int) (((pc >> 8) & 0xFF) * wave) << 8) | (int) ((pc & 0xFF) * wave);
+                            g.fill(px + 1, barY + 1, px + pipW - 1, barY + 3, col);
+                        }
+                    }
+                }
+            }
+            y += ch + m.gap();
+        }
+        return hovered;
     }
 
     private void drawSettings(GuiGraphicsExtractor graphics, int x, int y) {

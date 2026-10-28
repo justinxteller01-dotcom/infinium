@@ -56,10 +56,7 @@ public final class GuideCards {
                 c.add(info("Where fragments hide", PINK, Items.CHEST, "World chests. Rarer chests, better odds"));
                 c.add(recipe("finder"));
                 c.add(info("Dungeon Finder", PURPLE, dev.justin.infinium.DungeonFinder.ITEM, "Points to the nearest dungeon"));
-                c.add(new Card("Beam colors (dungeon size)", VIOLET, List.of(), ItemStack.EMPTY, -1f, 0, 0, null));
-                c.add(bar("Green", ROSE, ItemStack.EMPTY, 1 / 3f, "Normal"));
-                c.add(bar("Yellow", ROSE, ItemStack.EMPTY, 2 / 3f, "Large"));
-                c.add(bar("Red", PINK, ItemStack.EMPTY, 1f, "Extra large"));
+                c.add(bar("Beam colors (dungeon size)", VIOLET, ItemStack.EMPTY, 1f, "Green normal, yellow large,", "red extra large"));
             }
             case "Infinium Ingot" -> {
                 c.add(recipe("ingot"));
@@ -82,11 +79,10 @@ public final class GuideCards {
                 c.add(info("Axe", PURPLE, Infinium.AXE, "Logs drop the log type you pick"));
                 c.add(info("Shovel", VIOLET, Infinium.SHOVEL, "1x1, 3x3, or 3x1 digging"));
                 c.add(info("Hoe", VIOLET, Infinium.HOE, "Farmland stays wet, lit, untrampled"));
-                c.add(info("Change modes", HOT, (ItemLike) null, "Sneak + Right Click on air"));
             }
             case "Dye It Your Way" -> {
                 c.add(recipe("dyes"));
-                c.add(info("Template slot", PINK, Items.PURPLE_DYE, "Any dye"));
+                c.add(info("Template slot", PINK, GuideStacks.dye("purple_dye"), "Any dye"));
                 c.add(info("Base slot", PURPLE, Infinium.CHESTPLATE, "Your armor or tool"));
                 c.add(info("No ingot needed", VIOLET, Infinium.INGOT, "Re-dye any time, as often as you like"));
             }
