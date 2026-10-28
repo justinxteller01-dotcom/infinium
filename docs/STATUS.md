@@ -1,10 +1,11 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~5:47 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~5:58 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-2f54375` (pre-release, 2026-10-28 5:49 PM ET)
+## 1. Current release: `batch1-819c7cd` (pre-release, 2026-10-28 5:58 PM ET; includes everything below)
+- **Review fixes**: guide + sword tooltip slash/beam damage now read from code (`EnergySlashEntity.SLASH_PCT/BEAM_PCT`, `dmg()`): 6 / 7.7 / 9.6 and 7.5 / 9.35 / 11.4; guide shows Cybernetic milestones 2/4/6/8 (slots 8/16/32 already from code); stale slow config/constants removed; `gen_data.py` never overwrites sounds.json, mixin configs or fabric.mod.json and skips the missing `gen_r8.py`; new `tools/check_assets.py` (27 checks, all pass).
 - **Custom gap sounds**: the 13 vanilla stand-ins are now real clips (`tools/gen_gap_sounds.py`, mono 48 kHz vorbis, loudness matched to crystal/flight files): Cyber Psycho thrust start (electric zap + charge, not a rocket), seamless 3 s hum loop, smooth power-down stop (`sounds/cyberpsycho/thrust_*.ogg`); per-set perk unlock (short) and set maxed (bigger, 4.4 s) in `sounds/perk/`. Bass "Fire Force" foundation under all; cyber sets electric, Astral/Singularity spacey, Infinity both. `gen_lang_extra.py` now uses setdefault so it can no longer reset these to vanilla. Preview: `/workspace/sound_preview/gap_sounds_preview.ogg`. Remaining stand-ins: `bonus_jump`, `bonus_jump_last`.
 - **Metadata**: fabricloader `>=0.19.5`; all 3 mixin configs `compatibilityLevel` JAVA_25 (highest in bundled Mixin 0.17.4; no JAVA_26, and the game runs Java 25).
 - **Singularity leg speed config** (`batch1-1cfc87a`): own `leg_speed_singularity` (default 0.05) + Mod Menu slider; Singularity leggings used to read Astral's value. No behavior change.
@@ -51,18 +52,18 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 ## 4. Review findings to fix (2026-10-28 review)
 **Build and assets**
 1. ~~`sounds.json` has only 55 entries.~~ Fixed in `batch1-1d18d01` (132 entries). **Warning:** do NOT run old `gen_r8.py` copies (`/workspace/backups/gen_r8.py.20261027_1441`, `/workspace/m1/root/infinium_pass2/gen_r8.py`), and do not restore `gen_r8.py` into the repo for `gen_data.py:92` as-is: they overwrite sounds.json with an old, shorter set. `gen_lang_extra.py` is safe (merges).
-2. `gen_data.py:92` calls `gen_r8.py`, which is missing from the repo.
-3. 400 unused old wing frames (about 1.6 MB; Cybernetic, Cyber Psycho, Infinity) still load at startup. `particle/star.png` is unused. The wings-layer glow frames are probably unused.
+2. ~~`gen_data.py:92` calls missing `gen_r8.py`.~~ Fixed in `batch1-819c7cd`: skipped unless present and `INFINIUM_RUN_GEN_R8=1`; `w()` also refuses to overwrite sounds.json, the 3 mixin configs and fabric.mod.json (its copies were stale).
+3. Unused old wing frames still load at startup (needs per-frame verification before deleting; not done). ~~`particle/star.png` is unused~~: it IS used (`particles/star_head.json`, `star_trail.json`).
 4. Punchy and roguelike are listed as hard dependencies.
-5. The local clone is missing 4 tags, and the `out/` jar is stale.
+5. ~~Local clone missing 4 tags~~ (fetched 10-28). `out/` jar is stale (build output; releases are the source of truth).
 
 **Values and text**
-6. The guide says 4 crystal slots instead of 8/16/32.
-7. Old slow values are still in `PerkValues` and `InfiniumConfig`.
-8. Seven guide numbers are hard-coded. The Quantum Tunnel and X-Ray numbers are defined but not shown.
+6. ~~Guide says 4 crystal slots.~~ Guide reads 8/16/32 from code and now shows Cybernetic milestones 2/4/6/8.
+7. ~~Old slow values in `PerkValues`/`InfiniumConfig`.~~ Removed in `batch1-819c7cd`.
+8. Slash/beam guide numbers now come from code; Quantum Tunnel and X-Ray numbers are shown. Still LITERAL in GuideNumbers: hold-jump heights 2/3/4, DoT 3-5 s, meteor warning 2 min, thrust ramp 2.5 s (no code constant yet).
 
 **Testing**
-9. There are no tests. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
+9. ~~No tests.~~ `tools/check_assets.py` (sounds coverage + files, locked tier tables, crystal orders, guide 33 pages/LF, lang). A headless boot test is still a good next step. Suggestion: a headless boot test (start a dedicated or gametest server in CI and fail on mixin, registry or missing-sound errors).
 
 **Unfinished since Oct 11 (modpack)**
 10. Player config bundle.
@@ -79,7 +80,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 17. Slash + melee double hit.
 18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-06a8938`)
+## 5. In-game test checklist (`batch1-819c7cd`)
+- [ ] Guide sword page and sword tooltip show 6 / 7.7 / 9.6 and 7.5 / 9.35 / 11.4; crystal page shows 8/16/32 and Cybernetic 2/4/6/8; old config files still load (removed slow keys are ignored).
 - [ ] Title menu v4: no character; landscape + village reads well behind the buttons; meteors spread evenly, frozen, with visible twinkle/glow/sparks; fog drifts; parallax sway gentle; no seam at 120s; no FPS drop.
 - [ ] Game boots on Fabric Loader 0.19.5+ with JAVA_25 mixin configs (no mixin errors in log).
 - [ ] Singularity Leg Speed slider changes only Singularity leggings; Astral slider no longer affects Singularity.
@@ -106,6 +108,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-819c7cd` 10-28 5:58 PM: review fixes (guide/tooltip damage from code, milestones, stale slow config removed, gen_data.py safe, tools/check_assets.py).
 - `batch1-2f54375` 10-28 5:49 PM: custom sounds for Cyber Psycho thrust start/loop/stop and the 10 perk-unlock / set-maxed cues.
 - `batch1-06a8938` 10-28 5:47 PM: title menu v4, rebuilt from scratch (figure-free procedural village landscape, evenly spread frozen meteors, fog, fireflies, sparkles, parallax sway).
 - `batch1-f680ee3` 10-28 5:45 PM: fabricloader >=0.19.5; mixin compatibilityLevel JAVA_25.
