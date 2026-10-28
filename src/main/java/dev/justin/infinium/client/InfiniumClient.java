@@ -114,6 +114,7 @@ public class InfiniumClient implements ClientModInitializer {
         ChestHintClient.register();
         DungeonHudClient.register();
         MeteorShowerClient.register();
+        WorldSkyFx.register();   // sky-v6: sky-space shooting stars + daytime ripples (no particles)
         ClientTickEvents.END_LEVEL_TICK.register(level -> {
             Minecraft mc = Minecraft.getInstance();
             if (!mc.isPaused()) {

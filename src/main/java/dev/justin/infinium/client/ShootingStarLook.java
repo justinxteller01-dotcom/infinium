@@ -1,7 +1,7 @@
 package dev.justin.infinium.client;
 
 /**
- * pass2: ONE source for the purple shooting-star look, used by the in-game sky (WorldSkyFx, world-space dust) and the
+ * pass2: ONE source for the purple shooting-star look, used by the out-of-world menu backdrop; the in-game sky (WorldSkyFx, sky-v6) only shares HEAD_RGB/TRAIL_RGB/TRAIL_FADE_TICKS and keeps its own pre-v5 sizes/speeds. Originally also
  * out-of-world menu backdrop (UiInfection.menuBackdrop, screen-space). Change values here only, so the two can't drift.
  */
 public final class ShootingStarLook {
