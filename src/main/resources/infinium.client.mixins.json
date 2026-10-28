@@ -29,7 +29,8 @@
     "SwordAnimSwingMixin",
     "SwordAnimRenderStateMixin",
     "SwordAnimAvatarRendererMixin",
-    "SwordAnimHumanoidModelMixin"
+    "SwordAnimHumanoidModelMixin",
+    "SkyRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

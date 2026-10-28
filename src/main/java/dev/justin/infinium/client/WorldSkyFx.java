@@ -90,38 +90,112 @@ public final class WorldSkyFx {
         }
     }
 
-    /** Sky render hook. Pose = level view rotation with no camera translation, so offsets are sky directions. */
+    // ---- render mode / fallback (sky-v7) ----
+    private static volatile long lastSkyHookNs;      // set every frame the SkyRenderer mixin fires
+    private static int worldFramesWithoutHook;
+    private static boolean loggedFallback;
+    /** Called from SkyRendererMixin's class init when the mixin applied; absent = target missing. */
+    public static volatile boolean skyHookApplied;
+
+    private static boolean skyHookAlive() { return System.nanoTime() - lastSkyHookNs < 300_000_000L; }
+
+    /** Iris API via reflection (no compile dep). */
+    public static boolean irisShaderPackInUse() {
+        try {
+            Class<?> c = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
+            Object api = c.getMethod("getInstance").invoke(null);
+            return (Boolean) c.getMethod("isShaderPackInUse").invoke(api);
+        } catch (Throwable t) { return false; }
+    }
+
+    private static boolean wantSky() { return InfiniumClientConfig.skyFxMode() != InfiniumClientConfig.SkyFxMode.WORLD; }
+
+    private static boolean anyActive() {
+        boolean any = rippleShow && rippleLeft > 0;
+        for (int i = 0; i < MAX && !any; i++) any = ON[i];
+        for (int i = 0; i < DISTANT_MAX && !any; i++) any = D_ON[i];
+        return any;
+    }
+
+    private static boolean visibleCamera(Minecraft mc) {
+        FogType fluid = mc.gameRenderer.mainCamera().getFluidInCamera();
+        if (fluid != FogType.NONE && fluid != FogType.ATMOSPHERIC) return false;   // underwater/lava/snow: sky fogged out
+        return mc.player == null || (!mc.player.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS)
+            && !mc.player.hasEffect(net.minecraft.world.effect.MobEffects.DARKNESS));
+    }
+
+    /** Emits the geometry of every active element into a sink. */
+    private static void emit(Sink sk, double skyR, float pt, float meteorFade, float rippleFade) {
+        if (meteorFade > 0.01F) {
+            for (int i = 0; i < MAX; i++) if (ON[i])
+                star(sk, skyR, X[i] + VX[i] * pt, Y[i] + VY[i] * pt, Z[i] + VZ[i] * pt,
+                    VX[i], VY[i], VZ[i], AGE[i] + pt, LIFE[i], TRAIL_POINTS, meteorFade);
+            for (int i = 0; i < DISTANT_MAX; i++) if (D_ON[i])
+                star(sk, skyR, D_X[i] + D_VX[i] * pt, D_Y[i] + D_VY[i] * pt, D_Z[i] + D_VZ[i] * pt,
+                    D_VX[i], D_VY[i], D_VZ[i], D_AGE[i] + pt, D_LIFE[i], 3, meteorFade);
+        }
+        if (rippleFade > 0.01F && rippleShow && rippleLeft > 0) ripple(sk, skyR, rippleGrow + 0.95F * pt, rippleFade);
+    }
+
+    /**
+     * SKY path: called from SkyRendererMixin at the TAIL of SkyRenderer.renderSunMoonAndStars (vanilla sky pass,
+     * before terrain/DH LODs/clouds; no depth write -> everything later overdraws it). Fixed radius 100 like stars.
+     * Drawn TEXTURED through RenderPipelines.CELESTIAL (the sun/moon pipeline: position_tex, additive, no depth)
+     * so Iris routes it to gbuffers_skytextured, which Complementary keeps.
+     */
+    public static void renderSky(com.mojang.blaze3d.vertex.PoseStack poseStack, float rainBrightness, float starBrightness) {
+        lastSkyHookNs = System.nanoTime();
+        if (!wantSky()) return;
+        Minecraft mc = Minecraft.getInstance();
+        Level level = mc.level;
+        if (level == null || level.dimension() != Level.OVERWORLD || !visibleCamera(mc) || !anyActive()) return;
+        float pt = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        // meteors: night-only, follow vanilla star brightness (floor so dusk meteors are not invisible)
+        float meteorFade = rainBrightness * Math.min(1F, Math.max(starBrightness * 2F, 0.35F));
+        // ripples: daytime curve = inverse of starlight
+        float rippleFade = rainBrightness * Math.max(0F, Math.min(1F, 1F - starBrightness * 2F));
+        try {
+            SkyFxDraw.draw(poseStack, sk -> emit(sk, 100.0, pt, meteorFade, rippleFade));
+        } catch (Throwable t) {
+            if (!loggedFallback) { loggedFallback = true; dev.justin.infinium.Infinium.LOG.warn("[Infinium] sky-pass meteor draw failed, using WORLD pass", t); }
+            lastSkyHookNs = 0; skyDrawBroken = true;
+        }
+    }
+    private static boolean skyDrawBroken;
+
+    /** WORLD path (mode WORLD, or automatic fallback when the sky hook is missing/not firing). */
     public static void register() {
         LevelRenderEvents.COLLECT_SUBMITS.register(ctx -> {
             Minecraft mc = Minecraft.getInstance();
             Level level = mc.level;
             if (level == null || level.dimension() != Level.OVERWORLD) return;
-            FogType fluid = mc.gameRenderer.mainCamera().getFluidInCamera();
-            if (fluid != FogType.NONE && fluid != FogType.ATMOSPHERIC) return;   // underwater/lava/snow: sky fogged out
+            if (wantSky() && !skyDrawBroken) {
+                if (skyHookAlive()) { worldFramesWithoutHook = 0; return; }
+                if (++worldFramesWithoutHook < 40) return;            // grace period (loading / pause)
+                if (!loggedFallback) {
+                    loggedFallback = true;
+                    dev.justin.infinium.Infinium.LOG.warn("[Infinium] SkyRenderer hook " + (skyHookApplied ? "not firing" : "missing")
+                        + " (renderSunMoonAndStars); falling back to WORLD-pass shooting stars");
+                }
+            }
+            if (!visibleCamera(mc) || !anyActive()) return;
             float pt = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
             float fade = 1F - level.getRainLevel(pt);   // rain/thunder fade like vanilla stars
             if (fade <= 0.01F) return;
-            boolean any = rippleShow && rippleLeft > 0;
-            for (int i = 0; i < MAX && !any; i++) any = ON[i];
-            for (int i = 0; i < DISTANT_MAX && !any; i++) any = D_ON[i];
-            if (!any) return;
-            final double skyR = Math.min(180.0, mc.options.getEffectiveRenderDistance() * 16.0 * 2.5);
-            final boolean ripples = any && rippleShow && rippleLeft > 0;
+            double far = mc.options.getEffectiveRenderDistance() * 16.0 * 4.0;   // ~vanilla depth far
+            final double skyR = Math.min(Math.min(180.0, mc.options.getEffectiveRenderDistance() * 16.0 * 2.5), far * 0.9);
             PoseStack ps = ctx.poseStack();
-            ctx.submitNodeCollector().submitCustomGeometry(ps, RenderTypes.lightning(), (pose, vc) -> {
-                for (int i = 0; i < MAX; i++) if (ON[i])
-                    star(vc, pose, skyR, X[i] + VX[i] * pt, Y[i] + VY[i] * pt, Z[i] + VZ[i] * pt,
-                        VX[i], VY[i], VZ[i], AGE[i] + pt, LIFE[i], TRAIL_POINTS, fade);
-                for (int i = 0; i < DISTANT_MAX; i++) if (D_ON[i])
-                    star(vc, pose, skyR, D_X[i] + D_VX[i] * pt, D_Y[i] + D_VY[i] * pt, D_Z[i] + D_VZ[i] * pt,
-                        D_VX[i], D_VY[i], D_VZ[i], D_AGE[i] + pt, D_LIFE[i], 3, fade);
-                if (ripples) ripple(vc, pose, skyR, rippleGrow + 0.95F * pt, fade);
-            });
+            ctx.submitNodeCollector().submitCustomGeometry(ps, RenderTypes.lightning(), (pose, vc) ->
+                emit((p0, p1, p2, p3, rgb, a0, a1, glow) -> quad(vc, pose, p0, p1, p2, p3, rgb, a0, a1), skyR, pt, fade, fade));
         });
     }
 
+    /** Geometry sink: strip quads (p0,p1 at a0; p2,p3 at a1) or glow billboards. */
+    @FunctionalInterface
+    interface Sink { void quad(float[] p0, float[] p1, float[] p2, float[] p3, int rgb, int a0, int a1, boolean glow); }
+
     /** Head billboard + fading tapered streak (replaces the trail particles that each lived TRAIL_FADE_TICKS). */
-    private static void star(VertexConsumer vc, PoseStack.Pose pose, double skyR, double x, double y, double z,
+    private static void star(Sink vc, double skyR, double x, double y, double z,
                              double vx, double vy, double vz, float age, int life, int points, float fade) {
         float lifeFade = Math.min(1F, Math.min(age / 6F, (life - age) / 20F));
         if (lifeFade <= 0F) return;
@@ -135,23 +209,23 @@ public final class WorldSkyFx {
             int a0 = (int) (TRAIL_ALPHA * a * (1 - s / (double) seg));
             int a1 = (int) (TRAIL_ALPHA * a * (1 - (s + 1) / (double) seg));
             double w0 = trailW * (1 - 0.7 * s / seg), w1 = trailW * (1 - 0.7 * (s + 1) / seg);
-            ribbon(vc, pose, skyR, x - vx * f0, y - vy * f0, z - vz * f0, x - vx * f1, y - vy * f1, z - vz * f1,
+            ribbon(vc, skyR, x - vx * f0, y - vy * f0, z - vz * f0, x - vx * f1, y - vy * f1, z - vz * f1,
                 w0, w1, TRAIL_RGB, a0, a1);
         }
-        billboard(vc, pose, skyR, x, y, z, HEAD_BLOCKS * 0.5, HEAD_RGB, (int) (255 * a));
-        billboard(vc, pose, skyR, x, y, z, HEAD_BLOCKS * 0.22, 0xFFFFFF, (int) (200 * a));   // hot core
+        billboard(vc, skyR, x, y, z, HEAD_BLOCKS * 0.5, HEAD_RGB, (int) (255 * a));
+        billboard(vc, skyR, x, y, z, HEAD_BLOCKS * 0.22, 0xFFFFFF, (int) (200 * a));   // hot core
     }
 
     /** Expanding purple ring overhead (formerly dust particles at +38 blocks), drawn as sky-space bands. */
-    private static void ripple(VertexConsumer vc, PoseStack.Pose pose, double skyR, float grow, float fade) {
+    private static void ripple(Sink vc, double skyR, float grow, float fade) {
         float life = Math.min(1F, Math.min(grow / 8F, rippleLeft / 20F));
         float base = fade * life * Math.min(1F, 0.35F + rippleDens * 0.65F);
         double h = 38.0, rad = 8 + grow;
-        band(vc, pose, skyR, h, rad, 1.6, (int) (150 * base));
-        if (rad > 15) band(vc, pose, skyR, h - 0.5, rad - 6.5, 1.0, (int) (90 * base));
+        band(vc, skyR, h, rad, 1.6, (int) (150 * base));
+        if (rad > 15) band(vc, skyR, h - 0.5, rad - 6.5, 1.0, (int) (90 * base));
     }
 
-    private static void band(VertexConsumer vc, PoseStack.Pose pose, double skyR, double h, double rad, double w, int alpha) {
+    private static void band(Sink vc, double skyR, double h, double rad, double w, int alpha) {
         if (alpha <= 2) return;
         int n = 72;
         for (int k = 0; k < n; k++) {
@@ -161,7 +235,7 @@ public final class WorldSkyFx {
             float[] p1 = proj(skyR, Math.cos(t0) * (rad + w), h, Math.sin(t0) * (rad + w));
             float[] p2 = proj(skyR, Math.cos(t1) * (rad + w), h, Math.sin(t1) * (rad + w));
             float[] p3 = proj(skyR, Math.cos(t1) * (rad - w), h, Math.sin(t1) * (rad - w));
-            quad(vc, pose, p0, p1, p2, p3, rgb, alpha, alpha);
+            vc.quad(p0, p1, p2, p3, rgb, alpha, alpha, false);
         }
     }
 
@@ -172,7 +246,7 @@ public final class WorldSkyFx {
         return new float[] {(float) (x * k), (float) (y * k), (float) (z * k)};
     }
 
-    private static void billboard(VertexConsumer vc, PoseStack.Pose pose, double skyR, double x, double y, double z,
+    private static void billboard(Sink vc, double skyR, double x, double y, double z,
                                   double half, int rgb, int alpha) {
         double d = Math.sqrt(x * x + y * y + z * z);
         if (d < 1e-3 || alpha <= 2) return;
@@ -187,10 +261,10 @@ public final class WorldSkyFx {
         float[] p1 = {(float) (cx + (ux - wx) * hs), (float) (cy + (uy - wy) * hs), (float) (cz + (uz - wz) * hs)};
         float[] p2 = {(float) (cx + (ux + wx) * hs), (float) (cy + (uy + wy) * hs), (float) (cz + (uz + wz) * hs)};
         float[] p3 = {(float) (cx + (-ux + wx) * hs), (float) (cy + (-uy + wy) * hs), (float) (cz + (-uz + wz) * hs)};
-        quad(vc, pose, p0, p1, p2, p3, rgb, alpha, alpha);
+        vc.quad(p0, p1, p2, p3, rgb, alpha, alpha, true);
     }
 
-    private static void ribbon(VertexConsumer vc, PoseStack.Pose pose, double skyR, double x0, double y0, double z0,
+    private static void ribbon(Sink vc, double skyR, double x0, double y0, double z0,
                                double x1, double y1, double z1, double w0, double w1, int rgb, int a0, int a1) {
         if (a0 <= 2 && a1 <= 2) return;
         double d0 = Math.sqrt(x0 * x0 + y0 * y0 + z0 * z0), d1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
@@ -208,7 +282,7 @@ public final class WorldSkyFx {
         float[] p1 = {(float) (ax + sx * h0), (float) (ay + sy * h0), (float) (az + sz * h0)};
         float[] p2 = {(float) (bx + sx * h1), (float) (by + sy * h1), (float) (bz + sz * h1)};
         float[] p3 = {(float) (bx - sx * h1), (float) (by - sy * h1), (float) (bz - sz * h1)};
-        quad(vc, pose, p0, p1, p2, p3, rgb, a0, a1);
+        vc.quad(p0, p1, p2, p3, rgb, a0, a1, false);
     }
 
     /** Both windings so the quad shows regardless of facing. p0,p1 take alpha a0; p2,p3 take a1. */

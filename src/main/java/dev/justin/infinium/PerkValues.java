@@ -109,9 +109,9 @@ public final class PerkValues {
             case "mining" -> "+" + Math.round(mining(f) * 100) + "% Mining Speed";
             case "jump" -> "+" + airJumps(f) + " Air Jump" + (airJumps(f) == 1 ? "" : "s");
             case "attack" -> switch (f) {
-                case CYBERPSYCHO -> "Greatly increased attack speed with swords and bows";
-                case INFINITY -> "Massively increased attack speed with swords and bows";
-                default -> "Increased attack speed with swords and bows";
+                case CYBERPSYCHO -> "Faster attacks +" + Math.round(attackAndBow(f) * 100) + "%";
+                case INFINITY -> "Faster attacks +" + Math.round(attackAndBow(f) * 100) + "%";
+                default -> "Faster attacks +" + Math.round(attackAndBow(f) * 100) + "%";
             };
             case "slow" -> "Slow nearby mobs when damaged";
             default -> kind;

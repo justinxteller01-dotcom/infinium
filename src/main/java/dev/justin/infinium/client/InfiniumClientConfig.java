@@ -44,6 +44,9 @@ public final class InfiniumClientConfig {
     private static boolean shootingStars = true;
     private static boolean uiEffects = true;
     private static boolean skyRipple = true;
+    /** sky-v7: where shooting stars/ripples render. AUTO = sky pass (textured, survives Iris packs), auto-fallback to WORLD if the hook is missing. */
+    public enum SkyFxMode { AUTO, SKY, WORLD }
+    private static SkyFxMode skyFxMode = SkyFxMode.AUTO;
     private static boolean underwaterShimmer = true;
     private static float meteorDensity = 1.0f;
     private static float daytimeSkyRippleDensity = 1.0f;
@@ -72,6 +75,7 @@ public final class InfiniumClientConfig {
         shootingStars = true;
         uiEffects = true;
         skyRipple = true;
+        skyFxMode = SkyFxMode.AUTO;
         underwaterShimmer = true;
         meteorDensity = 1.0f;
         daytimeSkyRippleDensity = 1.0f;
@@ -152,6 +156,7 @@ public final class InfiniumClientConfig {
         fx.addProperty("meteorDensity", meteorDensity);
         fx.addProperty("uiEffects", uiEffects);
         fx.addProperty("skyRipple", skyRipple);
+        fx.addProperty("skyFxMode", skyFxMode.name());
         fx.addProperty("daytimeSkyRippleDensity", daytimeSkyRippleDensity);
         fx.addProperty("underwaterShimmer", underwaterShimmer);
         fx.addProperty("underwaterParticleDensity", underwaterParticleDensity);
@@ -235,6 +240,8 @@ public final class InfiniumClientConfig {
     public static void setShootingStars(boolean on) { shootingStars = on; }
     public static void setUiEffects(boolean on) { uiEffects = on; }
     public static void setSkyRipple(boolean on) { skyRipple = on; }
+    public static SkyFxMode skyFxMode() { return skyFxMode; }
+    public static void setSkyFxMode(SkyFxMode m) { skyFxMode = m == null ? SkyFxMode.AUTO : m; }
     public static void setUnderwaterShimmer(boolean on) { underwaterShimmer = on; }
     public static void setMeteorDensity(float v) { meteorDensity = Math.max(0.0f, Math.min(2.0f, v)); }
     public static void setDaytimeSkyRippleDensity(float v) { daytimeSkyRippleDensity = Math.max(0.0f, Math.min(2.0f, v)); }
@@ -247,6 +254,9 @@ public final class InfiniumClientConfig {
             meteorDensity = flt(fx, "meteorDensity", meteorDensity);
             uiEffects = bool(fx, "uiEffects", uiEffects);
             skyRipple = bool(fx, "skyRipple", skyRipple);
+            if (fx.get("skyFxMode") instanceof JsonElement m && m.isJsonPrimitive()) {
+                try { skyFxMode = SkyFxMode.valueOf(m.getAsString().toUpperCase(java.util.Locale.ROOT)); } catch (IllegalArgumentException ignored) {}
+            }
             daytimeSkyRippleDensity = flt(fx, "daytimeSkyRippleDensity", daytimeSkyRippleDensity);
             underwaterShimmer = bool(fx, "underwaterShimmer", underwaterShimmer);
             underwaterParticleDensity = flt(fx, "underwaterParticleDensity", underwaterParticleDensity);

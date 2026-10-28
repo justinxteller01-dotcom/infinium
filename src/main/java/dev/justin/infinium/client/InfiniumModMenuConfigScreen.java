@@ -83,6 +83,17 @@ public class InfiniumModMenuConfigScreen extends OptionsSubScreen {
             v -> InfiniumClientConfig.setDaytimeSkyRippleDensity((float) (v / 100.0))
         ).withTooltip(Component.translatable("text.infinium.config.world_fx.sky_ripple_density.tooltip")));
 
+        {
+            Component lbl = Component.literal("Sky FX Render: ");
+            AbstractWidget modeBtn = Button.builder(Component.empty().append(lbl).append(InfiniumClientConfig.skyFxMode().name()), b -> {
+                var vals = InfiniumClientConfig.SkyFxMode.values();
+                var next = vals[(InfiniumClientConfig.skyFxMode().ordinal() + 1) % vals.length];
+                InfiniumClientConfig.setSkyFxMode(next);
+                b.setMessage(Component.empty().append(lbl).append(next.name()));
+            }).width(150).build();
+            modeBtn.setTooltip(Tooltip.create(Component.literal("AUTO/SKY: meteors & ripples drawn in the vanilla sky pass (behind terrain, DH and clouds; textured so Iris/Complementary keep them). WORLD: legacy world-pass geometry (use if they vanish with a shader pack).")));
+            worldFx.add(modeBtn);
+        }
         worldFx.add(makeToggle(
             Component.translatable("text.infinium.config.world_fx.underwater_shimmer"),
             InfiniumClientConfig.underwaterShimmer(),

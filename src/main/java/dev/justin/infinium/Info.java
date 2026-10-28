@@ -73,17 +73,17 @@ public final class Info {
                 .append(Component.literal(switch (fam) {
                     case 0 -> "Singularity Template + Ingot at 100% charge.";
                     case 1 -> "Cyber Psycho Template + Ingot at 100% charge.";
-                    case 4 -> "Ultimate tier. Counts as maxed lower set piece.";
+                    case 4 -> "The top tier. Counts as fully charged lower armor.";
                     default -> "Combine with 100% charged " + (fam == 2 ? "Cyber Psycho" : "Singularity") + " + Ingot.";
                 }).withStyle(ChatFormatting.GRAY)));
-            o.add(l("At " + PerkValues.durabilityFloor() + " durability: enchants disable, perks stay."));
+            o.add(l("Almost broken (" + PerkValues.durabilityFloor() + " durability left): enchantments stop working, perks keep going."));
             return o;
         }
         o.add(h("Tool"));
         if (it == Infinium.SWORD) {
             o.add(l("12 dmg, applies 8s bleed."));
             o.add(l("100% full attack charge: fires 3-block piercing Energy Slash (5.5 dmg, applies bleed)."));
-            o.add(l("Scales with Cyber attack speed boosts & compresses mob damage i-frames."));
+            o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
         }
         if (it == Infinium.PICKAXE) o.add(l("Toggle between Fortune IV or Silk Touch."));
         if (it == Infinium.SHOVEL) o.add(l("1x1, 3x3, and 3x1 digging modes."));
@@ -122,10 +122,10 @@ public final class Info {
                 // G4b: X-ray is the M3 pulse ability on every helmet (XrayPulse.radius: r10 / r20 / r30), not a continuous X key.
                 // Astral (0) split from the shared default so only Astral gets the plain wording.
                 case 0 -> "Helmet: Breathe underwater; X-Ray Pulse shows ores within 10 blocks (" + key("xray_pulse", "X-Ray Pulse", null) + ").";
-                case 1 -> "Helmet: Infinite oxygen; " + pulse(10) + ".";
-                case 2 -> "Helmet: Infinite oxygen; " + pulse(20) + ".";
-                case 3 -> "Helmet: Infinite oxygen; " + pulse(20) + ".";
-                case 4 -> "Helmet: Infinite oxygen; " + pulse(30) + ".";
+                case 1 -> "Helmet: Breathe underwater forever; " + pulse(10) + ".";
+                case 2 -> "Helmet: Breathe underwater forever; " + pulse(20) + ".";
+                case 3 -> "Helmet: Breathe underwater forever; " + pulse(20) + ".";
+                case 4 -> "Helmet: Breathe underwater forever; " + pulse(30) + ".";
                 default -> "Helmet: Infinite oxygen; " + pulse(10) + ".";
             };
             case CHEST -> switch (fam) {
@@ -138,18 +138,18 @@ public final class Info {
             };
             case LEGS -> switch (fam) {
                 case 0 -> "Leggings: Run a little faster; Quantum Tunnel zips you " + (int) SpacetimeWarp.DISTANCE[0] + " blocks forward in mid-air (" + key("warp", "Quantum Tunnel", null) + ").";
-                case 1 -> "Leggings: +10% Speed Bonus (No FOV change).";
-                case 2 -> "Leggings: +5% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
-                case 3 -> "Leggings: +15% Speed Bonus (No FOV change).";
-                case 4 -> "Leggings: +20% Speed Bonus. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
+                case 1 -> "Leggings: Run faster (your view won't zoom), +10%.";
+                case 2 -> "Leggings: Run faster, +5%. " + warp((int) SpacetimeWarp.DISTANCE[1]) + ".";
+                case 3 -> "Leggings: Run faster (your view won't zoom), +15%.";
+                case 4 -> "Leggings: Run faster, +20%. " + warp((int) SpacetimeWarp.DISTANCE[2]) + ".";
                 default -> "Leggings: " + pct(PerkValues.legSpeed(PerkValues.Family.values()[fam])) + " Speed Bonus (No FOV change).";
             };
             default -> switch (fam) {
                 case 0 -> "Boots: No fall damage; tap to jump, hold to jump higher (up to 2 blocks).";
                 case 1 -> "Boots: No fall damage.";
-                case 2 -> "Boots: No fall damage; Jump Augmentation (+2 blocks height, hold jump).";
+                case 2 -> "Boots: No fall damage. Tap jump for 1 block, hold for up to 3.";
                 case 3 -> "Boots: No fall damage.";
-                case 4 -> "Boots: No fall damage; Jump Augmentation (+3 blocks height, hold jump).";
+                case 4 -> "Boots: No fall damage. Tap jump for 1 block, hold for up to 4.";
                 default -> "Boots: No fall damage.";
             };
         };
@@ -177,19 +177,19 @@ public final class Info {
     public static List<Object[]> setLines(int fam) {
         PerkValues.Family f = PerkValues.Family.values()[fam];
         List<Object[]> o = new ArrayList<>();
-        o.add(new Object[]{f == PerkValues.Family.ASTRAL ? "Passive: Tougher than netherite; fire and lava can't hurt you." : f == PerkValues.Family.INFINITY ? "Passive: -50% netherite dmg; Fire, lava & explosion immune; Rocket-free flight." : "Passive: " + PerkValues.damageTakenText(f) + " dmg vs netherite; Fire & lava immune.", Perk.set(fam, "immune")});
+        o.add(new Object[]{f == PerkValues.Family.ASTRAL ? "Passive: Takes about a third less damage than netherite; fire and lava can't hurt you." : f == PerkValues.Family.INFINITY ? "Passive: Takes half the damage netherite would; fire, lava and explosions can't hurt you." : "Passive: " + (fam == 1 ? "Takes about a third less damage than netherite" : "Takes almost half the damage netherite would") + " (" + PerkValues.damageTakenText(f) + "); fire and lava can't hurt you.", Perk.set(fam, "immune")});
         for (String kind : CrystalCharge.ORDER[fam]) {
             int req = CrystalCharge.crystalsRequired(fam, kind);
             String prefix = "[" + req + "✦] ";
             String desc = f == PerkValues.Family.ASTRAL ? astralSetLine(kind) : switch (kind) {
-                case "regen" -> "Auto-repair: 1 dur/" + (PerkValues.repairTicks(f) / 20) + "s to all inventory gear.";
-                case "noconsume" -> pct(PerkValues.keepChance(f)) + " chance to not consume building blocks.";
-                case "reach" -> blocks((int) PerkValues.reach(f)) + " reach (place, break, attack).";
-                case "stacks" -> "Stacks: 64->" + PerkValues.boostedMax(f, 64) + ", 16->" + PerkValues.boostedMax(f, 16) + ", 1->" + PerkValues.boostedMax(f, 1) + ".";
-                case "mining" -> "+" + pct(PerkValues.mining(f)) + " mining speed.";
-                case "jump" -> PerkValues.airJumpsText(f) + " (press jump mid-air, Elytra off).";
-                case "attack" -> "+" + pct(PerkValues.attackAndBow(f)) + " attack & bow draw speed.";
-                case "slow" -> "Nearby mobs (16m) slowed " + pct(PerkValues.slowAmount(f)) + " on hit for " + PerkValues.slowDurationTicks(f) / 20 + "s (" + PerkValues.slowCooldownTicks(f) / 20 + "s cd).";
+                case "regen" -> "Repairs all your gear over time (1 durability every " + (PerkValues.repairTicks(f) / 20) + "s).";
+                case "noconsume" -> "Sometimes you get the block back after placing it (" + pct(PerkValues.keepChance(f)) + ").";
+                case "reach" -> "Reach " + (int) PerkValues.reach(f) + " blocks farther.";
+                case "stacks" -> "Items stack higher (64 to " + PerkValues.boostedMax(f, 64) + ", 16 to " + PerkValues.boostedMax(f, 16) + ", 1 to " + PerkValues.boostedMax(f, 1) + ").";
+                case "mining" -> "Mine faster (+" + pct(PerkValues.mining(f)) + ").";
+                case "jump" -> "Jump again in mid-air (" + PerkValues.airJumps(f) + " extra). Turn wings off to use it.";
+                case "attack" -> "Swing swords and draw bows faster (+" + pct(PerkValues.attackAndBow(f)) + ").";
+                case "slow" -> "When you get hit, nearby mobs slow down (" + pct(PerkValues.slowAmount(f)) + " for " + PerkValues.slowDurationTicks(f) / 20 + "s, every " + PerkValues.slowCooldownTicks(f) / 20 + "s).";
                 default -> kind;
             };
             o.add(new Object[]{prefix + desc, Perk.set(fam, kind)});
