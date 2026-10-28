@@ -1,10 +1,11 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~4:00 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~4:25 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-b1bc2b6` (pre-release, 2026-10-28 4:22 PM ET)
+## 1. Current release: `batch1-c2c2532` (pre-release, 2026-10-28 4:25 PM ET)
+- **Title menu v2**: purple meteors frozen in mid-air (fixed, farther/smaller; only twinkle, glow pulse, trail shimmer, orbiting sparks, glints), fireflies over the village, rising crystal motes, gentle camera sway; sky unchanged; 120s seamless loop. Preview `/workspace/menu_mock/mock_v2.mp4`.
 - **Crystal order**: Astral/Singularity repair, block saver, saber, stacks, reach; Cybernetic/Cyber Psycho mining, jump, slow, attack; Infinity repair, mining, block saver, jump, saber, slow, stacks, attack, reach. Saber = energy slash milestone (Astral needs it before slashes fire). Crystal screen lays 5/9 cards in two rows.
 - **Energy slash / beam**: slash 60/70/80% of the tier base = 6 / 7.7 / 9.6; beam 75/85/95% = 7.5 / 9.35 / 11.4.
 - **Sword damage by 3 tiers**: Tier 1 (no armor, Astral, Cybernetic) 10, Tier 2 (Singularity, Cyber Psycho) 11, Tier 3 (Infinity) 12. 
@@ -71,7 +72,8 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 17. Slash + melee double hit.
 18. Particle-map growth.
 
-## 5. In-game test checklist (`batch1-b1bc2b6`)
+## 5. In-game test checklist (`batch1-c2c2532`)
+- [ ] Title menu v2: meteors stay fixed (no travel) and read as far away; twinkle/sparks subtle; fireflies and crystal motes visible but calm; camera sway gentle; no seam at the 120s loop; no FPS drop.
 - [ ] Crystal screen: Astral/Singularity 5 cards (3+2), Infinity 9 (5+4), in the new order; saber card icon is a placeholder (attack icon).
 - [ ] Astral: no energy slash until the saber milestone (5 crystals); Cybernetic and tier 2/3 slash from the start.
 - [ ] Slash does 6 / 7.7 / 9.6 and beam 7.5 / 9.35 / 11.4 by tier.
@@ -90,6 +92,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-c2c2532` 10-28 4:25 PM: title menu v2 (frozen far meteors with twinkle/glow/sparks, fireflies, crystal motes, gentle camera sway; sky unchanged).
 - `batch1-b1bc2b6` 10-28 4:22 PM: crystal unlock order (Astral/Singularity 5 perks incl. saber, Cyber lines 4, Infinity 9 alternating); supersedes `batch1-aad53c6` (4:20 PM, 4-perk order without saber or Infinity).
 - `batch1-9d9fece` 10-28 4:15 PM: energy slash 60/70/80% (6 / 7.7 / 9.6), beam 75/85/95% (7.5 / 9.35 / 11.4) of the tier base.
 - `batch1-8c89f58` 10-28 4:11 PM: sword damage by 3 tiers, 10/11/12 (Tier 1 no armor/Astral/Cybernetic, Tier 2 Singularity/Cyber Psycho, Tier 3 Infinity); slash/beam scale with it.
