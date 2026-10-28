@@ -3,75 +3,138 @@ package dev.justin.infinium.client.guide;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.justin.infinium.Infinium;
-import dev.justin.infinium.InfiniumStyle;
 import dev.justin.infinium.client.UiInfection;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
-import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Two-page Informational Crystal guide. Text comes from {@code assets/infinium/guide/pages.json} (written by gen_book.py).
- * Scaled ~2x larger than legacy v2, with 50/50 vertically centered Welcome pages, inline Spacetime Crystal icons ({C}),
- * vertically centered right-page armor notes, two-column Good to Know spreads, and deep-space void backdrop.
+ * Guidebook v2 (GUIDEBOOK_OVERHAUL_PLAN). Pages come from {@code assets/infinium/guide/pages.json} (gen_guide_v2.py):
+ * id, chapter, title, subtitle, keywords, body, visual, caption, numbers. No card system.
+ * Left page: centered title, subtitle, short centered paragraphs. Right page: one centered visual
+ * (recipe / live armor render / picture), a caption, then the "Numbers" paragraph. Text never shrinks: anything
+ * that does not fit continues on a "(cont.)" spread (pagination in {@link #paginate()}).
+ * Numbers are {n:key} tokens resolved by {@link GuideNumbers}. Layout is in fixed book units (BOOK_W x BOOK_H) and the
+ * whole book is scaled to the screen, so it is identical at every GUI scale; nav buttons are drawn in book space.
+ * Navigation: clickable contents + keyword search, chapter tabs on the right edge, Back / Next, Return (history),
+ * last page remembered across sessions (config/infinium_guide_last.txt).
  */
 public class InfiniumGuideScreen extends Screen {
     private static final int BOOK_W = 292;
     private static final int BOOK_H = 196;
+    private static final int TAB_W = 18;
     static final int FRAMES = 16;
     static final int FRAME = 128;
     private static final int SET_FRAMES = 8;
     private static final int SET_FRAME = 64;
-    private static final Identifier BOOK = Identifier.fromNamespaceAndPath("infinium", "textures/gui/guide/book.png");
     private static final Identifier CRYSTAL_TEX = Identifier.fromNamespaceAndPath("infinium", "textures/item/spacetime_crystal.png");
     private static final int CRYSTAL_FRAMES = 80;
-    /** Scaled ~2x larger than old 0.8f cap while keeping a comfortable screen margin. */
     private static final float MAX_SCALE = 1.55f;
     private static final float FILL = 0.90f;
     private static final int SLOT_EDGE = 0xFF6A4A78, SLOT_FILL = 0xFF3A3346, PANEL_BG = 0xCC2A2433, RESULT_EDGE = 0xFFC45AD4, ARROW = 0xFF8A5AA0;
     private static final String CRYSTAL_TOKEN = "\uE000";
 
+    // page geometry (book units)
+    private static final int LX = 14, RX = 152, PW = 126, TOP = 12, BOTTOM = 166, NAV_Y = 172, NAV_H = 13;
+    private static final float TS = 0.70f;               // body text scale (never changes)
+    private static final float SUB_S = 0.62f;
+    private static final int LINE = 7;                   // (font 9 + 1) * 0.7
+    private static final int GAP = 3;                    // paragraph gap
+    private static final int ROW = 6;                    // contents row height
+    private static final int TEXT = 0xFFD2C0D4, SUB = 0xFFB898C8, PINK = 0xFFFF66CC, HOT = 0xFFFF00AA, PURPLE = 0xFFC45AD4,
+            EDGE = 0xFF6A2A78, NUM = 0xFFE8C8E8;
+
     private final Screen back;
-    private final List<Spread> spreads = new ArrayList<>();
-    private int page;
+    private final List<Page> pages = new ArrayList<>();
+    private final List<String> chapters = new ArrayList<>();
+    private final List<View> views = new ArrayList<>();
+    private final Deque<Integer> history = new ArrayDeque<>();
+    private int view;
     private boolean closing;
+    private boolean dragging;
+    private EditBox search;
+    private String query = "";
+    private static String lastPageId;
+    private static int lastPageCont;
 
     public InfiniumGuideScreen(Screen back) {
         super(Component.translatable("item.infinium.infinium_guide"));
         this.back = back;
     }
 
+    // ------------------------------------------------------------------ data
+
+    private record Page(String id, int chapter, String title, String subtitle, List<String> keywords, String body,
+                        String visual, String caption, String numbers) {}
+
+    /** One rendered spread: page index, continuation number, line ranges for each side. */
+    private record View(int page, int cont, int lFrom, int lTo, int rFrom, int rTo, boolean visual) {}
+
+    /** Wrapped line; "" = paragraph gap. */
+    private record Ln(String text, int color) {}
+
+    private void load() {
+        if (!pages.isEmpty()) return;
+        var res = Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath("infinium", "guide/pages.json"));
+        try {
+            if (res.isEmpty()) throw new IllegalStateException();
+            try (var reader = new InputStreamReader(res.get().open(), StandardCharsets.UTF_8)) {
+                JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
+                for (var c : root.getAsJsonArray("chapters")) chapters.add(c.getAsString());
+                for (var e : root.getAsJsonArray("pages")) {
+                    JsonObject o = e.getAsJsonObject();
+                    List<String> kw = new ArrayList<>();
+                    if (o.has("keywords")) for (var k : o.getAsJsonArray("keywords")) kw.add(k.getAsString().toLowerCase(Locale.ROOT));
+                    pages.add(new Page(str(o, "id"), o.has("chapter") ? o.get("chapter").getAsInt() : 0, str(o, "title"), str(o, "subtitle"),
+                            kw, str(o, "body"), str(o, "visual"), str(o, "caption"), str(o, "numbers")));
+                }
+            }
+        } catch (Exception ex) {
+            pages.clear();
+            pages.add(new Page("error", 0, "Informational Crystal", "", List.of(), "Could not read the guide pages.", "none", "", ""));
+        }
+        if (chapters.isEmpty()) chapters.add("Start");
+    }
+
+    private static String str(JsonObject o, String k) {
+        return o.has(k) && !o.get(k).isJsonNull() ? o.get(k).getAsString() : "";
+    }
+
+    // ------------------------------------------------------------------ layout
+
     private float bookScale() {
-        float sx = (this.width * FILL) / (float) BOOK_W;
+        float sx = (this.width * FILL) / (float) (BOOK_W + TAB_W);
         float sy = (this.height * FILL) / (float) BOOK_H;
         return Math.min(MAX_SCALE, Math.min(sx, sy));
     }
 
-    private int bookLeft() {
-        return (int) ((this.width - BOOK_W * bookScale()) / 2f);
-    }
+    private int bookLeft() { return (int) ((this.width - (BOOK_W + TAB_W) * bookScale()) / 2f); }
+    private int bookTop() { return (int) ((this.height - BOOK_H * bookScale()) / 2f); }
 
-    private int bookTop() {
-        return (int) ((this.height - BOOK_H * bookScale()) / 2f);
-    }
+    /** Search box band height in book units (EditBox needs >= 12 screen px). */
+    private int searchH() { return Math.max(10, (int) Math.ceil(12 / bookScale())); }
+    private int contentsTopLeft() { return TOP + 22 + searchH() + 4; }
 
     @Override
     protected void init() {
@@ -79,284 +142,760 @@ public class InfiniumGuideScreen extends Screen {
         sheets = null;
         clearWidgets();
         load();
+        if (views.isEmpty() && lastPageId == null) readLast();
+        String keepId = lastPageId;
+        int keepCont = lastPageCont;
+        if (!views.isEmpty()) { View v = cur(); keepId = pages.get(v.page()).id(); keepCont = v.cont(); }
+        paginate();
+        view = 0;
+        if (keepId != null) {
+            for (int i = 0; i < views.size(); i++) {
+                View v = views.get(i);
+                if (pages.get(v.page()).id().equals(keepId) && v.cont() <= keepCont) view = i;
+            }
+        }
         float s = bookScale();
-        int left = bookLeft();
-        int top = bookTop();
-        int bw = Math.max(30, (int) (46 * s));
-        int bh = Math.max(10, (int) (14 * s));
-        addRenderableWidget(new GuideButton(left + (int) (16 * s), top + (int) ((BOOK_H - 24) * s), bw, bh, Component.literal("Back"), b -> turn(-1)));
-        addRenderableWidget(new GuideButton(left + (int) ((BOOK_W - 62) * s), top + (int) ((BOOK_H - 24) * s), bw, bh, Component.literal("Next"), b -> turn(1)));
-        int idxW = Math.max(28, (int) (42 * s));
-        addRenderableWidget(new GuideButton(left + (int) (74 * s), top + (int) ((BOOK_H - 24) * s), idxW, bh, Component.literal("Index"), b -> jumpToContents()));
+        int bx = bookLeft() + (int) ((LX + 8) * s), by = bookTop() + (int) ((TOP + 22) * s);
+        search = new EditBox(this.font, bx, by, (int) ((PW - 16) * s), (int) (searchH() * s), Component.literal("Search"));
+        search.setHint(Component.literal("Search...").withColor(0xFF8A6A98));
+        search.setTextColor(0xFFF0D8F0);
+        search.setValue(query);
+        search.setResponder(q -> query = q == null ? "" : q.trim().toLowerCase(Locale.ROOT));
+        addRenderableWidget(search);
+        syncSearch();
     }
 
-    private void jumpToContents() {
-        for (int i = 0; i < spreads.size(); i++) {
-            if (isContents(spreads.get(i))) {
-                page = i;
-                return;
+    private void syncSearch() {
+        if (search == null) return;
+        boolean on = !views.isEmpty() && isContents(cur()) && cur().cont() == 0;
+        search.visible = on;
+        search.active = on;
+        if (!on && search.isFocused()) { search.setFocused(false); setFocused(null); }
+    }
+
+    private View cur() { return views.get(Math.max(0, Math.min(view, views.size() - 1))); }
+    private boolean isContents(View v) { return "contents".equals(pages.get(v.page()).visual()); }
+    private boolean isIntro(View v) { return "intro".equals(pages.get(v.page()).visual()); }
+
+    private List<Ln> wrap(String text, float scale, int color, int width) {
+        List<Ln> out = new ArrayList<>();
+        if (text == null || text.isEmpty()) return out;
+        String t = GuideNumbers.resolve(text).replace("{C}", CRYSTAL_TOKEN);
+        int wrapW = (int) (width / scale);
+        boolean first = true;
+        for (String para : t.split("\n")) {
+            if (para.isBlank()) continue;
+            if (!first) out.add(new Ln("", 0));
+            first = false;
+            for (String l : splitLines(para, wrapW)) out.add(new Ln(l, color));
+        }
+        return out;
+    }
+
+    private static int h(Ln l) { return l.text().isEmpty() ? GAP : LINE; }
+
+    private List<Ln> leftLines(Page p) { return wrap(p.body(), TS, TEXT, PW - 4); }
+
+    private List<Ln> rightLines(Page p) {
+        List<Ln> r = new ArrayList<>();
+        if (!p.numbers().isEmpty()) r.addAll(wrap(p.numbers(), TS, NUM, PW - 4));
+        return r;
+    }
+
+    private int visualH(Page p) {
+        String v = p.visual();
+        if (v.startsWith("armor:")) return v.equals("armor:5") ? 104 : 112;
+        if (v.equals("recipe:tools") || v.equals("recipe:dyes")) return 104;
+        if (v.startsWith("recipe:")) return 66;
+        if (v.startsWith("items:")) return 48;
+        return switch (v) {
+            case "matrix" -> 108;
+            case "meteor" -> 50;
+            case "settings" -> 104;
+            case "flow" -> 108;
+            default -> 0;
+        };
+    }
+
+    /** y where right-page text starts on a spread that shows the visual. */
+    private int rightTextTop(Page p) {
+        int vh = visualH(p);
+        if (vh == 0) return TOP + 2;
+        return TOP + vh + 4 + (p.caption().isEmpty() ? 0 : 9) + 3;
+    }
+
+    private static int fit(List<Ln> lines, int from, int avail) {
+        int used = 0, i = from;
+        while (i < lines.size()) {
+            int hh = h(lines.get(i));
+            if (used + hh > avail) break;
+            used += hh;
+            i++;
+        }
+        while (i > from && i < lines.size() && lines.get(i - 1).text().isEmpty()) i--;   // no gap at the bottom of a page
+        if (i == from && from < lines.size()) i = from + 1;   // always progress
+        return i;
+    }
+
+    private void paginate() {
+        views.clear();
+        for (int pi = 0; pi < pages.size(); pi++) {
+            Page p = pages.get(pi);
+            if ("contents".equals(p.visual())) {
+                int rows = contentsRows("").size();
+                int cap = (BOTTOM - contentsTopLeft()) / ROW + (BOTTOM - TOP) / ROW;
+                int n = Math.max(1, (rows + cap - 1) / cap);
+                for (int c = 0; c < n; c++) views.add(new View(pi, c, 0, 0, 0, 0, false));
+                continue;
             }
+            if ("intro".equals(p.visual())) { views.add(new View(pi, 0, 0, 0, 0, 0, false)); continue; }
+            List<Ln> l = leftLines(p), r = rightLines(p);
+            int li = 0, ri = 0, cont = 0;
+            boolean hasVisual = visualH(p) > 0 || !"none".equals(p.visual()) && !p.visual().isEmpty();
+            do {
+                int lTop = cont == 0 ? TOP + 12 + (p.subtitle().isEmpty() ? 0 : 9) + 6 : TOP + 16;
+                int lEnd = l.isEmpty() ? 0 : fit(l, li, BOTTOM - lTop);
+                if (li >= l.size()) lEnd = li;
+                int rTop = cont == 0 && hasVisual ? rightTextTop(p) : TOP + 4;
+                int rEnd = ri >= r.size() ? ri : fit(r, ri, BOTTOM - rTop);
+                if (cont == 0 && hasVisual && BOTTOM - rTop < LINE) rEnd = ri;   // visual fills the page
+                views.add(new View(pi, cont, li, lEnd, ri, rEnd, cont == 0 && hasVisual));
+                li = lEnd; ri = rEnd; cont++;
+            } while ((li < l.size() || ri < r.size()) && cont < 20);
         }
-        page = 0;
+        if (views.isEmpty()) views.add(new View(0, 0, 0, 0, 0, 0, false));
     }
 
-    private void turn(int delta) {
-        page = Math.max(0, Math.min(spreads.size() - 1, page + delta));
+    /** Contents rows: {chapter header (-1 - chapter)} or {page index}. Filtered by query. */
+    private List<Integer> contentsRows(String q) {
+        List<Integer> rows = new ArrayList<>();
+        int lastCh = -1;
+        for (int i = 0; i < pages.size(); i++) {
+            Page p = pages.get(i);
+            if ("contents".equals(p.visual())) continue;
+            if (!q.isEmpty() && !matches(p, q)) continue;
+            if (p.chapter() != lastCh) { rows.add(-1 - p.chapter()); lastCh = p.chapter(); }
+            rows.add(i);
+        }
+        return rows;
     }
 
-    private void load() {
-        if (!spreads.isEmpty()) return;
-        var id = Identifier.fromNamespaceAndPath("infinium", "guide/pages.json");
-        var resource = Minecraft.getInstance().getResourceManager().getResource(id);
-        if (resource.isEmpty()) {
-            spreads.add(new Spread("Informational Crystal", "The page file is missing. Run gen_book.py.", "", ""));
-            return;
-        }
-        try (var reader = new InputStreamReader(resource.get().open(), StandardCharsets.UTF_8)) {
-            JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
-            for (var element : root.getAsJsonArray("spreads")) {
-                JsonObject o = element.getAsJsonObject();
-                spreads.add(new Spread(
-                        o.get("title").getAsString(),
-                        o.get("body").getAsString(),
-                        o.has("art") && !o.get("art").isJsonNull() ? o.get("art").getAsString() : "",
-                        o.has("recipe") && !o.get("recipe").isJsonNull() ? o.get("recipe").getAsString() : "",
-                        o.has("note") && !o.get("note").isJsonNull() ? o.get("note").getAsString() : ""));
-            }
-        } catch (Exception e) {
-            spreads.add(new Spread("Informational Crystal", "Could not read the guide pages.", "", ""));
-        }
-        if (spreads.isEmpty()) spreads.add(new Spread("Informational Crystal", "", "", ""));
+    private boolean matches(Page p, String q) {
+        if (p.title().toLowerCase(Locale.ROOT).contains(q)) return true;
+        if (p.chapter() < chapters.size() && chapters.get(p.chapter()).toLowerCase(Locale.ROOT).contains(q)) return true;
+        for (String k : p.keywords()) if (k.contains(q)) return true;
+        return false;
     }
+
+    private int firstView(int pageIdx) {
+        for (int i = 0; i < views.size(); i++) if (views.get(i).page() == pageIdx) return i;
+        return 0;
+    }
+
+    private int chapterOf(View v) { return pages.get(v.page()).chapter(); }
+
+    // ------------------------------------------------------------------ navigation
+
+    private void go(int target, boolean remember) {
+        target = Math.max(0, Math.min(views.size() - 1, target));
+        if (target == view) return;
+        if (remember) { history.push(view); while (history.size() > 32) history.removeLast(); }
+        view = target;
+        dragging = false;
+        saveLast();
+        syncSearch();
+    }
+
+    private void turn(int d) { go(view + d, false); }
+
+    private void returnBack() {
+        if (!history.isEmpty()) { int t = history.pop(); view = Math.max(0, Math.min(views.size() - 1, t)); saveLast(); syncSearch(); }
+    }
+
+    private void click() {
+        float vol = 0.8F * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeMaster() * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeCrystal();
+        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(dev.justin.infinium.ModSounds.crystal(0, dev.justin.infinium.ModSounds.INSERT).value(), 1.0F, vol));
+    }
+
+    private static java.nio.file.Path lastFile() {
+        return net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir().resolve("infinium_guide_last.txt");
+    }
+
+    private void saveLast() {
+        if (views.isEmpty()) return;
+        View v = cur();
+        lastPageId = pages.get(v.page()).id();
+        lastPageCont = v.cont();
+        try { java.nio.file.Files.writeString(lastFile(), lastPageId + "\n" + lastPageCont + "\n"); } catch (Exception ignored) {}
+    }
+
+    private static void readLast() {
+        try {
+            var f = lastFile();
+            if (!java.nio.file.Files.exists(f)) return;
+            List<String> ls = java.nio.file.Files.readAllLines(f);
+            if (!ls.isEmpty()) lastPageId = ls.get(0).trim();
+            lastPageCont = ls.size() > 1 ? Integer.parseInt(ls.get(1).trim()) : 0;
+        } catch (Exception ignored) {}
+    }
+
+    // nav buttons in book units: {x, w}
+    private static final int[] B_BACK = {LX, 38}, B_CONTENTS = {LX + 42, 46}, B_RETURN = {LX + 92, 34}, B_NEXT = {BOOK_W - 14 - 38, 38};
+
+    private boolean inRect(int mx, int my, int x, int y, int w, int hh) { return mx >= x && mx < x + w && my >= y && my < y + hh; }
+
+    private int tabY(int i) { return 8 + i * 25; }
+
+    // armor render box (book units) for the current view, or null
+    private int[] armorBox() {
+        View v = cur();
+        Page p = pages.get(v.page());
+        if (!v.visual() || !p.visual().startsWith("armor:")) return null;
+        int vh = visualH(p);
+        boolean toggle = !p.visual().equals("armor:5");
+        return new int[]{RX + 10, TOP, PW - 20, vh - (toggle ? 12 : 0), toggle ? 1 : 0};
+    }
+
+    private int[] wingsBtn() {
+        int[] b = armorBox();
+        if (b == null || b[4] == 0) return null;
+        return new int[]{RX + PW / 2 - 24, TOP + b[3] + 2, 48, 9};
+    }
+
+    // ------------------------------------------------------------------ render
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         float s = bookScale();
-        int left = bookLeft();
-        int top = bookTop();
-        var pose = graphics.pose();
+        int left = bookLeft(), top = bookTop();
+        int mx = (int) Math.floor((mouseX - left) / s), my = (int) Math.floor((mouseY - top) / s);
+        var pose = g.pose();
         pose.pushMatrix();
         pose.translate(left, top);
         pose.scale(s, s);
 
-        graphics.fill(0, 0, BOOK_W, BOOK_H, 0xFF6A2A78);
-        graphics.fill(1, 1, BOOK_W - 1, BOOK_H - 1, 0xFF000000);
-        drawPageAnim(graphics);
-        graphics.fill(145, 8, 147, BOOK_H - 28, 0xFF6A2A78);
-        Spread spread = spreads.get(Math.min(page, spreads.size() - 1));
-        if (!"additional_info".equals(spread.art)) {
-            graphics.text(this.font, spread.title, 16, 14, titleColor(spread.art), false);
-        }
+        g.fill(0, 0, BOOK_W, BOOK_H, EDGE);
+        g.fill(1, 1, BOOK_W - 1, BOOK_H - 1, 0xFF000000);
+        if (dev.justin.infinium.client.InfiniumClientConfig.uiEffects()) UiInfection.guideBackdrop(g, 2, 2, BOOK_W - 4, BOOK_H - 4);
+        g.fill(145, 8, 147, BOTTOM + 2, EDGE);
 
-        int localMouseX = (int) ((mouseX - left) / s);
-        int localMouseY = (int) ((mouseY - top) / s);
+        View v = cur();
+        Page p = pages.get(v.page());
         ItemStack hovered = ItemStack.EMPTY;
+        int titleCol = titleColor(p);
 
-        if (isContents(spread)) {
-            drawContents(graphics, localMouseX, localMouseY);
-        } else if (isWelcome()) {
-            drawWelcome(graphics, spread.body);
-        } else if ("flow".equals(spread.art)) {
-            drawTwoColumnFlow(graphics, spread.body);
-        } else if ("additional_info".equals(spread.art)) {
-            drawAdditionalInfo(graphics, spread, localMouseX, localMouseY);
+        if (isContents(v)) {
+            title(g, v.cont() == 0 ? p.title() : p.title() + " (cont.)", LX, titleCol);
+            if (v.cont() == 0) sub(g, query.isEmpty() ? p.subtitle() : "Results for \"" + query + "\"", LX, TOP + 12);
+            drawContents(g, v, mx, my);
+        } else if (isIntro(v)) {
+            title(g, p.title(), LX, titleCol);
+            drawWelcome(g, p.body());
         } else {
-            drawBody(graphics, spread.body, 16, 28, 124);
-            List<GuideCards.Card> cards = "meteor".equals(spread.art) ? List.of() : GuideCards.forPage(spread.title, spread.art, spread.recipe, spread.note);
-            if (!cards.isEmpty()) {
-                hovered = drawCardStack(graphics, cards, STACK_X, STACK_TOP, STACK_W, STACK_BOTTOM, localMouseX, localMouseY);
-            } else if ("welcome".equals(spread.art)) {
-                blitArt(graphics, spread.art, 168, 18, 100);
-            } else if ("settings".equals(spread.art)) {
-                drawSettings(graphics, 152, 16);
-            } else if ("matrix".equals(spread.art)) {
-                drawMatrixShowcase(graphics, 150, 16);
-            } else if ("meteor".equals(spread.art)) {
-                drawMeteorShowcase(graphics, 150, 16);
-            } else if ("templates".equals(spread.art) && spread.note.isEmpty()) {
-                // Bring both template images closer to the vertical center so the gap is balanced (#5)
-                int topArtY = 24;
-                if (!blitSheet(graphics, spread.art, 151, topArtY, 124, 62)) {
-                    blitArt(graphics, spread.art, 158, topArtY, 64);
-                }
-                hovered = drawRecipes(graphics, spread.recipe, 150, 96, 56, localMouseX, localMouseY);
-            } else if (!spread.note.isEmpty() && spread.art.isEmpty()) {
-                hovered = drawRecipes(graphics, spread.recipe, 150, 22, 72, localMouseX, localMouseY);
-                drawBody(graphics, spread.note, 152, 102, 124);
-            } else {
-                int topArtY = 8;
-                int artH = 62;
-                int recipeY = 116;
-                int recipeH = spread.art.isEmpty() ? 156 : 52;
-                if (!spread.art.isEmpty()) {
-                    if (!blitSheet(graphics, spread.art, 151, topArtY, 124, artH)) {
-                        blitArt(graphics, spread.art, 158, topArtY, 64);
-                    }
-                    if (!spread.note.isEmpty()) {
-                        // Vertically center the piece text equally between the top render and bottom recipe (#14)
-                        int gapTop = topArtY + artH;
-                        int gapBottom = recipeY;
-                        drawNoteBandCentered(graphics, spread.note, 152, gapTop, gapBottom, 124);
-                    }
-                }
-                hovered = drawRecipes(graphics, spread.recipe, 150, spread.art.isEmpty() ? 8 : recipeY, recipeH, localMouseX, localMouseY);
+            title(g, v.cont() == 0 ? p.title() : p.title() + " (cont.)", LX, titleCol);
+            int lTop;
+            if (v.cont() == 0) {
+                if (!p.subtitle().isEmpty()) sub(g, p.subtitle(), LX, TOP + 12);
+                lTop = TOP + 12 + (p.subtitle().isEmpty() ? 0 : 9) + 6;
+            } else lTop = TOP + 16;
+            List<Ln> l = leftLines(p);
+            drawLines(g, l, v.lFrom(), v.lTo(), LX, lTop, BOTTOM, true);
+            if (v.visual()) hovered = drawVisual(g, p, mx, my, mouseX, mouseY, left, top, s);
+            List<Ln> r = rightLines(p);
+            if (v.rTo() > v.rFrom()) {
+                int rTop = v.visual() ? rightTextTop(p) : TOP + 4;
+                drawLines(g, r, v.rFrom(), v.rTo(), RX, rTop, BOTTOM, v.visual() || v.lTo() > v.lFrom());
+            } else if (!v.visual() && v.cont() > 0 && v.lTo() > v.lFrom()) {
+                // continuation spread with nothing left for the right page: keep it calm
+                centerText(g, "~", RX, (TOP + BOTTOM) / 2, 1f, 0xFF5A246E);
             }
         }
 
-        String count = (page + 1) + " / " + spreads.size();
-        graphics.text(this.font, count, BOOK_W / 2 + 18 - this.font.width(count) / 2, BOOK_H - 20, 0xFFD24A8A, false);
+        drawNav(g, mx, my);
+        drawTabs(g, mx, my, chapterOf(v));
         pose.popMatrix();
 
-        drawEdgeParticles(graphics, left, top, BOOK_W * s, BOOK_H * s);
-
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        drawEdgeParticles(g, left, top, BOOK_W * s, BOOK_H * s);
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         if (!hovered.isEmpty()) {
             List<ClientTooltipComponent> lines = Screen.getTooltipFromItem(Minecraft.getInstance(), hovered).stream()
-                    .map(Component::getVisualOrderText)
-                    .map(ClientTooltipComponent::create)
-                    .toList();
-            graphics.tooltip(this.font, lines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+                    .map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList();
+            g.tooltip(this.font, lines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
         }
     }
 
-    private boolean isContents(Spread sp) {
-        return "Contents".equals(sp.title) || "contents".equals(sp.art);
+    private int titleColor(Page p) {
+        return switch (p.visual()) {
+            case "armor:0" -> 0xFFC45AD4;
+            case "armor:1" -> 0xFFD24A8A;
+            case "armor:2" -> 0xFFA14AD0;
+            case "armor:3" -> 0xFFE0235A;
+            case "armor:4" -> 0xFFC43A7A;
+            default -> 0xFFE070C0;
+        };
     }
 
-    private int getFirstAdditionalInfoIndex() {
-        for (int i = 0; i < spreads.size(); i++) {
-            if ("additional_info".equals(spreads.get(i).art)) return i;
+    private void title(GuiGraphicsExtractor g, String t, int x, int col) {
+        // never shrink below 0.8: long titles are short by design; clamp only if a title would overflow the page
+        float sc = Math.min(1f, (PW - 2) / (float) Math.max(1, this.font.width(t)));
+        sc = Math.max(0.8f, sc);
+        centerText(g, t, x, TOP, sc, col);
+    }
+
+    private void sub(GuiGraphicsExtractor g, String t, int x, int y) { centerText(g, t, x, y, SUB_S, SUB); }
+
+    private void centerText(GuiGraphicsExtractor g, String t, int pageX, int y, float sc, int col) {
+        var pose = g.pose();
+        float w = this.font.width(t.replace(CRYSTAL_TOKEN, "  ")) * sc;
+        pose.pushMatrix();
+        pose.translate(pageX + (PW - w) / 2f, y);
+        pose.scale(sc, sc);
+        drawLineWithCrystalIcons(g, t, 0, 0, col);
+        pose.popMatrix();
+    }
+
+    /** Draws lines [from, to) centred horizontally; block vertically centred in [y0, y1] when center is true. */
+    private void drawLines(GuiGraphicsExtractor g, List<Ln> lines, int from, int to, int pageX, int y0, int y1, boolean center) {
+        int total = 0;
+        for (int i = from; i < to; i++) total += h(lines.get(i));
+        int y = center ? y0 + Math.max(0, (y1 - y0 - total) / 2) : y0;
+        for (int i = from; i < to; i++) {
+            Ln l = lines.get(i);
+            if (!l.text().isEmpty()) centerText(g, l.text(), pageX, y, TS, l.color());
+            y += h(l);
+        }
+    }
+
+    private void drawNav(GuiGraphicsExtractor g, int mx, int my) {
+        navButton(g, B_BACK, "< Back", view > 0, mx, my);
+        navButton(g, B_CONTENTS, "Contents", true, mx, my);
+        if (!history.isEmpty()) navButton(g, B_RETURN, "Return", true, mx, my);
+        navButton(g, B_NEXT, "Next >", view < views.size() - 1, mx, my);
+        String count = (view + 1) + " / " + views.size();
+        centerText(g, count, RX, NAV_Y + 3, 0.75f, 0xFFD24A8A);
+    }
+
+    private void navButton(GuiGraphicsExtractor g, int[] b, String label, boolean enabled, int mx, int my) {
+        boolean hover = enabled && inRect(mx, my, b[0], NAV_Y, b[1], NAV_H);
+        g.fill(b[0], NAV_Y, b[0] + b[1], NAV_Y + NAV_H, hover ? 0xFFD864FF : 0xFF5A246E);
+        g.fill(b[0] + 1, NAV_Y + 1, b[0] + b[1] - 1, NAV_Y + NAV_H - 1, hover ? 0xFF4A1A5A : 0xFF1A0A22);
+        var pose = g.pose();
+        float sc = 0.75f;
+        float w = this.font.width(label) * sc;
+        pose.pushMatrix();
+        pose.translate(b[0] + (b[1] - w) / 2f, NAV_Y + 3.5f);
+        pose.scale(sc, sc);
+        g.text(this.font, label, 0, 0, enabled ? (hover ? 0xFFFFFFFF : 0xFFE8C8DE) : 0xFF6A4A78, false);
+        pose.popMatrix();
+    }
+
+    private void drawTabs(GuiGraphicsExtractor g, int mx, int my, int active) {
+        var pose = g.pose();
+        for (int i = 0; i < chapters.size(); i++) {
+            int y = tabY(i);
+            boolean on = i == active;
+            boolean hover = inRect(mx, my, BOOK_W, y, TAB_W, 23);
+            int x0 = BOOK_W - 1, x1 = BOOK_W + (on ? TAB_W : TAB_W - 3);
+            g.fill(x0, y, x1, y + 23, on ? HOT : hover ? 0xFFD864FF : 0xFF5A246E);
+            g.fill(x0, y + 1, x1 - 1, y + 22, on ? 0xFF3A1848 : hover ? 0xFF2A1038 : 0xFF12061A);
+            String lab = chapters.get(i);
+            if (lab.length() > 5) lab = lab.substring(0, 4) + ".";
+            float sc = 0.5f;
+            float w = this.font.width(lab) * sc;
+            pose.pushMatrix();
+            pose.translate(x0 + ((x1 - x0) - w) / 2f, y + 9);
+            pose.scale(sc, sc);
+            g.text(this.font, lab, 0, 0, on ? 0xFFFFFFFF : 0xFFB898C8, false);
+            pose.popMatrix();
+        }
+    }
+
+    private void drawContents(GuiGraphicsExtractor g, View v, int mx, int my) {
+        List<Integer> rows = contentsRows(query);
+        int capL = (BOTTOM - contentsTopLeft()) / ROW, capR = (BOTTOM - TOP) / ROW;
+        int per = capL + capR;
+        int start = v.cont() * per;
+        if (rows.isEmpty() && v.cont() == 0) {
+            centerText(g, "No pages match.", LX, contentsTopLeft() + 6, TS, SUB);
+            return;
+        }
+        if (start >= rows.size()) {
+            centerText(g, "End of results.", LX, contentsTopLeft() + 6, TS, SUB);
+            return;
+        }
+        for (int k = start; k < Math.min(rows.size(), start + per); k++) {
+            int rel = k - start;
+            boolean right = rel >= capL;
+            int px = right ? RX : LX;
+            int y = right ? TOP + (rel - capL) * ROW : contentsTopLeft() + rel * ROW;
+            int r = rows.get(k);
+            if (r < 0) {
+                int ch = -1 - r;
+                String name = "- " + (ch < chapters.size() ? chapters.get(ch) : "?") + " -";
+                centerText(g, name, px, y + 1, 0.62f, HOT);
+            } else {
+                Page p = pages.get(r);
+                boolean hover = inRect(mx, my, px + 4, y, PW - 8, ROW);
+                if (hover) g.fill(px + 4, y, px + PW - 4, y + ROW - 1, 0xFF3A1848);
+                centerText(g, p.title(), px, y + 1, 0.62f, hover ? 0xFFFFFFFF : TEXT);
+                String n = String.valueOf(firstView(r) + 1);
+                var pose = g.pose();
+                pose.pushMatrix();
+                pose.translate(px + PW - 4 - this.font.width(n) * 0.5f, y + 1.5f);
+                pose.scale(0.5f, 0.5f);
+                g.text(this.font, n, 0, 0, SUB, false);
+                pose.popMatrix();
+            }
+        }
+    }
+
+    private int hitContents(int mx, int my) {
+        View v = cur();
+        if (!isContents(v)) return -1;
+        List<Integer> rows = contentsRows(query);
+        int capL = (BOTTOM - contentsTopLeft()) / ROW, capR = (BOTTOM - TOP) / ROW;
+        int per = capL + capR, start = v.cont() * per;
+        for (int k = start; k < Math.min(rows.size(), start + per); k++) {
+            int rel = k - start;
+            boolean right = rel >= capL;
+            int px = right ? RX : LX;
+            int y = right ? TOP + (rel - capL) * ROW : contentsTopLeft() + rel * ROW;
+            if (rows.get(k) >= 0 && inRect(mx, my, px + 4, y, PW - 8, ROW)) return rows.get(k);
         }
         return -1;
     }
 
-    private void drawContents(GuiGraphicsExtractor g, int localMx, int localMy) {
-        String sub = "Click any chapter to jump directly to its page:";
+    private ItemStack drawVisual(GuiGraphicsExtractor g, Page p, int mx, int my, int mouseX, int mouseY, int left, int top, float s) {
+        String v = p.visual();
+        int vh = visualH(p);
+        ItemStack hovered = ItemStack.EMPTY;
+        if (v.startsWith("armor:")) {
+            int fam = Integer.parseInt(v.substring(6));
+            int[] b = armorBox();
+            g.fill(b[0], b[1], b[0] + b[2], b[1] + b[3], 0x66160822);
+            GuideArmorRender.drawSparkles(g, b[0], b[1], b[2], b[3]);
+            int sx0 = left + Math.round(b[0] * s), sy0 = top + Math.round(b[1] * s);
+            int sx1 = left + Math.round((b[0] + b[2]) * s), sy1 = top + Math.round((b[1] + b[3]) * s);
+            if (!GuideArmorRender.draw(g, fam, sx0, sy0, sx1, sy1)) {
+                centerText(g, "[ armor render ]", RX, b[1] + b[3] / 2 - 3, TS, SUB);
+            }
+            int[] w = wingsBtn();
+            if (w != null) {
+                boolean hov = inRect(mx, my, w[0], w[1], w[2], w[3]);
+                g.fill(w[0], w[1], w[0] + w[2], w[1] + w[3], hov ? 0xFFD864FF : 0xFF5A246E);
+                g.fill(w[0] + 1, w[1] + 1, w[0] + w[2] - 1, w[1] + w[3] - 1, hov ? 0xFF4A1A5A : 0xFF12061A);
+                centerText(g, "Wings: " + (GuideArmorRender.wings ? "On" : "Off"), RX, w[1] + 2, 0.55f, 0xFFE8C8DE);
+            }
+            // drag hint
+        } else if (v.startsWith("recipe:")) {
+            hovered = drawRecipes(g, v.substring(7), RX + 1, TOP, vh, mx, my);
+        } else if (v.startsWith("items:")) {
+            String[] ids = v.substring(6).split(",");
+            int n = ids.length, size = 40, gap = 6;
+            int x = RX + (PW - (n * size + (n - 1) * gap)) / 2;
+            for (String id : ids) {
+                var item = BuiltInRegistries.ITEM.getValue(Identifier.parse(id.trim()));
+                ItemStack st = new ItemStack(item);
+                float bob = (float) Math.sin(System.currentTimeMillis() / 600.0) * 1.5f;
+                g.fill(x, TOP + 2, x + size, TOP + 2 + size, 0x55160822);
+                var pose = g.pose();
+                pose.pushMatrix();
+                pose.translate(x + 4, TOP + 6 + bob);
+                pose.scale(2f, 2f);
+                g.item(st, 0, 0);
+                pose.popMatrix();
+                if (inRect(mx, my, x, TOP + 2, size, size)) hovered = st;
+                x += size + gap;
+            }
+            GuideArmorRender.drawSparkles(g, RX + 20, TOP, PW - 40, vh);
+        } else switch (v) {
+            case "matrix" -> drawMatrixShowcase(g, RX + 1, TOP);
+            case "meteor" -> drawMeteorShowcase(g, RX + 1, TOP + 2);
+            case "settings" -> drawSettings(g, RX + 3, TOP);
+            case "flow" -> hovered = drawFlow(g, RX, TOP, mx, my);
+            default -> {}
+        }
+        if (!p.caption().isEmpty()) sub(g, p.caption(), RX, TOP + vh + 4);
+        return hovered;
+    }
+
+    /** Roadmap: fragments -> crystal -> ingot + template -> tier 1 -> tier 2 -> Infinity, zig-zag with arrows. */
+    private ItemStack drawFlow(GuiGraphicsExtractor g, int x, int y, int mx, int my) {
+        ItemStack[] st = {
+                new ItemStack(Infinium.SPACETIME_FRAGMENTS), new ItemStack(Infinium.SPACETIME_CRYSTAL),
+                new ItemStack(Infinium.INGOT), GuideStacks.template(dev.justin.infinium.InfiniumStyle.ASTRAL),
+                GuideStacks.armor(Infinium.CHESTPLATE, dev.justin.infinium.InfiniumStyle.ASTRAL),
+                GuideStacks.armor(Infinium.CHESTPLATE, dev.justin.infinium.InfiniumStyle.SINGULARITY),
+                new ItemStack(Infinium.INF_CHESTPLATE)};
+        String[] lab = {"Fragments", "Crystal", "Ingot", "Template", "Tier 1", "Tier 2", "Infinity"};
+        // 4 rows: (0,1) (2,3) (4,5) (6)
+        int[][] pos = {{x + 22, y + 2}, {x + 82, y + 2}, {x + 82, y + 30}, {x + 22, y + 30}, {x + 22, y + 58}, {x + 82, y + 58}, {x + 52, y + 84}};
+        ItemStack hovered = ItemStack.EMPTY;
+        long ms = System.currentTimeMillis();
+        for (int i = 0; i < st.length - 1; i++) {
+            int ax = pos[i][0] + 11, ay = pos[i][1] + 9, bx = pos[i + 1][0] + 11, by = pos[i + 1][1] + 9;
+            int steps = 14;
+            for (int k = 1; k < steps; k++) {
+                float t = k / (float) steps;
+                float pulse = (float) ((ms / 900.0 + i * 0.3) % 1.0);
+                int a = Math.abs(t - pulse) < 0.12f ? 0xFF : 0x88;
+                int col = (a << 24) | ((i & 1) == 0 ? 0xD864FF : 0xFF66CC);
+                int px = (int) (ax + (bx - ax) * t), py = (int) (ay + (by - ay) * t);
+                g.fill(px, py, px + 1, py + 1, col);
+            }
+        }
+        var pose = g.pose();
+        for (int i = 0; i < st.length; i++) {
+            int px = pos[i][0], py = pos[i][1];
+            g.fill(px, py, px + 22, py + 18, i == st.length - 1 ? 0xFFC45AD4 : 0xFF5A246E);
+            g.fill(px + 1, py + 1, px + 21, py + 17, 0xFF12061A);
+            if (!st[i].isEmpty()) g.item(st[i], px + 3, py + 1);
+            if (inRect(mx, my, px, py, 22, 18)) hovered = st[i];
+            float w = this.font.width(lab[i]) * 0.5f;
+            pose.pushMatrix();
+            pose.translate(px + 11 - w / 2f, py + 19);
+            pose.scale(0.5f, 0.5f);
+            g.text(this.font, lab[i], 0, 0, SUB, false);
+            pose.popMatrix();
+        }
+        return hovered;
+    }
+
+    private void drawMatrixShowcase(GuiGraphicsExtractor graphics, int x, int y) {
+        long ms = System.currentTimeMillis();
+        var pose = graphics.pose();
+        int boxW = 124, boxH = 24;
+        graphics.fill(x, y, x + boxW, y + boxH, 0xFF5A246E);
+        graphics.fill(x + 1, y + 1, x + boxW - 1, y + boxH - 1, 0xEE160822);
+        int frame = (int) ((ms / 100L) % CRYSTAL_FRAMES);
+        pose.pushMatrix();
+        pose.translate(x + 4, y + 4);
+        pose.scale(0.80f, 0.80f);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, CRYSTAL_TEX, 0, 0, 0, frame * 16, 16, 16, 16, 16 * CRYSTAL_FRAMES);
+        pose.popMatrix();
+        small(graphics, "LIFETIME CRYSTALS", x + 20, y + 3, 0.60f, SUB);
+        String tot = GuideNumbers.get("crystals_total");
+        small(graphics, tot + " / " + tot + " (max)", x + 20, y + 9, 0.68f, HOT);
+        int barX = x + 4, barY = y + 17, barW = 116, barH = 4;
+        graphics.fill(barX, barY, barX + barW, barY + barH, 0xFF3A1248);
+        graphics.fill(barX + 1, barY + 1, barX + barW - 1, barY + barH - 1, 0xFF0D0312);
+        int fillW = barW - 2;
+        for (int px = 0; px < fillW; px++) {
+            float u = (float) px / fillW;
+            float wave = (float) (0.5 + 0.5 * Math.sin(u * 6.0 + ms / 350.0));
+            int col = 0xFF000000 | ((int) (180 + 75 * wave) << 16) | ((int) (40 + 50 * wave) << 8) | (int) (200 + 55 * wave);
+            graphics.fill(barX + 1 + px, barY + 1, barX + 2 + px, barY + barH - 1, col);
+        }
+        int startY = y + 27;
+        drawMilestoneCard(graphics, x, startY, 124, 25, "Tier 1: Astral & Cybernetic", 0xFFC45AD4,
+                GuideNumbers.get("crystals_t1") + " crystals, 4 perks", 8, 4, 0xFFFF00AA, ms);
+        drawMilestoneCard(graphics, x, startY + 28, 124, 25, "Tier 2: Singularity & Cyber Psycho", 0xFFA14AD0,
+                GuideNumbers.get("crystals_t2") + " crystals, 4 upgrades", 16, 4, 0xFFA14AD0, ms);
+        drawMilestoneCard(graphics, x, startY + 56, 124, 25, "Tier 3: Infinity", 0xFFFF00AA,
+                GuideNumbers.get("crystals_t3") + " crystals, 8 upgrades", 32, 8, 0xFFFF00AA, ms);
+    }
+
+    private void small(GuiGraphicsExtractor g, String t, float x, float y, float sc, int col) {
         var pose = g.pose();
         pose.pushMatrix();
-        pose.translate(16, 26);
-        pose.scale(0.68f, 0.68f);
-        g.text(this.font, sub, 0, 0, 0xFFB898C8, false);
+        pose.translate(x, y);
+        pose.scale(sc, sc);
+        g.text(this.font, t, 0, 0, col, false);
         pose.popMatrix();
-
-        int firstAddIdx = getFirstAdditionalInfoIndex();
-        int totalChapters = 0;
-        for (int i = 0; i < spreads.size(); i++) {
-            Spread sp = spreads.get(i);
-            if (isContents(sp)) continue;
-            if ("additional_info".equals(sp.art) && i != firstAddIdx) continue;
-            totalChapters++;
-        }
-        int leftCap = totalChapters <= 14 ? 7 : 8;
-        int rowIdx = 0;
-        for (int i = 0; i < spreads.size(); i++) {
-            Spread sp = spreads.get(i);
-            if (isContents(sp)) continue;
-            if ("additional_info".equals(sp.art) && i != firstAddIdx) continue;
-
-            boolean isAdd = "additional_info".equals(sp.art);
-            String title = isAdd ? "Additional Information" : sp.title;
-            String pgNum = isAdd ? (i + 1) + "–" + spreads.size() : String.valueOf(i + 1);
-            int accent = isAdd ? 0xFFFF00AA : titleColor(sp.art);
-
-            boolean rightCol = rowIdx >= leftCap;
-            int colRow = rightCol ? (rowIdx - leftCap) : rowIdx;
-            int rx = rightCol ? 154 : 16;
-            int ry = (rightCol ? 22 : 38) + colRow * 16;
-            int rw = 122;
-            int rh = 14;
-            boolean hover = localMx >= rx && localMx < rx + rw && localMy >= ry && localMy < ry + rh;
-
-            int bg = hover ? 0xFF3A1848 : 0xFF160820;
-            int border = hover ? 0xFFD864FF : (isAdd ? 0xFF8A2067 : 0xFF5A246E);
-            g.fill(rx, ry, rx + rw, ry + rh, border);
-            g.fill(rx + 1, ry + 1, rx + rw - 1, ry + rh - 1, bg);
-
-            pose.pushMatrix();
-            pose.translate(rx + 5, ry + 3);
-            pose.scale(0.75f, 0.75f);
-            g.text(this.font, title, 0, 0, hover ? 0xFFFFFFFF : accent, false);
-            pose.popMatrix();
-
-            pose.pushMatrix();
-            int pw = (int) (this.font.width("p." + pgNum) * 0.7f);
-            pose.translate(rx + rw - pw - 4, ry + 3);
-            pose.scale(0.7f, 0.7f);
-            g.text(this.font, "p." + pgNum, 0, 0, 0xFFB898C8, false);
-            pose.popMatrix();
-
-            rowIdx++;
-        }
     }
 
-    private int hitContentsSpread(double mouseX, double mouseY) {
-        if (spreads.isEmpty() || !isContents(spreads.get(Math.min(page, spreads.size() - 1)))) return -1;
-        float s = bookScale();
-        int localMx = (int) ((mouseX - bookLeft()) / s);
-        int localMy = (int) ((mouseY - bookTop()) / s);
-        int firstAddIdx = getFirstAdditionalInfoIndex();
-        int totalChapters = 0;
-        for (int i = 0; i < spreads.size(); i++) {
-            Spread sp = spreads.get(i);
-            if (isContents(sp)) continue;
-            if ("additional_info".equals(sp.art) && i != firstAddIdx) continue;
-            totalChapters++;
+    /** Animated night sky window (the old fact cards are gone; facts live in the Numbers paragraph). */
+    private void drawMeteorShowcase(GuiGraphicsExtractor graphics, int x, int y) {
+        long ms = System.currentTimeMillis();
+        var pose = graphics.pose();
+        int skyW = 124, skyH = 46;
+        graphics.fill(x, y, x + skyW, y + skyH, 0xFF8A1061);
+        graphics.fill(x + 1, y + 1, x + skyW - 1, y + skyH - 1, 0xFF06030A);
+        for (int i = 0; i < 14; i++) {
+            int sx = x + 6 + Math.abs(hash(i, 42) % 110);
+            int sy = y + 4 + Math.abs(hash(i, 99) % 26);
+            float tw = (float) (0.4 + 0.6 * Math.sin(ms / 300.0 + i * 1.7));
+            graphics.fill(sx, sy, sx + 1, sy + 1, ((int) (180 * tw) << 24) | 0xFFD8F0);
         }
-        int leftCap = totalChapters <= 14 ? 7 : 8;
-        int rowIdx = 0;
-        for (int i = 0; i < spreads.size(); i++) {
-            Spread sp = spreads.get(i);
-            if (isContents(sp)) continue;
-            if ("additional_info".equals(sp.art) && i != firstAddIdx) continue;
-            boolean rightCol = rowIdx >= leftCap;
-            int colRow = rightCol ? (rowIdx - leftCap) : rowIdx;
-            int rx = rightCol ? 154 : 16;
-            int ry = (rightCol ? 22 : 38) + colRow * 16;
-            int rw = 122;
-            int rh = 14;
-            if (localMx >= rx && localMx < rx + rw && localMy >= ry && localMy < ry + rh) {
-                return i;
+        for (int m = 0; m < 2; m++) {
+            float phase = ((ms + m * 900L) % 1800L) / 1800.0f;
+            float mx = x + 110 - phase * 100;
+            float my = y + 4 + phase * 28;
+            if (my < y + skyH - 14) {
+                for (int t = 1; t <= 5; t++) {
+                    float tx = mx + t * 3.5f, ty = my - t * 1.5f;
+                    graphics.fill((int) tx, (int) ty, (int) tx + 2, (int) ty + 2, t > 3 ? 0x66FF00AA : 0xAAFF00AA);
+                }
+                graphics.fill((int) mx, (int) my, (int) mx + 3, (int) my + 3, 0xFFFFAAE3);
             }
-            rowIdx++;
         }
-        return -1;
+        int groundY = y + skyH - 12;
+        graphics.fill(x + 1, groundY, x + skyW - 1, y + skyH - 1, 0xFF140A18);
+        graphics.fill(x + 1, groundY, x + skyW - 1, groundY + 1, 0xFF3A1A30);
+        int craterX = x + 38;
+        int ring = (int) ((ms / 50L) % 24);
+        int ra = Math.max(0, 160 - ring * 6);
+        graphics.fill(craterX - ring, groundY - ring / 3, craterX + ring, groundY + ring / 3, (ra << 24) | 0xFF00AA);
+        graphics.fill(craterX - 3, groundY - 1, craterX + 3, groundY + 2, 0xFFFF00AA);
+        if (Infinium.SPACETIME_FRAGMENTS != null) {
+            pose.pushMatrix();
+            pose.translate(craterX - 4, groundY - 14);
+            pose.scale(0.55f, 0.55f);
+            graphics.item(new ItemStack(Infinium.SPACETIME_FRAGMENTS), 0, 0);
+            pose.popMatrix();
+        }
     }
+
+    private void drawSettings(GuiGraphicsExtractor graphics, int x, int y) {
+        String[] files = {"settings_particles_on", "settings_particles_off", "settings_wings_on", "settings_wings_off"};
+        String[] labels = {"Particles on", "Particles off", "Wings on", "Wings off"};
+        int size = 42, colW = 62, rowH = 52;
+        long ms = System.currentTimeMillis();
+        for (int i = 0; i < 4; i++) {
+            int cx = x + (i % 2) * colW + (colW - size) / 2;
+            int cy = y + (i / 2) * rowH;
+            if (!blitStrip(graphics, files[i], cx, cy, size, SET_FRAME, SET_FRAMES)) drawProceduralSettingsBox(graphics, i, cx, cy, size, ms);
+            float w = this.font.width(labels[i]) * 0.6f;
+            small(graphics, labels[i], cx + (size - w) / 2f, cy + size + 2, 0.6f, 0xFFD2C0D4);
+        }
+    }
+
+    private boolean blitStrip(GuiGraphicsExtractor graphics, String art, int x, int y, int size, int frame, int frames) {
+        Identifier id = Identifier.fromNamespaceAndPath("infinium", "textures/gui/guide/" + art + ".png");
+        if (Minecraft.getInstance().getResourceManager().getResource(id).isEmpty()) return false;
+        int which = (int) ((System.currentTimeMillis() / 120L) % frames);
+        var pose = graphics.pose();
+        pose.pushMatrix();
+        pose.translate(x, y);
+        pose.scale(size / (float) frame, size / (float) frame);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, id, 0, 0, 0, which * frame, frame, frame, frame, frame * frames);
+        pose.popMatrix();
+        return true;
+    }
+
+    private ItemStack drawRecipes(GuiGraphicsExtractor graphics, String recipe, int x, int y, int availH, int mouseX, int mouseY) {
+        List<GuideStacks.Layout> layouts = GuideStacks.layouts(recipe);
+        if (layouts.isEmpty()) return ItemStack.EMPTY;
+        boolean stackAll = "tools".equals(recipe) || "dyes".equals(recipe);
+        if (!stackAll) {
+            int index = layouts.size() == 1 ? 0 : (int) ((System.currentTimeMillis() / 2200L) % layouts.size());
+            return drawStation(graphics, layouts.get(index), x, y, 124, availH, mouseX, mouseY);
+        }
+        int rows = layouts.size(), gap = 3;
+        int rowH = Math.max(12, Math.min(22, (availH - gap * (rows - 1)) / rows));
+        int groupH = rows * rowH + gap * (rows - 1);
+        int y0 = y + Math.max(0, (availH - groupH) / 2);
+        ItemStack hovered = ItemStack.EMPTY;
+        for (int i = 0; i < rows; i++) {
+            ItemStack hit = drawStation(graphics, layouts.get(i), x, y0 + i * (rowH + gap), 124, rowH, mouseX, mouseY);
+            if (!hit.isEmpty()) hovered = hit;
+        }
+        return hovered;
+    }
+
+    private void drawLineWithCrystalIcons(GuiGraphicsExtractor g, String line, int x, int y, int color) {
+        int idx = line.indexOf(CRYSTAL_TOKEN);
+        if (idx < 0) { g.text(this.font, line, x, y, color, false); return; }
+        int curX = x, pos = 0;
+        int frame = (int) ((System.currentTimeMillis() / 100L) % CRYSTAL_FRAMES);
+        while (pos < line.length()) {
+            int next = line.indexOf(CRYSTAL_TOKEN, pos);
+            if (next < 0) { g.text(this.font, line.substring(pos), curX, y, color, false); break; }
+            if (next > pos) {
+                String seg = line.substring(pos, next);
+                g.text(this.font, seg, curX, y, color, false);
+                curX += this.font.width(seg);
+            }
+            var pose = g.pose();
+            pose.pushMatrix();
+            pose.translate(curX + 0.5f, y - 0.5f);
+            pose.scale(0.55f, 0.55f);
+            g.blit(RenderPipelines.GUI_TEXTURED, CRYSTAL_TEX, 0, 0, 0, frame * 16, 16, 16, 16, 16 * CRYSTAL_FRAMES);
+            pose.popMatrix();
+            curX += 10;
+            pos = next + CRYSTAL_TOKEN.length();
+        }
+    }
+
+    // ------------------------------------------------------------------ input
+
+    private int lmx(double x) { return (int) Math.floor((x - bookLeft()) / bookScale()); }
+    private int lmy(double y) { return (int) Math.floor((y - bookTop()) / bookScale()); }
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubled) {
+        if (search != null && search.visible && search.isMouseOver(event.x(), event.y())) return super.mouseClicked(event, doubled);
         if (event.button() == 0) {
-            float s = bookScale();
-            int localMx = (int) ((event.x() - bookLeft()) / s);
-            int localMy = (int) ((event.y() - bookTop()) / s);
-            Spread spread = spreads.get(Math.min(page, spreads.size() - 1));
-            if ("additional_info".equals(spread.art)) {
-                int clickedSub = hitAdditionalInfoTab(localMx, localMy);
-                if (clickedSub >= 0) {
-                    int target = getAdditionalInfoIndex(clickedSub);
-                    if (target >= 0 && target != page) {
-                        float cVol = 0.8F * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeMaster() * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeCrystal();
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(dev.justin.infinium.ModSounds.crystal(0, dev.justin.infinium.ModSounds.INSERT).value(), 1.0F, cVol));
-                        page = target;
-                        return true;
+            int mx = lmx(event.x()), my = lmy(event.y());
+            if (inRect(mx, my, B_BACK[0], NAV_Y, B_BACK[1], NAV_H) && view > 0) { click(); turn(-1); return true; }
+            if (inRect(mx, my, B_NEXT[0], NAV_Y, B_NEXT[1], NAV_H) && view < views.size() - 1) { click(); turn(1); return true; }
+            if (inRect(mx, my, B_CONTENTS[0], NAV_Y, B_CONTENTS[1], NAV_H)) { click(); go(0, true); return true; }
+            if (!history.isEmpty() && inRect(mx, my, B_RETURN[0], NAV_Y, B_RETURN[1], NAV_H)) { click(); returnBack(); return true; }
+            for (int i = 0; i < chapters.size(); i++) {
+                if (inRect(mx, my, BOOK_W, tabY(i), TAB_W, 23)) {
+                    for (int pi = 0; pi < pages.size(); pi++) {
+                        if (pages.get(pi).chapter() == i && !"contents".equals(pages.get(pi).visual())) { click(); go(firstView(pi), true); return true; }
                     }
                 }
             }
-            int target = hitContentsSpread(event.x(), event.y());
-            if (target >= 0) {
-                float cVol = 0.8F * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeMaster() * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeCrystal();
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(dev.justin.infinium.ModSounds.crystal(0, dev.justin.infinium.ModSounds.INSERT).value(), 1.0F, cVol));
-                page = target;
-                return true;
-            }
+            int hit = hitContents(mx, my);
+            if (hit >= 0) { click(); go(firstView(hit), true); return true; }
+            int[] w = wingsBtn();
+            if (w != null && inRect(mx, my, w[0], w[1], w[2], w[3])) { click(); GuideArmorRender.wings = !GuideArmorRender.wings; return true; }
+            int[] b = armorBox();
+            if (b != null && inRect(mx, my, b[0], b[1], b[2], b[3])) { dragging = true; return true; }
+            if (search != null && search.isFocused()) { search.setFocused(false); setFocused(null); }
         }
         return super.mouseClicked(event, doubled);
     }
 
-    /** Darker, calmer deep-space backdrop matching the main menu scene (#13). */
-    private void drawPageAnim(GuiGraphicsExtractor graphics) {
-        if (!dev.justin.infinium.client.InfiniumClientConfig.uiEffects()) return;
-        UiInfection.guideBackdrop(graphics, 2, 2, BOOK_W - 4, BOOK_H - 4);
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (dragging) { GuideArmorRender.addDrag(dx / Math.max(0.5f, bookScale())); return true; }
+        return super.mouseDragged(event, dx, dy);
     }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        dragging = false;
+        return super.mouseReleased(event);
+    }
+
+    @Override
+    public boolean mouseScrolled(double x, double y, double sx, double sy) {
+        if (sy > 0) { turn(-1); return true; }
+        if (sy < 0) { turn(1); return true; }
+        return super.mouseScrolled(x, y, sx, sy);
+    }
+
+    @Override
+    public boolean keyPressed(KeyEvent event) {
+        int key = event.key();
+        if (search != null && search.visible && search.isFocused()) {
+            if (key == 256) return super.keyPressed(event);   // Esc closes
+            if (key == 257 || key == 335) {   // Enter: open first result
+                for (int r : contentsRows(query)) if (r >= 0) { go(firstView(r), true); return true; }
+                return true;
+            }
+            return super.keyPressed(event);
+        }
+        if (key == 263 || key == 65 || key == 266) { turn(-1); return true; }
+        if (key == 262 || key == 68 || key == 267) { turn(1); return true; }
+        if (key == 259) { returnBack(); return true; }    // Backspace = Return
+        if (key == 268) { go(0, true); return true; }     // Home = Contents
+        return super.keyPressed(event);
+    }
+
+    @Override
+    public void onClose() {
+        if (closing) return;
+        closing = true;
+        saveLast();
+        Minecraft.getInstance().gui.setScreen(back);
+    }
+
+    @Override
+    public boolean isPauseScreen() { return false; }
 
     private void drawEdgeParticles(GuiGraphicsExtractor graphics, float left, float top, float w, float h) {
         long ms = System.currentTimeMillis();
@@ -382,360 +921,6 @@ public class InfiniumGuideScreen extends Screen {
         }
     }
 
-    /** Vertically centers the piece description lines between gapTop and gapBottom on the right page (#14). */
-    private void drawNoteBandCentered(GuiGraphicsExtractor graphics, String note, int x, int gapTop, int gapBottom, int width) {
-        float scale = 0.68f;
-        int wrap = Math.max(20, (int) (width / scale));
-        List<FormattedCharSequence> lines = new ArrayList<>();
-        for (String para : note.split("\n", -1)) {
-            if (para.isEmpty()) continue;
-            lines.addAll(this.font.split(FormattedText.of(para), wrap));
-        }
-        int lh = this.font.lineHeight + 1;
-        float blockH = (lines.size() * lh - 1) * scale;
-        float startY = gapTop + ((gapBottom - gapTop) - blockH) / 2f;
-
-        var pose = graphics.pose();
-        pose.pushMatrix();
-        pose.translate(x, startY);
-        pose.scale(scale, scale);
-        int lineY = 0;
-        for (FormattedCharSequence line : lines) {
-            graphics.text(this.font, line, 0, lineY, 0xFFE8D4EE, false);
-            lineY += lh;
-        }
-        pose.popMatrix();
-    }
-
-    private void drawMatrixShowcase(GuiGraphicsExtractor graphics, int x, int y) {
-        long ms = System.currentTimeMillis();
-        var pose = graphics.pose();
-
-        // 1. Total Matrix Progression Box (replica of HUD X / 80 Counter)
-        int boxW = 124, boxH = 24;
-        graphics.fill(x, y, x + boxW, y + boxH, 0xFF5A246E);
-        graphics.fill(x + 1, y + 1, x + boxW - 1, y + boxH - 1, 0xEE160822);
-
-        // Blit animated Spacetime Crystal icon
-        int frame = (int) ((ms / 100L) % CRYSTAL_FRAMES);
-        pose.pushMatrix();
-        pose.translate(x + 4, y + 4);
-        pose.scale(0.80f, 0.80f);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, CRYSTAL_TEX, 0, 0, 0, frame * 16, 16, 16, 16, 16 * CRYSTAL_FRAMES);
-        pose.popMatrix();
-
-        pose.pushMatrix();
-        pose.translate(x + 20, y + 3);
-        pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "LIFETIME MATRIX PROGRESSION", 0, 0, 0xFFB898C8, false);
-        pose.popMatrix();
-
-        pose.pushMatrix();
-        pose.translate(x + 20, y + 9);
-        pose.scale(0.68f, 0.68f);
-        graphics.text(this.font, "80 / 80 Crystals (MAX)", 0, 0, 0xFFFF00AA, false);
-        pose.popMatrix();
-
-        // Mini Spacetime Energy Bar underneath
-        int barX = x + 4, barY = y + 17, barW = 116, barH = 4;
-        graphics.fill(barX, barY, barX + barW, barY + barH, 0xFF3A1248);
-        graphics.fill(barX + 1, barY + 1, barX + barW - 1, barY + barH - 1, 0xFF0D0312);
-        int fillW = barW - 2;
-        for (int px = 0; px < fillW; px++) {
-            float u = (float) px / fillW;
-            float wave = (float) (0.5 + 0.5 * Math.sin(u * 6.0 + ms / 350.0));
-            int r = (int) (180 + 75 * wave);
-            int g = (int) (40 + 50 * wave);
-            int b = (int) (200 + 55 * wave);
-            int col = 0xFF000000 | (r << 16) | (g << 8) | b;
-            graphics.fill(barX + 1 + px, barY + 1, barX + 2 + px, barY + barH - 1, col);
-        }
-
-        // 2. Upgrade Milestone Cards (Tier 1, Tier 2, Tier 3)
-        int startY = y + 27;
-        drawMilestoneCard(graphics, x, startY, 124, 25,
-                "Tier 1: Astral & Cybernetic", 0xFFC45AD4,
-                "8 Crystals Max • 4 Perks (2/perk)", 8, 4, 0xFFFF00AA, ms);
-
-        drawMilestoneCard(graphics, x, startY + 28, 124, 25,
-                "Tier 2: Singularity & Cyber Psycho", 0xFFA14AD0,
-                "16 Crystals Max • 4 Perks (4/perk)", 16, 4, 0xFFA14AD0, ms);
-
-        drawMilestoneCard(graphics, x, startY + 56, 124, 26,
-                "Tier 3: Infinity Armor", 0xFFFF00AA,
-                "32 Crystals Max • 8 Perks (4/perk)", 32, 8, 0xFFFF00AA, ms);
-
-        // 3. Footer Summary Box
-        int footY = startY + 85;
-        graphics.fill(x, footY, x + 124, footY + 31, 0xFF4A1A5A);
-        graphics.fill(x + 1, footY + 1, x + 123, footY + 30, 0xEE12051A);
-
-        pose.pushMatrix();
-        pose.translate(x + 5, footY + 4);
-        pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "✦ Matrix Sockets: 80 Crystals Total", 0, 0, 0xFFFF44C1, false);
-        pose.popMatrix();
-
-        pose.pushMatrix();
-        pose.translate(x + 5, footY + 12);
-        pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "✦ Crafting Ingots: 20 Crystals (4x/set)", 0, 0, 0xFFD2C0D4, false);
-        pose.popMatrix();
-
-        pose.pushMatrix();
-        pose.translate(x + 5, footY + 20);
-        pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "✦ The Golden Total: 100 Crystals", 0, 0, 0xFFFF55C6, false);
-        pose.popMatrix();
-    }
-
-    private void drawMilestoneCard(GuiGraphicsExtractor graphics, int cx, int cy, int cw, int ch,
-                                   String title, int titleCol, String sub, int cap, int perks, int pipCol, long ms) {
-        graphics.fill(cx, cy, cx + cw, cy + ch, 0xFF4A1A5A);
-        graphics.fill(cx + 1, cy + 1, cx + cw - 1, cy + ch - 1, 0xDD12061A);
-
-        var pose = graphics.pose();
-        pose.pushMatrix();
-        pose.translate(cx + 4, cy + 2);
-        pose.scale(0.65f, 0.65f);
-        graphics.text(this.font, title, 0, 0, titleCol, false);
-        pose.popMatrix();
-
-        pose.pushMatrix();
-        pose.translate(cx + 4, cy + 9);
-        pose.scale(0.57f, 0.57f);
-        graphics.text(this.font, sub, 0, 0, 0xFFB898C8, false);
-        pose.popMatrix();
-
-        // Draw milestone perk pips
-        int pipGap = 2;
-        int availW = cw - 8;
-        int totalGap = (perks - 1) * pipGap;
-        int pipW = Math.max(6, (availW - totalGap) / perks);
-        int pipH = 4;
-        int pipY = cy + ch - 6;
-        for (int p = 0; p < perks; p++) {
-            int px = cx + 4 + p * (pipW + pipGap);
-            graphics.fill(px, pipY, px + pipW, pipY + pipH, 0xFF30103A);
-            float wave = (float) (0.8 + 0.2 * Math.sin(ms / 250.0 + p * 0.8));
-            int r = (int) (((pipCol >> 16) & 0xFF) * wave);
-            int g = (int) (((pipCol >> 8) & 0xFF) * wave);
-            int b = (int) ((pipCol & 0xFF) * wave);
-            int col = 0xFF000000 | (r << 16) | (g << 8) | b;
-            graphics.fill(px + 1, pipY + 1, px + pipW - 1, pipY + pipH - 1, col);
-        }
-    }
-
-    private void drawMeteorShowcase(GuiGraphicsExtractor graphics, int x, int y) {
-        long ms = System.currentTimeMillis();
-        var pose = graphics.pose();
-
-        // 1. Animated Night Sky Celestial Event Window (124 x 56)
-        int skyW = 124, skyH = 46;
-        graphics.fill(x, y, x + skyW, y + skyH, 0xFF8A1061);
-        graphics.fill(x + 1, y + 1, x + skyW - 1, y + skyH - 1, 0xFF06030A);
-
-        // Twinkling stars
-        for (int i = 0; i < 14; i++) {
-            int sx = x + 6 + Math.abs(hash(i, 42) % 110);
-            int sy = y + 4 + Math.abs(hash(i, 99) % 26);
-            float twinkle = (float) (0.4 + 0.6 * Math.sin(ms / 300.0 + i * 1.7));
-            int alpha = (int) (180 * twinkle);
-            graphics.fill(sx, sy, sx + 1, sy + 1, (alpha << 24) | 0xFFE0E0);
-        }
-
-        // Animated falling meteors
-        for (int m = 0; m < 2; m++) {
-            float phase = ((ms + m * 900L) % 1800L) / 1800.0f;
-            float mx = x + 110 - phase * 100;
-            float my = y + 4 + phase * 28;
-            if (my < y + skyH - 14) {
-                for (int t = 1; t <= 5; t++) {
-                    float tx = mx + t * 3.5f;
-                    float ty = my - t * 1.5f;
-                    int tailCol = t > 3 ? 0x66FF00AA : 0xAAFF00AA;
-                    graphics.fill((int) tx, (int) ty, (int) tx + 2, (int) ty + 2, tailCol);
-                }
-                graphics.fill((int) mx, (int) my, (int) mx + 3, (int) my + 3, 0xFFFFAAE3);
-            }
-        }
-
-        // Ground silhouette
-        int groundY = y + skyH - 12;
-        graphics.fill(x + 1, groundY, x + skyW - 1, y + skyH - 1, 0xFF140A18);
-        graphics.fill(x + 1, groundY, x + skyW - 1, groundY + 1, 0xFF3A1A30);
-
-        // Crater impact pulse
-        int craterX = x + 38;
-        int ringPhase = (int) ((ms / 50L) % 24);
-        int ringAlpha = Math.max(0, 160 - ringPhase * 6);
-        graphics.fill(craterX - ringPhase, groundY - ringPhase / 3, craterX + ringPhase, groundY + ringPhase / 3, (ringAlpha << 24) | 0xFF00AA);
-        graphics.fill(craterX - 3, groundY - 1, craterX + 3, groundY + 2, 0xFFFF00AA);
-
-        // Floating fragment item above impact
-        if (Infinium.STRANGE_FRAGMENTS != null) {
-            pose.pushMatrix();
-            pose.translate(craterX - 4, groundY - 14);
-            pose.scale(0.55f, 0.55f);
-            graphics.item(new ItemStack(Infinium.STRANGE_FRAGMENTS), 0, 0);
-            pose.popMatrix();
-        }
-
-        pose.pushMatrix();
-        pose.translate(x + 4, y + 4);
-        pose.scale(0.60f, 0.60f);
-        graphics.text(this.font, "CELESTIAL IMPACT EVENT", 0, 0, 0xFFFF66CC, false);
-        pose.popMatrix();
-
-        // 2. Event facts as a card stack (same style as the Crystal Matrix page)
-        List<GuideCards.Card> facts = List.of(
-                GuideCards.info("When", GuideCards.PURPLE, (net.minecraft.world.level.ItemLike) null, "At night, every 10-15 days"),
-                GuideCards.info("Warning", GuideCards.VIOLET, (net.minecraft.world.level.ItemLike) null, "2 minute countdown on screen"),
-                GuideCards.info("Where", GuideCards.ROSE, (net.minecraft.world.level.ItemLike) null, "Within 10 chunks of players"),
-                GuideCards.bar("Danger", GuideCards.PINK, ItemStack.EMPTY, 1f, "1 heart, ignores armor. Hide under a roof!"),
-                GuideCards.info("Loot", GuideCards.HOT, Infinium.SPACETIME_FRAGMENTS, "About 8-10 fragments, rare template"));
-        drawCardStack(graphics, facts, x, y + skyH + 3, skyW, STACK_BOTTOM, -1, -1);
-    }
-
-    /** Right-page stack area (book units). BOOK_H - 28 = 168 is the divider end; buttons start at BOOK_H - 24. */
-    private static final int STACK_X = 150, STACK_W = 124, STACK_TOP = 10, STACK_BOTTOM = 166;
-    private static final int CARD_EDGE = 0xFF4A1A5A, CARD_FILL = 0xDD12061A, CARD_SUB = 0xFFB898C8;
-    private static final float CARD_TITLE_SCALE = 0.65f;
-
-    private record CardMetrics(float lineScale, int gap, int recipeH, List<List<FormattedCharSequence>> wrapped, int[] heights, int total) {}
-
-    private CardMetrics measureCards(List<GuideCards.Card> cards, int w, float lineScale, int gap, int recipeH) {
-        int lineH = (int) Math.ceil(this.font.lineHeight * lineScale) + 1;
-        int[] hs = new int[cards.size()];
-        List<List<FormattedCharSequence>> wrapped = new ArrayList<>();
-        int total = 0;
-        for (int i = 0; i < cards.size(); i++) {
-            GuideCards.Card c = cards.get(i);
-            List<FormattedCharSequence> lines = new ArrayList<>();
-            if (c.isRecipe()) {
-                hs[i] = recipeH;
-            } else {
-                int textW = w - 8 - (c.icon().isEmpty() ? 0 : 14);
-                int wrap = Math.max(20, (int) (textW / lineScale));
-                for (String ln : c.lines()) lines.addAll(this.font.split(FormattedText.of(ln), wrap));
-                int h = 3 + (c.title().isEmpty() ? 0 : 7) + lines.size() * lineH + ((c.bar() >= 0 || c.pips() > 0) ? 6 : 0) + 2;
-                if (!c.icon().isEmpty()) h = Math.max(h, 16);
-                hs[i] = h;
-            }
-            wrapped.add(lines);
-            total += hs[i];
-        }
-        total += gap * Math.max(0, cards.size() - 1);
-        return new CardMetrics(lineScale, gap, recipeH, wrapped, hs, total);
-    }
-
-    /** Fits the stack into [top, bottom]: shrink recipe card, then text, then gaps. Vertically centred. */
-    private ItemStack drawCardStack(GuiGraphicsExtractor g, List<GuideCards.Card> cards, int x, int top, int w, int bottom, int mx, int my) {
-        int avail = bottom - top;
-        float ls = 0.57f; int gap = 3; int rh = 42;
-        CardMetrics m = measureCards(cards, w, ls, gap, rh);
-        while (m.total() > avail && rh > 26) { rh -= 2; m = measureCards(cards, w, ls, gap, rh); }
-        while (m.total() > avail && ls > 0.45f) { ls -= 0.03f; m = measureCards(cards, w, ls, gap, rh); }
-        while (m.total() > avail && gap > 1) { gap--; m = measureCards(cards, w, ls, gap, rh); }
-        int y = top + Math.max(0, (avail - m.total()) / 2);
-        long ms = System.currentTimeMillis();
-        var pose = g.pose();
-        ItemStack hovered = ItemStack.EMPTY;
-        int lineH = (int) Math.ceil(this.font.lineHeight * ls) + 1;
-        for (int i = 0; i < cards.size(); i++) {
-            GuideCards.Card c = cards.get(i);
-            int ch = m.heights()[i];
-            if (y + ch > bottom + 1) break; // never draw past the page
-            g.fill(x, y, x + w, y + ch, c.isRecipe() ? 0xFF5A246E : CARD_EDGE);
-            g.fill(x + 1, y + 1, x + w - 1, y + ch - 1, CARD_FILL);
-            if (c.isRecipe()) {
-                List<GuideStacks.Layout> ls2 = GuideStacks.layouts(c.recipe());
-                if (!ls2.isEmpty()) {
-                    int idx = (int) ((ms / 2200L) % ls2.size());
-                    ItemStack hit = drawStation(g, ls2.get(idx), x + 3, y + 3, w - 6, ch - 6, mx, my);
-                    if (!hit.isEmpty()) hovered = hit;
-                }
-            } else {
-                int tx = x + 4;
-                if (!c.icon().isEmpty()) {
-                    int iy = y + (ch - 12) / 2;
-                    pose.pushMatrix();
-                    pose.translate(x + 3, iy);
-                    pose.scale(0.75f, 0.75f);
-                    g.item(c.icon(), 0, 0);
-                    pose.popMatrix();
-                    if (mx >= x + 3 && mx < x + 15 && my >= iy && my < iy + 12) hovered = c.icon();
-                    tx = x + 18;
-                }
-                int ty = y + 3;
-                if (!c.title().isEmpty()) {
-                    pose.pushMatrix();
-                    pose.translate(tx, ty);
-                    pose.scale(CARD_TITLE_SCALE, CARD_TITLE_SCALE);
-                    g.text(this.font, c.title(), 0, 0, c.titleCol(), false);
-                    pose.popMatrix();
-                    ty += 7;
-                }
-                for (FormattedCharSequence ln : m.wrapped().get(i)) {
-                    pose.pushMatrix();
-                    pose.translate(tx, ty);
-                    pose.scale(ls, ls);
-                    g.text(this.font, ln, 0, 0, CARD_SUB, false);
-                    pose.popMatrix();
-                    ty += lineH;
-                }
-                int barX = tx, barW = x + w - 4 - tx, barY = y + ch - 6;
-                if (c.bar() >= 0) {
-                    g.fill(barX, barY, barX + barW, barY + 4, 0xFF3A1248);
-                    g.fill(barX + 1, barY + 1, barX + barW - 1, barY + 3, 0xFF0D0312);
-                    int fillW = (int) ((barW - 2) * Math.min(1f, c.bar()));
-                    for (int px = 0; px < fillW; px++) {
-                        float u = (float) px / Math.max(1, barW - 2);
-                        float wave = (float) (0.5 + 0.5 * Math.sin(u * 6.0 + ms / 350.0));
-                        int col = 0xFF000000 | ((int) (180 + 75 * wave) << 16) | ((int) (40 + 50 * wave) << 8) | (int) (200 + 55 * wave);
-                        g.fill(barX + 1 + px, barY + 1, barX + 2 + px, barY + 3, col);
-                    }
-                } else if (c.pips() > 0) {
-                    int pipGap = 2;
-                    int pipW = Math.max(6, (barW - (c.pips() - 1) * pipGap) / c.pips());
-                    for (int p = 0; p < c.pips(); p++) {
-                        int px = barX + p * (pipW + pipGap);
-                        g.fill(px, barY, px + pipW, barY + 4, 0xFF30103A);
-                        if (p < c.pipsOn()) {
-                            float wave = (float) (0.8 + 0.2 * Math.sin(ms / 250.0 + p * 0.8));
-                            int pc = c.titleCol();
-                            int col = 0xFF000000 | ((int) (((pc >> 16) & 0xFF) * wave) << 16) | ((int) (((pc >> 8) & 0xFF) * wave) << 8) | (int) ((pc & 0xFF) * wave);
-                            g.fill(px + 1, barY + 1, px + pipW - 1, barY + 3, col);
-                        }
-                    }
-                }
-            }
-            y += ch + m.gap();
-        }
-        return hovered;
-    }
-
-    private void drawSettings(GuiGraphicsExtractor graphics, int x, int y) {
-        String[] files = {"settings_particles_on", "settings_particles_off", "settings_wings_on", "settings_wings_off"};
-        String[] labels = {"Particles on", "Particles off", "Wings on", "Wings off"};
-        int size = 52;
-        int colW = 64;
-        int rowH = 74;
-        long ms = System.currentTimeMillis();
-        for (int i = 0; i < 4; i++) {
-            int cx = x + (i % 2) * colW;
-            int cy = y + (i / 2) * rowH;
-            if (!blitStrip(graphics, files[i], cx, cy, size, SET_FRAME, SET_FRAMES)) {
-                drawProceduralSettingsBox(graphics, i, cx, cy, size, ms);
-            }
-            var pose = graphics.pose();
-            pose.pushMatrix();
-            pose.translate(cx, cy + size + 3);
-            pose.scale(0.8f, 0.8f);
-            graphics.text(this.font, labels[i], 0, 0, 0xFFD2C0D4, false);
-            pose.popMatrix();
-        }
-    }
 
     private void drawProceduralSettingsBox(GuiGraphicsExtractor g, int mode, int cx, int cy, int size, long ms) {
         g.fill(cx, cy, cx + size, cy + size, 0xFF6A2A78);
@@ -785,22 +970,19 @@ public class InfiniumGuideScreen extends Screen {
         g.fill(cx + size - 14, cy + 4, cx + size - 4, cy + 8, on ? 0xFFFF66CC : 0xFF9A6888);
     }
 
-    private void blitArt(GuiGraphicsExtractor graphics, String art, int x, int y, int size) {
-        blitStrip(graphics, art, x, y, size, FRAME, FRAMES);
-    }
 
-    private record Sheet(Identifier id, int fw, int fh, int cols, int frames, int ms) {}
-    private static java.util.Map<String, Sheet> sheets;
-    private static java.util.Map<String, Sheet> sheets() {
+    private record ArtSheet(Identifier id, int fw, int fh, int cols, int frames, int ms) {}
+    private static java.util.Map<String, ArtSheet> sheets;
+    private static java.util.Map<String, ArtSheet> sheets() {
         if (sheets != null) return sheets;
-        java.util.Map<String, Sheet> m = new java.util.HashMap<>();
+        java.util.Map<String, ArtSheet> m = new java.util.HashMap<>();
         var res = Minecraft.getInstance().getResourceManager().getResource(Identifier.fromNamespaceAndPath("infinium", "guide/strips.json"));
         if (res.isPresent()) {
             try (var reader = new InputStreamReader(res.get().open(), StandardCharsets.UTF_8)) {
                 JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
                 for (var e : root.entrySet()) {
                     JsonObject o = e.getValue().getAsJsonObject();
-                    m.put(e.getKey(), new Sheet(Identifier.fromNamespaceAndPath("infinium", "textures/gui/guide/" + o.get("file").getAsString() + ".png"),
+                    m.put(e.getKey(), new ArtSheet(Identifier.fromNamespaceAndPath("infinium", "textures/gui/guide/" + o.get("file").getAsString() + ".png"),
                             o.get("fw").getAsInt(), o.get("fh").getAsInt(), Math.max(1, o.get("cols").getAsInt()),
                             Math.max(1, o.get("frames").getAsInt()), Math.max(10, o.get("ms").getAsInt())));
                 }
@@ -810,7 +992,7 @@ public class InfiniumGuideScreen extends Screen {
     }
 
     private boolean blitSheet(GuiGraphicsExtractor graphics, String art, int x, int y, int w, int h) {
-        Sheet sh = sheets().get(art);
+        ArtSheet sh = sheets().get(art);
         if (sh == null || Minecraft.getInstance().getResourceManager().getResource(sh.id()).isEmpty()) return false;
         int which = (int) ((System.currentTimeMillis() / sh.ms()) % sh.frames());
         int rows = (sh.frames() + sh.cols() - 1) / sh.cols();
@@ -824,40 +1006,7 @@ public class InfiniumGuideScreen extends Screen {
         return true;
     }
 
-    private boolean blitStrip(GuiGraphicsExtractor graphics, String art, int x, int y, int size, int frame, int frames) {
-        Identifier id = Identifier.fromNamespaceAndPath("infinium", "textures/gui/guide/" + art + ".png");
-        if (Minecraft.getInstance().getResourceManager().getResource(id).isEmpty()) return false;
-        int which = (int) ((System.currentTimeMillis() / 120L) % frames);
-        var pose = graphics.pose();
-        pose.pushMatrix();
-        pose.translate(x, y);
-        pose.scale(size / (float) frame, size / (float) frame);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, id, 0, 0, 0, which * frame, frame, frame, frame, frame * frames);
-        pose.popMatrix();
-        return true;
-    }
 
-    private ItemStack drawRecipes(GuiGraphicsExtractor graphics, String recipe, int x, int y, int availH, int mouseX, int mouseY) {
-        List<GuideStacks.Layout> layouts = GuideStacks.layouts(recipe);
-        if (layouts.isEmpty()) return ItemStack.EMPTY;
-        boolean stackAll = "tools".equals(recipe) || "dyes".equals(recipe);
-        if (!stackAll) {
-            int index = layouts.size() == 1 || !"templates".equals(recipe) ? 0
-                    : (int) ((System.currentTimeMillis() / 2200L) % layouts.size());
-            return drawStation(graphics, layouts.get(index), x, y, 124, availH, mouseX, mouseY);
-        }
-        int rows = layouts.size();
-        int gap = 4;
-        int rowH = Math.max(12, Math.min(22, (availH - gap * (rows - 1)) / rows));
-        int groupH = rows * rowH + gap * (rows - 1);
-        int y0 = y + Math.max(0, (availH - groupH) / 2);
-        ItemStack hovered = ItemStack.EMPTY;
-        for (int i = 0; i < rows; i++) {
-            ItemStack hit = drawStation(graphics, layouts.get(i), x, y0 + i * (rowH + gap), 124, rowH, mouseX, mouseY);
-            if (!hit.isEmpty()) hovered = hit;
-        }
-        return hovered;
-    }
 
     private ItemStack drawStation(GuiGraphicsExtractor graphics, GuideStacks.Layout layout, int x, int y, int availW, int availH, int mouseX, int mouseY) {
         List<GuideStacks.Slot> slots = layout.slots();
@@ -909,34 +1058,6 @@ public class InfiniumGuideScreen extends Screen {
         return hovered;
     }
 
-    /** Draws body text with support for inline {C} Spacetime Crystal icons (#11). */
-    private void drawBody(GuiGraphicsExtractor graphics, String body, int x, int y, int width) {
-        String processed = body.replace("{C}", CRYSTAL_TOKEN);
-        String[] paras = processed.split("\n", -1);
-        int avail = BOOK_H - 34 - y;
-        float textScale = 0.75f;
-        while (textScale > 0.42f && bodyHeight(paras, width, textScale) > avail) textScale -= 0.03f;
-        int view = (int) (avail / textScale);
-        var pose = graphics.pose();
-        pose.pushMatrix();
-        pose.translate(x, y);
-        pose.scale(textScale, textScale);
-        int wrap = (int) (width / textScale);
-        int lineY = 0;
-        for (String para : paras) {
-            if (para.isEmpty()) {
-                lineY += (this.font.lineHeight + 1) / 2;
-                continue;
-            }
-            for (String line : splitLines(para, wrap)) {
-                if (lineY >= 0 && lineY + this.font.lineHeight <= view + 2) {
-                    drawLineWithCrystalIcons(graphics, line, 0, lineY, 0xFFD2C0D4);
-                }
-                lineY += this.font.lineHeight + 1;
-            }
-        }
-        pose.popMatrix();
-    }
 
     private List<String> splitLines(String para, int wrapWidth) {
         String measured = para.replace(CRYSTAL_TOKEN, "  ");
@@ -964,43 +1085,8 @@ public class InfiniumGuideScreen extends Screen {
         return sb.toString();
     }
 
-    private void drawLineWithCrystalIcons(GuiGraphicsExtractor g, String line, int x, int y, int color) {
-        int idx = line.indexOf(CRYSTAL_TOKEN);
-        if (idx < 0) {
-            g.text(this.font, line, x, y, color, false);
-            return;
-        }
-        int curX = x;
-        int pos = 0;
-        int frame = (int) ((System.currentTimeMillis() / 100L) % CRYSTAL_FRAMES);
-        while (pos < line.length()) {
-            int next = line.indexOf(CRYSTAL_TOKEN, pos);
-            if (next < 0) {
-                String rem = line.substring(pos);
-                g.text(this.font, rem, curX, y, color, false);
-                break;
-            }
-            if (next > pos) {
-                String seg = line.substring(pos, next);
-                g.text(this.font, seg, curX, y, color, false);
-                curX += this.font.width(seg);
-            }
-            // Blit mini animated Spacetime Crystal icon (8x8) inline
-            var pose = g.pose();
-            pose.pushMatrix();
-            pose.translate(curX + 0.5f, y - 0.5f);
-            pose.scale(0.55f, 0.55f);
-            g.blit(RenderPipelines.GUI_TEXTURED, CRYSTAL_TEX, 0, 0, 0, frame * 16, 16, 16, 16, 16 * CRYSTAL_FRAMES);
-            pose.popMatrix();
-            curX += 10;
-            pos = next + CRYSTAL_TOKEN.length();
-        }
-    }
 
-    /**
-     * Welcome spread (#3): Splits the text 50/50 equally between the left and right pages
-     * and centers both bodies of text vertically on their respective pages.
-     */
+
     private void drawWelcome(GuiGraphicsExtractor graphics, String body) {
         final float textScale = 0.70f;
         final int width = 124, leftX = 16, rightX = 154;
@@ -1041,157 +1127,44 @@ public class InfiniumGuideScreen extends Screen {
         pose.popMatrix();
     }
 
-    private static final String[] ADD_TABS = {
-        "1. Movement",
-        "2. Vision & HUD",
-        "3. Combat Arts",
-        "4. World FX"
-    };
 
-    private int getAdditionalInfoIndex(int subIdx) {
-        int count = 0;
-        for (int i = 0; i < spreads.size(); i++) {
-            if ("additional_info".equals(spreads.get(i).art)) {
-                if (count == subIdx) return i;
-                count++;
-            }
+    private void drawMilestoneCard(GuiGraphicsExtractor graphics, int cx, int cy, int cw, int ch,
+                                   String title, int titleCol, String sub, int cap, int perks, int pipCol, long ms) {
+        graphics.fill(cx, cy, cx + cw, cy + ch, 0xFF4A1A5A);
+        graphics.fill(cx + 1, cy + 1, cx + cw - 1, cy + ch - 1, 0xDD12061A);
+
+        var pose = graphics.pose();
+        pose.pushMatrix();
+        pose.translate(cx + 4, cy + 2);
+        pose.scale(0.65f, 0.65f);
+        graphics.text(this.font, title, 0, 0, titleCol, false);
+        pose.popMatrix();
+
+        pose.pushMatrix();
+        pose.translate(cx + 4, cy + 9);
+        pose.scale(0.57f, 0.57f);
+        graphics.text(this.font, sub, 0, 0, 0xFFB898C8, false);
+        pose.popMatrix();
+
+        // Draw milestone perk pips
+        int pipGap = 2;
+        int availW = cw - 8;
+        int totalGap = (perks - 1) * pipGap;
+        int pipW = Math.max(6, (availW - totalGap) / perks);
+        int pipH = 4;
+        int pipY = cy + ch - 6;
+        for (int p = 0; p < perks; p++) {
+            int px = cx + 4 + p * (pipW + pipGap);
+            graphics.fill(px, pipY, px + pipW, pipY + pipH, 0xFF30103A);
+            float wave = (float) (0.8 + 0.2 * Math.sin(ms / 250.0 + p * 0.8));
+            int r = (int) (((pipCol >> 16) & 0xFF) * wave);
+            int g = (int) (((pipCol >> 8) & 0xFF) * wave);
+            int b = (int) ((pipCol & 0xFF) * wave);
+            int col = 0xFF000000 | (r << 16) | (g << 8) | b;
+            graphics.fill(px + 1, pipY + 1, px + pipW - 1, pipY + pipH - 1, col);
         }
-        return -1;
     }
 
-    private int getCurrentAdditionalInfoSubIndex(Spread sp) {
-        int count = 0;
-        for (Spread s : spreads) {
-            if ("additional_info".equals(s.art)) {
-                if (s == sp) return count;
-                count++;
-            }
-        }
-        return 0;
-    }
-
-    private int hitAdditionalInfoTab(int localMx, int localMy) {
-        if (localMy < 8 || localMy > 23) return -1;
-        if (localMx >= 16 && localMx < 74) return 0;
-        if (localMx >= 78 && localMx < 142) return 1;
-        if (localMx >= 150 && localMx < 210) return 2;
-        if (localMx >= 214 && localMx < 276) return 3;
-        return -1;
-    }
-
-    private void drawAdditionalInfo(GuiGraphicsExtractor graphics, Spread spread, int localMx, int localMy) {
-        int activeSub = getCurrentAdditionalInfoSubIndex(spread);
-
-        int[] tabX = {16, 78, 150, 214};
-        int[] tabW = {58, 64, 60, 62};
-        int ty = 9;
-        int th = 13;
-
-        for (int i = 0; i < 4; i++) {
-            int tx = tabX[i];
-            int tw = tabW[i];
-            boolean active = i == activeSub;
-            boolean hovered = localMx >= tx && localMx < tx + tw && localMy >= ty && localMy < ty + th;
-
-            int border = active ? 0xFFFF00AA : (hovered ? 0xFFD864FF : 0xFF5A246E);
-            int bg = active ? 0xFF3A1848 : (hovered ? 0xFF2A1038 : 0xFF160820);
-            int textCol = active ? 0xFFFFFFFF : (hovered ? 0xFFFFFFFF : 0xFFB898C8);
-
-            graphics.fill(tx, ty, tx + tw, ty + th, border);
-            graphics.fill(tx + 1, ty + 1, tx + tw - 1, ty + th - 1, bg);
-
-            var pose = graphics.pose();
-            pose.pushMatrix();
-            float scale = 0.68f;
-            int strW = (int) (this.font.width(ADD_TABS[i]) * scale);
-            int textX = tx + (tw - strW) / 2;
-            int textY = ty + 2;
-            pose.translate(textX, textY);
-            pose.scale(scale, scale);
-            graphics.text(this.font, ADD_TABS[i], 0, 0, textCol, false);
-            pose.popMatrix();
-
-            if (active) {
-                graphics.fill(tx + 1, ty + th - 2, tx + tw - 1, ty + th - 1, 0xFFFF00AA);
-            }
-        }
-
-        graphics.fill(16, 24, 142, 25, 0xFF5A246E);
-        graphics.fill(150, 24, 276, 25, 0xFF5A246E);
-
-        drawTwoColumnFlowOffset(graphics, spread.body, 28);
-    }
-
-    private void drawTwoColumnFlowOffset(GuiGraphicsExtractor graphics, String body, int startY) {
-        String[] paras = body.split("\n\n", -1);
-        int split = (paras.length + 1) / 2;
-        StringBuilder leftSb = new StringBuilder();
-        StringBuilder rightSb = new StringBuilder();
-        for (int i = 0; i < paras.length; i++) {
-            if (i < split) {
-                if (leftSb.length() > 0) leftSb.append("\n\n");
-                leftSb.append(paras[i]);
-            } else {
-                if (rightSb.length() > 0) rightSb.append("\n\n");
-                rightSb.append(paras[i]);
-            }
-        }
-        drawBody(graphics, leftSb.toString(), 16, startY, 124);
-        drawBody(graphics, rightSb.toString(), 154, startY, 124);
-    }
-
-    /** Two-column flow across both left and right pages for Good to Know I & II (#9, #10, #23). */
-    private void drawTwoColumnFlow(GuiGraphicsExtractor graphics, String body) {
-        String[] paras = body.split("\n\n", -1);
-        int split = (paras.length + 1) / 2;
-        StringBuilder leftSb = new StringBuilder();
-        StringBuilder rightSb = new StringBuilder();
-        for (int i = 0; i < paras.length; i++) {
-            if (i < split) {
-                if (leftSb.length() > 0) leftSb.append("\n\n");
-                leftSb.append(paras[i]);
-            } else {
-                if (rightSb.length() > 0) rightSb.append("\n\n");
-                rightSb.append(paras[i]);
-            }
-        }
-        drawBody(graphics, leftSb.toString(), 16, 28, 124);
-        drawBody(graphics, rightSb.toString(), 154, 16, 124);
-    }
-
-    private boolean isWelcome() {
-        if (spreads.isEmpty()) return false;
-        String t = spreads.get(Math.min(page, spreads.size() - 1)).title;
-        return "Intro".equals(t) || "Welcome".equals(t);
-    }
-
-    private int bodyHeight(String[] paras, int width, float textScale) {
-        int wrap = Math.max(20, (int) (width / textScale));
-        int lineY = 0;
-        for (String para : paras) {
-            if (para.isEmpty()) {
-                lineY += (this.font.lineHeight + 1) / 2;
-                continue;
-            }
-            String measured = para.replace(CRYSTAL_TOKEN, "  ");
-            lineY += this.font.split(FormattedText.of(measured), wrap).size() * (this.font.lineHeight + 1);
-        }
-        return (int) (lineY * textScale);
-    }
-
-    private static int titleColor(String art) {
-        return switch (art) {
-            case "astral" -> 0xFFC45AD4;
-            case "cybernetic" -> 0xFFD24A8A;
-            case "singularity" -> 0xFFA14AD0;
-            case "cyberpsycho" -> 0xFFE0235A;
-            case "infinity" -> 0xFFC43A7A;
-            case "matrix" -> 0xFFC45AD4;
-            case "meteor" -> 0xFFFF44C1;
-            case "additional_info" -> 0xFFFF00AA;
-            default -> 0xFFE070C0;
-        };
-    }
 
     private static int hash(long a, int b) {
         long h = a * 0x9E3779B97F4A7C15L + b * 0xC2B2AE3D27D4EB4FL;
@@ -1200,57 +1173,5 @@ public class InfiniumGuideScreen extends Screen {
         return (int) (h ^ (h >>> 32));
     }
 
-    @Override
-    public boolean keyPressed(KeyEvent event) {
-        int key = event.key();
-        if (key == 263 || key == 65) { turn(-1); return true; }
-        if (key == 262 || key == 68) { turn(1); return true; }
-        return super.keyPressed(event);
-    }
 
-    @Override
-    public void onClose() {
-        if (closing) return;
-        closing = true;
-        Minecraft.getInstance().gui.setScreen(back);
-    }
-
-    @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
-
-    private record Spread(String title, String body, String art, String recipe, String note) {
-        Spread(String title, String body, String art, String recipe) { this(title, body, art, recipe, ""); }
-    }
-
-    private static final class GuideButton extends AbstractButton {
-        @Override protected void updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput out) { defaultButtonNarrationText(out); }
-        private final java.util.function.Consumer<InputWithModifiers> press;
-
-        GuideButton(int x, int y, int w, int h, Component message, java.util.function.Consumer<InputWithModifiers> press) {
-            super(x, y, w, h, message);
-            this.press = press;
-        }
-
-        @Override
-        public void onPress(InputWithModifiers input) {
-            press.accept(input);
-        }
-
-        @Override
-        public void playDownSound(net.minecraft.client.sounds.SoundManager soundManager) {
-            float cVol = 0.8F * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeMaster() * dev.justin.infinium.client.InfiniumClientConfig.soundVolumeCrystal();
-            soundManager.play(SimpleSoundInstance.forUI(dev.justin.infinium.ModSounds.crystal(0, dev.justin.infinium.ModSounds.INSERT).value(), 1.0F, cVol));
-        }
-
-        @Override
-        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-            int bg = isHoveredOrFocused() ? 0xFF6A2A78 : 0xFF3A1830;
-            graphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), bg);
-            var font = Minecraft.getInstance().font;
-            int tx = getX() + (getWidth() - font.width(getMessage())) / 2;
-            graphics.text(font, getMessage(), tx, getY() + 3, 0xFFE8C8DE, false);
-        }
-    }
 }

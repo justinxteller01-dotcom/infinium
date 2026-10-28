@@ -1,144 +1,545 @@
 {
-  "spreads": [
-    {
-      "title": "Contents",
-      "body": "Click any chapter to jump directly to its page.",
-      "note": "",
-      "art": "contents",
-      "recipe": ""
-    },
-    {
-      "title": "Intro",
-      "body": "52 thousand years ago, the black hole at the center of our galaxy, Sagittarius A*, collided with another. The immense pressure combined with the extreme warping of spacetime as they got closer created a material so dense, it had no other choice but to molecularly form as a crystal like substance. When the black holes finally merged, the energy released sent gravitational waves, as well as fragments of the crystal like substance flying out in all directions at 50% the speed of light! Some of those fragments shot straight at us, and it appears they have arrived. Some fragments get slowed down by the other planets in our Solar System before reaching us, but most of them don't. As the ultra dense fragments crash into the earth, they burrow deep underground, unscathed. \"Hmmm\" you think to yourself, \"I wonder if that material could be useful.\"... There's only 1 way to find out.",
-      "note": "",
-      "art": "",
-      "recipe": ""
-    },
-    {
-      "title": "Fragments & Crystals",
-      "body": "Place eight spacetime fragments around an amethyst shard to craft a spacetime crystal.\n\nSpacetime crystals seem to produce their own energy from nothing. \"How is this possible?\" You wonder to yourself. You have just discovered an infinite energy source. It may not have an infinite output (that would destroy the universe), but it appears to have a small stable output for an infinite amount of time. Looks like you will just have to make enough of them.\n\nWhile wearing a full Infinium armor set, insert spacetime crystals into the set to raise its power level and activate perks.",
-      "note": "",
-      "art": "",
-      "recipe": "crystal"
-    },
-    {
-      "title": "The Crystal Matrix",
-      "body": "Every piece of Infinium armor contains an internal Spacetime Crystal Matrix. Inserting crystals raises its power, unlocks unique perks, and accelerates your armor's cosmic glow and particle trails.\n\nMatrix Capacities (Per Full Set):\n• Tier 1 (Astral / Cybernetic): 8{C} max (4 perks @ 2{C} each).\n• Tier 2 (Singularity / Cyber Psycho): 16{C} max (4 perks @ 4{C} each).\n• Tier 3 (Infinity): 32{C} max (8 perks @ 4{C} each).\n\nThe full matrix journey across all tiers requires exactly 80 Spacetime Crystals.\n\nThe X / 80 counter across the top of your inventory portrait tracks total matrix crystals inserted into your worn set. Any Tier 2 piece counts as an 8/8 maxed Tier 1 piece, and Infinity pieces count as fully maxed lower tiers.\n\nPerks unlock in whole-perk milestones. Clicking any milestone card in the Matrix screen automatically consumes the required crystals from your inventory in a single click.",
-      "note": "",
-      "art": "matrix",
-      "recipe": ""
-    },
-    {
-      "title": "Roguelike Dungeons",
-      "body": "Put on your exploring boots! Fragments can be found in world chests, with a better chance in higher-rarity ones like bastions, fortresses, and End Cities. Dive into the deepest levels of Roguelike Dungeons for the best luck!\n\nPlace eight bones around a compass to craft a dungeon finder. It points to the nearest roguelike dungeon. While held, shows beams over dungeon entrances. Green normal, yellow large, red extra large.",
-      "note": "",
-      "art": "",
-      "recipe": "finder"
-    },
-    {
-      "title": "Infinium Ingot",
-      "body": "Crystal in the center. Netherite ingots on the left and right. Obsidian on the top and bottom.\n\nThe corners are an Eye of Ender, a Diamond Block, a Wither Skeleton Skull, and a Redstone Block. Those four can go in any order.\n\nInfinium ingots are required to make/upgrade Infinium gear at a smithing table.",
-      "note": "",
-      "art": "",
-      "recipe": "ingot"
-    },
-    {
-      "title": "Upgrade Templates",
-      "body": "Upgrade templates can be found in the same chests as fragments, but are rarer. Astral and Cybernetic are the common templates, while Singularity and Cyber Psycho are the rarer ones.\n\nTemplates are required to upgrade your infinium gear. See armor pages for more information.",
-      "note": "",
-      "art": "templates",
-      "recipe": "templates"
-    },
-    {
-      "title": "Tools",
-      "body": "Sword: 12 dmg, applies 8s bleed. 100% full attack charge unleashes a 3-block wide piercing Energy Slash (5.5 dmg, applies bleed). Scales with Cyber attack speed and compresses mob i-frames.\n\nPickaxe: Toggle between Fortune IV or Silk Touch.\n\nAxe: Make any mined log drop any log of your choice.\n\nShovel: 1x1, 3x3, and 3x1 digging modes.\n\nHoe: Tills permanently saturated, un-trampleable, 100% lit farmland.\n\nSneak + Right Click on air to change modes.",
-      "note": "",
-      "art": "",
-      "recipe": "tools"
-    },
-    {
-      "title": "Astral Armor",
-      "body": "Combine an Astral Template, Netherite armor, and 1 Infinium Ingot in a Smithing Table.\n\nTougher than netherite.\nFire and lava can't hurt you.\n\nFull Set: ({C} = crystals needed to unlock)\n\n2{C} Slowly repairs all gear in your inventory.\n\n4{C} Sometimes doesn't use up the block you place.\n\n6{C} +1 block reach.\n\n8{C} Items stack higher (64 becomes 96).",
-      "note": "Helmet: Breathe underwater.\nChestplate: Built-in wings you can turn on and off.\nLeggings: Run a little faster; Quantum Tunnel zips you 8 blocks forward in mid-air.\nBoots: No fall damage; tap to jump, hold to jump higher (up to 2 blocks).",
-      "art": "astral",
-      "recipe": "astral"
-    },
-    {
-      "title": "Cybernetic Armor",
-      "body": "Crafted the same way as Astral, just with a Cybernetic template.\n\nDamage taken is 66.7% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} +10% mining speed.\n\n4{C} +1 air jump (Elytra off).\n\n6{C} +20% attack speed and bow draw speed.\n\n8{C} Nearby mobs become slowed by 25% for 2s whenever you take damage (12s cooldown).",
-      "note": "Helmet: Infinite oxygen; X-Ray Vision 16m (X / button).\nChestplate: Built-in Jet Wings (toggleable).\nLeggings: +10% Speed (No FOV change).\nBoots: No fall damage.",
-      "art": "cybernetic",
-      "recipe": "cybernetic"
-    },
-    {
-      "title": "Singularity Armor",
-      "body": "Singularity armor is obtained only by upgrading Astral gear with a Singularity Template and 1 Infinium Ingot in a Smithing Table.\n\nDamage taken is 57.1% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} Auto repair: every 5 seconds, all gear in your inventory regains 1 durability.\n\n4{C} 22% chance to not consume most building blocks.\n\n6{C} +2 block reach.\n\n8{C} Stacks grow from 64 to 128, 16 to 32, and unstackable items to 4.",
-      "note": "Helmet: Infinite oxygen.\nChestplate: Built-in Elytra; Flight Thrust (hold Ctrl).\nLeggings: +5% Speed; Quantum Tunnel 12m (ability key, mid-air).\nBoots: No fall damage; +2 blocks jump.",
-      "art": "singularity",
-      "recipe": "singularity"
-    },
-    {
-      "title": "Cyber Psycho Armor",
-      "body": "Cyber Psycho armor is obtained only by upgrading Cybernetic gear with a Cyber Psycho Template and 1 Infinium Ingot in a Smithing Table.\n\nDamage taken is 57.1% of netherite.\nFire and lava immunity.\n\nFull Set: ({C} = required crystals to activate perk)\n\n2{C} +20% mining speed.\n\n4{C} +2 air jumps (Elytra off).\n\n6{C} +50% attack speed and bow draw speed.\n\n8{C} Nearby mobs become slowed by 50% for 4s whenever you take damage (10s cooldown).",
-      "note": "Helmet: Infinite oxygen; X-Ray Vision 32m (X / button).\nChestplate: Built-in Jet Wings; Flight Thrust (hold Ctrl).\nLeggings: +15% Speed (No FOV change).\nBoots: No fall damage.",
-      "art": "cyberpsycho",
-      "recipe": "cyberpsycho"
-    },
-    {
-      "title": "Infinity Armor",
-      "body": "Combine a piece of Singularity gear with the same piece of Cyber Psycho gear, plus 1 Infinium Ingot to craft INFINITY ARMOR! It applies all previous bonus perks from all Infinium armor types, with even more unique bonuses!\n\nDamage taken is 50% of netherite.\nFire, lava, and explosion immunity.\nRocket-free flight: Hold Left Ctrl while flying to thrust up to max speed!\n\nFull Set: ({C} = required crystals to activate perk)\n\n4{C} +30% mining speed.\n\n8{C} +3 air jumps (Elytra off).\n\n12{C} +75% attack speed and bow draw speed.\n\n16{C} Auto repair: every 2 seconds, all gear in your inventory regains 1 durability.\n\n20{C} Stacks grow from 64 to 256, 16 to 64, and unstackable items to 16.\n\n24{C} Nearby mobs become slowed by 75% for 6s whenever you take damage (8s cooldown).\n\n28{C} 33% chance to not consume most building blocks.\n\n32{C} +3 block reach.",
-      "note": "Helmet: Infinite oxygen; 48m X-Ray.\nChestplate: Hybrid Flight & Surging Thrust (hold Ctrl).\nLeggings: +20% Speed; Quantum Tunnel 16m (ability key, mid-air).\nBoots: No fall damage; +3 blocks jump.",
-      "art": "infinity",
-      "recipe": "infinity"
-    },
-    {
-      "title": "Dye It Your Way",
-      "body": "Armor and tools can be dyed any color, any time, as many times as you want.\n\nPut a dye in the smithing template slot and your gear in the base slot. No ingot required.",
-      "note": "",
-      "art": "",
-      "recipe": "dyes"
-    },
-    {
-      "title": "Settings",
-      "body": "Built in Elytra default to ON, Shift + Right Click on air with an empty hand to toggle OFF or assign your own hotkey.\n\nAll armor perks, particles, armor lighting, and custom sounds can be customized by clicking the purple gear icon in your inventory, to the right of the recipe book. It opens straight to the set you are wearing.\n\nThe settings button only appears when you obtain your first piece of Infinium gear.\n\nShooting stars, sky ripples, and the underwater shimmer can be toggled in the Infinium settings, under the World Effects tab.",
-      "note": "",
-      "art": "settings",
-      "recipe": ""
-    },
-    {
-      "title": "Meteor Shower",
-      "body": "Roughly once every 10–15 in-game days, Sagittarius A*'s ancient cosmic debris collides with the upper atmosphere, raining crystal fragments from the night sky.\n\nThe Warning:\nTwo minutes before impact, a server-wide warning banner and countdown appear on screen, accompanied by an eerie musical swell.\n\nThe Bombardment:\nPhysical meteors streak down within a moving 10-chunk radius around active players. Distant meteors across the horizon are purely cosmetic.\nIncoming meteors screech overhead with a distinct falling whistle followed by a deep, ground-shaking thud.\n\nLethal Hazard:\nDirect hits deal a flat 1 heart (2 HP) of true cosmic damage that completely ignores all armor and enchantments! Always seek solid overhead shelter during the storm.\n\nCosmic Spoils:\nA mix of cosmetic and dropping meteors hit the ground. Venturing out to harvest impact sites yields roughly 8–10 Spacetime Fragments per shower, with an ultra-rare chance (<1%) to uncover a Smithing Template.",
-      "note": "",
-      "art": "meteor",
-      "recipe": ""
-    },
-    {
-      "title": "Movement & Flight Dynamics",
-      "body": "Flight Thrust:\nHolding the Flight Thrust key (default Left Control) while airborne triggers rocket-free directional forward propulsion, ramping up to max vanilla elytra speed without fireworks.\nAvailable exclusively on Tier 2 & 3:\n• Singularity Chestplate\n• Cyber Psycho Chestplate\n• Infinity Chestplate\n(Astral and Cybernetic behave as standard Elytras).\n\nJump Augmentation:\nEquipping higher-tier boots grants permanent vertical jump boosts:\n• Astral Boots: up to 2 blocks (tap 1, hold 2)\n• Singularity Boots: up to 3 blocks (tap 1, hold up to 3)\n• Infinity Boots: up to 4 blocks (tap 1, hold up to 4)\nBoots across all Infinium tiers eliminate 100% of fall damage.\n\nQuantum Tunnel:\nPressing the Quantum Tunnel ability key (bind it in Controls) while mid-air tunnels you along your look direction and launches you forward out of it:\n• Astral Leggings: 8 blocks, 8s cooldown\n• Singularity Leggings: 12 blocks, 6s cooldown\n• Infinity Leggings: 16 blocks, 4s cooldown\nThe warp non-phases along terrain and cannot penetrate solid structures. Includes chromatic audio-visual distortion signatures.",
-      "note": "",
-      "art": "additional_info",
-      "recipe": ""
-    },
-    {
-      "title": "Vision Systems & Tactical HUD",
-      "body": "Sensory Enhancements (X-Ray Vision):\nAdvanced Infinium helmets project 3D wireframe bounding outlines through solid terrain, highlighting high-value ores, mob spawners, trial chambers, vaults, and storage containers.\nScan Radiuses by Tier:\n• Cybernetic Helmet: 16 blocks radius\n• Cyber Psycho Helmet: 32 blocks radius\n• Infinity Helmet: 48 blocks radius\nToggled via Hotkey (default X) or the inventory screen widget. Gracefully deactivates upon un-equipping.\n\nTactical HUD & Dungeon Tracker:\nActive vision modes render neatly in the top-left corner, automatically offsetting below the Dungeon Loot reset timer when within dungeon chunks.",
-      "note": "",
-      "art": "additional_info",
-      "recipe": ""
-    },
-    {
-      "title": "Combat Arts & Weapon Discharge",
-      "body": "Energy Blade Dynamics:\nThe Infinium Sword deals 12 base melee damage and inflicts 8 seconds of Bleeding damage over time.\n\nPiercing Energy Slash:\nSwinging at 100% full attack charge unleashes a 3-block wide piercing crescent wave.\n• Wave Dimensions: 3.0 blocks wide, 0.6 blocks high.\n• Velocity & Range: 1.5 blocks/tick (~30 blocks/sec) spanning up to 36 blocks before dissipating.\n• Piercing Power: Penetrates all entities along its path, dealing 50% base sword damage (5.5 dmg) and inflicting 8s Bleeding to every mob struck. Raycasts against solid blocks and explodes on terrain collision.\n• Swing Threshold: Triggers strictly at 100% charge scale (≥0.99). Incomplete swings perform standard melee only.\n\nCyber-Tier Swing Recovery:\nWearing Cybernetic (+20%), Cyber Psycho (+50%), or Infinity (+75%) armor boosts attack speed. Weapon recovery charges significantly faster, allowing rapid barrages of energy slashes.\n\nI-Frame Compression:\nAttacking while wearing Cyber-tier armor dynamically compresses enemy damage immunity frames (i-frames) in direct proportion to your swing speed. Slashing projectiles reset mob invulnerability, ensuring piercing wave damage is never nullified by prior hits.",
-      "note": "",
-      "art": "additional_info",
-      "recipe": ""
-    },
-    {
-      "title": "World Phenomena & Atmospheric Tuning",
-      "body": "Celestial Meteor Showers:\nRoughly every 10–15 in-game days, Sagittarius A*'s ancient cosmic debris strikes the upper atmosphere, raining physical and cosmetic meteorites.\n• Warning Phase: A 2-minute countdown banner and musical swell warn players prior to impact.\n• Lethal Impact: Direct physical meteor hits inflict 1 heart (2 HP) of true cosmic damage that bypasses all armor and protection enchantments. Take overhead shelter!\n• Harvest: Impact craters yield 8–10 Spacetime Fragments with a rare chance (<1%) for Smithing Templates.\n\nWorld FX Customization:\nThe pause settings menu contains master toggles for ambient cosmic visuals:\n• Shooting star head & trail frequency\n• Daytime celestial sky ripples\n• Underwater cosmic shimmer & particles\n\nMod Menu In-Depth Tuning:\nFor server owners and enthusiasts, the deep Mod Menu configuration screen offers granular density and frequency sliders for meteor showers, chest fragment loot chances, template drop rates, and visual effect density.",
-      "note": "",
-      "art": "additional_info",
-      "recipe": ""
-    }
-  ]
+ "chapters": [
+  "Start",
+  "Find",
+  "Make",
+  "Armor",
+  "Abilities",
+  "Tools",
+  "World"
+ ],
+ "pages": [
+  {
+   "id": "contents",
+   "chapter": 0,
+   "title": "Contents",
+   "subtitle": "Click a page to open it",
+   "keywords": [
+    "index",
+    "search"
+   ],
+   "body": "",
+   "visual": "contents",
+   "caption": "",
+   "numbers": ""
+  },
+  {
+   "id": "intro",
+   "chapter": 0,
+   "title": "Intro",
+   "subtitle": "",
+   "keywords": [
+    "story",
+    "lore"
+   ],
+   "body": "52 thousand years ago, the black hole at the center of our galaxy, Sagittarius A*, collided with another. The immense pressure combined with the extreme warping of spacetime as they got closer created a material so dense, it had no other choice but to molecularly form as a crystal like substance. When the black holes finally merged, the energy released sent gravitational waves, as well as fragments of the crystal like substance flying out in all directions at 50% the speed of light! Some of those fragments shot straight at us, and it appears they have arrived. Some fragments get slowed down by the other planets in our Solar System before reaching us, but most of them don't. As the ultra dense fragments crash into the earth, they burrow deep underground, unscathed. \"Hmmm\" you think to yourself, \"I wonder if that material could be useful.\"... There's only 1 way to find out.",
+   "visual": "intro",
+   "caption": "",
+   "numbers": ""
+  },
+  {
+   "id": "roadmap",
+   "chapter": 0,
+   "title": "How Infinium Works",
+   "subtitle": "The road from fragment to Infinity",
+   "keywords": [
+    "roadmap",
+    "progression",
+    "start",
+    "guide"
+   ],
+   "body": "Find Spacetime Fragments and turn them into crystals.\nCrystals make Infinium Ingots. Ingots and upgrade templates turn netherite armor into your first set.\nCharge that set with crystals, then upgrade it to tier 2. Combine both tier 2 lines to make Infinity.",
+   "visual": "flow",
+   "caption": "Fragments, crystal, ingot, armor, upgrade, Infinity",
+   "numbers": ""
+  },
+  {
+   "id": "fragments",
+   "chapter": 1,
+   "title": "Spacetime Fragments",
+   "subtitle": "Where it all starts",
+   "keywords": [
+    "fragment",
+    "loot",
+    "chest",
+    "structure"
+   ],
+   "body": "Fragments are the base of everything in this mod.\nLook in structure chests. The Nether, the End and ancient structures hide the most. Villages rarely have any.\nDungeons and meteor craters have them too.",
+   "visual": "items:infinium:spacetime_fragments",
+   "caption": "Spacetime Fragments",
+   "numbers": ""
+  },
+  {
+   "id": "dungeons",
+   "chapter": 1,
+   "title": "Roguelike Dungeons",
+   "subtitle": "Deep floors, better loot",
+   "keywords": [
+    "dungeon",
+    "loot",
+    "refill",
+    "chest"
+   ],
+   "body": "Dungeons are full of fragments and templates.\nThe deeper the floor, the better the loot.\nChests you loot fill up again after a while, so come back later.",
+   "visual": "items:infinium:dungeon_finder",
+   "caption": "Dungeon loot refills",
+   "numbers": "Numbers: chests refill {n:dungeon_refill_days} days after you loot them."
+  },
+  {
+   "id": "finder",
+   "chapter": 1,
+   "title": "Dungeon Finder",
+   "subtitle": "Point the way down",
+   "keywords": [
+    "dungeon",
+    "finder",
+    "compass",
+    "bones"
+   ],
+   "body": "Put 8 bones around a compass.\nHold it to point at the nearest dungeon. Beams of light show over dungeon entrances.\nThe beam color tells you how big the dungeon is.",
+   "visual": "recipe:finder",
+   "caption": "Crafting table",
+   "numbers": ""
+  },
+  {
+   "id": "meteors",
+   "chapter": 1,
+   "title": "Meteor Showers",
+   "subtitle": "Look up, then take cover",
+   "keywords": [
+    "meteor",
+    "shower",
+    "crater",
+    "sky"
+   ],
+   "body": "Every so often a meteor shower comes at night. You get a warning first.\nMeteors fall near players. A direct hit hurts through any armor, so get under a roof.\nAfterwards, loot the craters for fragments and, very rarely, a template.",
+   "visual": "meteor",
+   "caption": "A meteor shower",
+   "numbers": "Numbers: every {n:meteor_min_days}-{n:meteor_max_days} nights, {n:meteor_warning_min} minute warning, a hit costs {n:meteor_hit_hearts} heart. Each meteor has a {n:meteor_loot} chance to drop {n:meteor_frag_min}-{n:meteor_frag_max} fragments; templates {n:meteor_tpl_t1} (tier 1) and {n:meteor_tpl_t2} (tier 2)."
+  },
+  {
+   "id": "templates",
+   "chapter": 1,
+   "title": "Upgrade Templates",
+   "subtitle": "The shape of your armor",
+   "keywords": [
+    "template",
+    "smithing",
+    "upgrade"
+   ],
+   "body": "Templates are in the same chests as fragments, but rarer. Very rarely a meteor drops one.\nAstral and Cybernetic templates are the common ones. Singularity and Cyber Psycho templates are rare.",
+   "visual": "recipe:templates",
+   "caption": "Each template sets an armor line",
+   "numbers": ""
+  },
+  {
+   "id": "crystals",
+   "chapter": 2,
+   "title": "Spacetime Crystals",
+   "subtitle": "Power for your armor",
+   "keywords": [
+    "crystal",
+    "craft",
+    "amethyst",
+    "charge"
+   ],
+   "body": "Put 8 fragments around an amethyst shard to make a crystal {C}.\nCrystals make ingots, and they charge your armor to unlock its perks.",
+   "visual": "recipe:crystal",
+   "caption": "Crafting table",
+   "numbers": ""
+  },
+  {
+   "id": "ingot",
+   "chapter": 2,
+   "title": "Infinium Ingot",
+   "subtitle": "Used in every Infinium craft",
+   "keywords": [
+    "ingot",
+    "craft",
+    "netherite"
+   ],
+   "body": "A crystal goes in the middle, netherite on the sides, obsidian on top and bottom.\nThe four corners take an Eye of Ender, a Diamond Block, a Wither Skeleton Skull and a Redstone Block, in any order.",
+   "visual": "recipe:ingot",
+   "caption": "Crafting table",
+   "numbers": ""
+  },
+  {
+   "id": "first_set",
+   "chapter": 2,
+   "title": "Your First Set",
+   "subtitle": "Pick a path",
+   "keywords": [
+    "astral",
+    "cybernetic",
+    "smithing",
+    "swap",
+    "first"
+   ],
+   "body": "At a smithing table, use a template, a netherite piece and an ingot.\nAstral suits builders and explorers. Cybernetic suits fighters and miners.\nChanged your mind? Use the other template on a piece to swap it. The template is used up.",
+   "visual": "recipe:first_set",
+   "caption": "Smithing table: make, or swap lines",
+   "numbers": ""
+  },
+  {
+   "id": "tiers",
+   "chapter": 3,
+   "title": "How Tiers Work",
+   "subtitle": "Tier 1, tier 2, Infinity",
+   "keywords": [
+    "tier",
+    "upgrade",
+    "singularity",
+    "cyber psycho",
+    "infinity"
+   ],
+   "body": "Tier 1 is Astral or Cybernetic.\nTier 2: upgrade a fully charged tier 1 piece. Astral becomes Singularity, Cybernetic becomes Cyber Psycho.\nA tier 2 piece counts as fully charged tier 1. It keeps every tier 1 perk at full strength. Crystals then upgrade those perks.\nTier 3: combine a Singularity piece with the same Cyber Psycho piece and an ingot to make Infinity. It counts as both lines fully charged and upgrades all 8 perks.\nEvery set: fire and lava can't hurt you, no fall damage, built-in wings.",
+   "visual": "recipe:tiers",
+   "caption": "Smithing table: upgrade, then combine",
+   "numbers": ""
+  },
+  {
+   "id": "matrix",
+   "chapter": 3,
+   "title": "The Crystal Matrix",
+   "subtitle": "Charge your set",
+   "keywords": [
+    "matrix",
+    "crystal",
+    "charge",
+    "perk",
+    "unlock"
+   ],
+   "body": "Wear a full set and put crystals {C} into it to unlock its perks one by one. Click a milestone to unlock it.\nThe counter tracks every crystal you have ever put in.\nMore charge also means a stronger glow.",
+   "visual": "matrix",
+   "caption": "Tier 1, tier 2 and Infinity milestones",
+   "numbers": "Numbers: tier 1 holds {n:crystals_t1} crystals (a perk every 2), tier 2 holds {n:crystals_t2} (every 4), Infinity holds {n:crystals_t3} (every 4). {n:crystals_total} for the whole journey."
+  },
+  {
+   "id": "astral",
+   "chapter": 3,
+   "title": "Astral Armor",
+   "subtitle": "Tier 1, the builder line",
+   "keywords": [
+    "astral",
+    "armor",
+    "tier 1",
+    "builder"
+   ],
+   "body": "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in wings.\nLeggings: run a bit faster. Quantum Tunnel zips you forward in mid-air.\nBoots: no fall damage. Tap jump for 1 block, hold to jump higher.\nFull set (charge with crystals): repairs all your gear over time, sometimes gives back a placed block, longer reach, and items stack higher.",
+   "visual": "armor:0",
+   "caption": "Full Astral set, fully charged",
+   "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_astral}. Tunnel {n:tunnel_t1} blocks, every {n:tunnel_cd_t1}s. Jump up to {n:jump_astral} blocks. Repair 1 durability every {n:repair_t1}s. Block back {n:keep_t1}. Reach +{n:reach_t1}. Stacks 64 to {n:stack64_t1}, 16 to {n:stack16_t1}, 1 to {n:stack1_t1}."
+  },
+  {
+   "id": "cybernetic",
+   "chapter": 3,
+   "title": "Cybernetic Armor",
+   "subtitle": "Tier 1, the fighter line",
+   "keywords": [
+    "cybernetic",
+    "armor",
+    "tier 1",
+    "fighter"
+   ],
+   "body": "Takes about a third less damage than netherite armor. Fire and lava can't hurt you.\nHelmet: breathe underwater forever. Press {key:xray_pulse} to see ores nearby.\nChestplate: built-in jet wings.\nLeggings: run faster (your view won't zoom).\nBoots: no fall damage.\nFull set (charge with crystals): mine faster, jump again in mid-air (wings off), swing swords and draw bows faster, and nearby mobs slow down when you get hit.",
+   "visual": "armor:1",
+   "caption": "Full Cybernetic set, fully charged",
+   "numbers": "Numbers: {n:dmg_t1} of netherite damage. X-Ray {n:xray_t1} blocks. Speed +{n:speed_cyber}. Mining +{n:mining_t1}. {n:airjumps_t1} air jump. Attack +{n:attack_t1}. Slow {n:slow_t1} for {n:slowdur_t1}s, every {n:slowcd_t1}s, within {n:slow_radius} blocks."
+  },
+  {
+   "id": "singularity",
+   "chapter": 3,
+   "title": "Singularity Armor",
+   "subtitle": "Tier 2, upgrade your Astral armor",
+   "keywords": [
+    "singularity",
+    "armor",
+    "tier 2",
+    "upgrade"
+   ],
+   "body": "Upgrade your Astral armor with a Singularity template and an ingot. It counts as fully charged Astral and keeps every Astral perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: built-in wings. Hold {key:flight_thrust} while flying to boost, no rockets needed.\nLeggings: a longer Quantum Tunnel.\nBoots: no fall damage. Hold jump to go higher.\nFull set: faster repair, gets blocks back more often, more reach, bigger stacks.",
+   "visual": "armor:2",
+   "caption": "Full Singularity set, fully charged",
+   "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_sing}. Tunnel {n:tunnel_t2} blocks, every {n:tunnel_cd_t2}s. Jump up to {n:jump_sing} blocks. Repair every {n:repair_t2}s. Block back {n:keep_t2}. Reach +{n:reach_t2}. Stacks 64 to {n:stack64_t2}, 16 to {n:stack16_t2}, 1 to {n:stack1_t2}."
+  },
+  {
+   "id": "cyberpsycho",
+   "chapter": 3,
+   "title": "Cyber Psycho Armor",
+   "subtitle": "Tier 2, upgrade your Cybernetic armor",
+   "keywords": [
+    "cyber psycho",
+    "cyberpsycho",
+    "armor",
+    "tier 2",
+    "upgrade"
+   ],
+   "body": "Upgrade your Cybernetic armor with a Cyber Psycho template and an ingot. It counts as fully charged Cybernetic and keeps every Cybernetic perk. Crystals upgrade them.\nTakes almost half the damage netherite would.\nHelmet: X-Ray reaches farther.\nChestplate: jet wings. Hold {key:flight_thrust} while flying to boost.\nLeggings: run even faster.\nBoots: no fall damage.\nFull set: mine faster, more air jumps, much faster attacks, a stronger slow.",
+   "visual": "armor:3",
+   "caption": "Full Cyber Psycho set, fully charged",
+   "numbers": "Numbers: {n:dmg_t2} of netherite damage. X-Ray {n:xray_t2} blocks. Speed +{n:speed_cp}. Mining +{n:mining_t2}. {n:airjumps_t2} air jumps. Attack +{n:attack_t2}. Slow {n:slow_t2} for {n:slowdur_t2}s, every {n:slowcd_t2}s."
+  },
+  {
+   "id": "infinity",
+   "chapter": 3,
+   "title": "Infinity Armor",
+   "subtitle": "Tier 3, upgrade both lines into one",
+   "keywords": [
+    "infinity",
+    "armor",
+    "tier 3",
+    "upgrade"
+   ],
+   "body": "Upgrade a Singularity piece with the same Cyber Psycho piece and an ingot. It counts as both lines fully charged and has all 8 perks. Crystals upgrade them to Infinity strength.\nTakes half the damage netherite would. Fire, lava and explosions can't hurt you.\nHelmet: the widest X-Ray.\nChestplate: hybrid wings. Hold {key:flight_thrust} to boost, no rockets needed.\nLeggings: the fastest run and the longest tunnel.\nBoots: no fall damage. Hold jump to go highest.\nFull set: mining, air jumps, attack speed, repair, stacks, slow, blocks back and reach, all at their best.",
+   "visual": "armor:4",
+   "caption": "Full Infinity set, fully charged",
+   "numbers": "Numbers: {n:dmg_t3} of netherite damage. X-Ray {n:xray_t3} blocks. Speed +{n:speed_inf}. Tunnel {n:tunnel_t3} blocks, every {n:tunnel_cd_t3}s. Jump up to {n:jump_inf} blocks. Mining +{n:mining_t3}. {n:airjumps_t3} air jumps. Attack +{n:attack_t3}. Repair every {n:repair_t3}s. Stacks 64 to {n:stack64_t3}, 16 to {n:stack16_t3}, 1 to {n:stack1_t3}. Slow {n:slow_t3} for {n:slowdur_t3}s, every {n:slowcd_t3}s. Block back {n:keep_t3}. Reach +{n:reach_t3}."
+  },
+  {
+   "id": "bread",
+   "chapter": 3,
+   "title": "Bread Armor",
+   "subtitle": "A joke set",
+   "keywords": [
+    "bread",
+    "joke",
+    "armor"
+   ],
+   "body": "Made of bread. Really.\nIt protects about as well as leather and it never breaks.\nCraft it from bread like any armor.",
+   "visual": "armor:5",
+   "caption": "Full Bread set",
+   "numbers": ""
+  },
+  {
+   "id": "care",
+   "chapter": 3,
+   "title": "Care & Durability",
+   "subtitle": "Keep your gear working",
+   "keywords": [
+    "durability",
+    "repair",
+    "enchant",
+    "broken",
+    "dye"
+   ],
+   "body": "When a piece is almost broken, its enchantments stop working. Its perks keep going.\nRepair it to turn the enchantments back on.\nDyeing never changes perks.",
+   "visual": "items:infinium:infinium_chestplate",
+   "caption": "Repair before it breaks",
+   "numbers": "Numbers: enchantments stop at {n:durability_floor} durability left."
+  },
+  {
+   "id": "wings",
+   "chapter": 4,
+   "title": "Wings & Flight Thrust",
+   "subtitle": "Fly without rockets",
+   "keywords": [
+    "wings",
+    "elytra",
+    "flight",
+    "thrust",
+    "boost",
+    "toggle"
+   ],
+   "body": "Your wings are on by default. Shift + Right-Click on air with an empty hand to turn them on or off. You can also set a key in Controls.\nTier 2 and 3: hold {key:flight_thrust} while flying to speed up to full elytra speed. No rockets needed.",
+   "visual": "armor:4",
+   "caption": "Infinity wings deployed",
+   "numbers": "Numbers: Flight Thrust builds up to full speed over {n:thrust_ramp_s}s."
+  },
+  {
+   "id": "jumping",
+   "chapter": 4,
+   "title": "Jumping",
+   "subtitle": "Higher and again",
+   "keywords": [
+    "jump",
+    "air jump",
+    "double jump",
+    "boots"
+   ],
+   "body": "Astral-line boots: tap jump for 1 block, hold it to go higher.\nCyber-line full sets: jump again in mid-air. This only works with your wings off.\nAstral, Singularity and Infinity also give you a small push forward in the air.",
+   "visual": "items:infinium:infinium_boots",
+   "caption": "Boots",
+   "numbers": "Numbers: hold-jump up to {n:jump_astral} / {n:jump_sing} / {n:jump_inf} blocks (Astral / Singularity / Infinity). Air jumps {n:airjumps_t1} / {n:airjumps_t2} / {n:airjumps_t3} (Cybernetic / Cyber Psycho / Infinity)."
+  },
+  {
+   "id": "tunnel",
+   "chapter": 4,
+   "title": "Quantum Tunnel",
+   "subtitle": "Zip forward through the air",
+   "keywords": [
+    "tunnel",
+    "warp",
+    "dash",
+    "leggings"
+   ],
+   "body": "Astral-line leggings. Press {key:warp} in mid-air to tunnel forward and shoot out the end.\nIt stops at solid walls.\nThe key is not set at first. Pick one in Controls.",
+   "visual": "items:infinium:infinium_leggings",
+   "caption": "Leggings",
+   "numbers": "Numbers: {n:tunnel_t1} / {n:tunnel_t2} / {n:tunnel_t3} blocks, every {n:tunnel_cd_t1} / {n:tunnel_cd_t2} / {n:tunnel_cd_t3}s."
+  },
+  {
+   "id": "xray",
+   "chapter": 4,
+   "title": "X-Ray Pulse",
+   "subtitle": "See what is hidden",
+   "keywords": [
+    "xray",
+    "x-ray",
+    "ores",
+    "pulse",
+    "helmet"
+   ],
+   "body": "Every Infinium helmet has it.\nPress {key:xray_pulse} to show nearby ores and mobs for a moment.\nHigher tiers see farther.",
+   "visual": "items:infinium:infinium_helmet",
+   "caption": "Helmet",
+   "numbers": "Numbers: {n:xray_t1} / {n:xray_t2} / {n:xray_t3} blocks (tier 1 / tier 2 / Infinity)."
+  },
+  {
+   "id": "slow",
+   "chapter": 4,
+   "title": "Slow Aura",
+   "subtitle": "Make them back off",
+   "keywords": [
+    "slow",
+    "aura",
+    "mobs",
+    "cybernetic"
+   ],
+   "body": "Cyber-line full sets.\nWhen you get hit, nearby mobs slow down for a few seconds.\nIt needs a short rest before it works again.",
+   "visual": "items:infinium:infinium_chestplate",
+   "caption": "Cyber-line full set",
+   "numbers": "Numbers: {n:slow_t1} / {n:slow_t2} / {n:slow_t3} slower, for {n:slowdur_t1} / {n:slowdur_t2} / {n:slowdur_t3}s, every {n:slowcd_t1} / {n:slowcd_t2} / {n:slowcd_t3}s, within {n:slow_radius} blocks."
+  },
+  {
+   "id": "sword",
+   "chapter": 5,
+   "title": "Sword & Energy Slash",
+   "subtitle": "Hit hard, cut wide",
+   "keywords": [
+    "sword",
+    "slash",
+    "bleed",
+    "energy"
+   ],
+   "body": "The sword hits hard and makes enemies bleed.\nA fully charged swing fires a wide energy slash through every enemy in its path.\nCyber armor lets you swing faster and hit fast enemies again sooner.",
+   "visual": "recipe:sword",
+   "caption": "Smithing table",
+   "numbers": "Numbers: {n:sword_dmg} damage, bleed {n:bleed_s}s. Slash deals {n:slash_t1} / {n:slash_t2} / {n:slash_t3} of sword damage by tier."
+  },
+  {
+   "id": "tools",
+   "chapter": 5,
+   "title": "Mining Tools",
+   "subtitle": "Pick, axe and shovel",
+   "keywords": [
+    "pickaxe",
+    "axe",
+    "shovel",
+    "mode",
+    "fortune",
+    "silk"
+   ],
+   "body": "Pickaxe: switch between Fortune IV and Silk Touch.\nAxe: logs drop the wood type you choose.\nShovel: dig 1x1, 3x3 or 3x1.\nSneak + Right-Click on air to switch modes. Tools copy your armor's look.",
+   "visual": "recipe:tools",
+   "caption": "Smithing table: netherite tool + ingot",
+   "numbers": ""
+  },
+  {
+   "id": "hoe",
+   "chapter": 5,
+   "title": "Hoe",
+   "subtitle": "Perfect farmland",
+   "keywords": [
+    "hoe",
+    "farm",
+    "farmland"
+   ],
+   "body": "Farmland you make stays wet and lit, and it can't be trampled.",
+   "visual": "items:infinium:infinium_hoe",
+   "caption": "Infinium Hoe",
+   "numbers": ""
+  },
+  {
+   "id": "rocket",
+   "chapter": 5,
+   "title": "Infinium Rocket",
+   "subtitle": "One rocket, forever",
+   "keywords": [
+    "rocket",
+    "firework",
+    "netherite rocket",
+    "elytra"
+   ],
+   "body": "Put any firework rocket and an ingot in a smithing table.\nThe Infinium Rocket is never used up.",
+   "visual": "recipe:rocket",
+   "caption": "Smithing table",
+   "numbers": ""
+  },
+  {
+   "id": "dye",
+   "chapter": 6,
+   "title": "Dye It Your Way",
+   "subtitle": "Your colors",
+   "keywords": [
+    "dye",
+    "color",
+    "glow"
+   ],
+   "body": "Put a dye in the template slot and your gear in the base slot. No ingot needed.\nRe-dye any time. Dye never changes perks.",
+   "visual": "recipe:dyes",
+   "caption": "Smithing table",
+   "numbers": ""
+  },
+  {
+   "id": "settings",
+   "chapter": 6,
+   "title": "Settings",
+   "subtitle": "Make it yours",
+   "keywords": [
+    "settings",
+    "config",
+    "particles",
+    "sound",
+    "toggle",
+    "perks"
+   ],
+   "body": "Click the purple gear next to the recipe book. It shows up once you own a piece.\nTurn perks, particles, lighting and sounds on or off for your set.\nThe World Effects tab has shooting stars, sky ripples and the underwater shimmer.",
+   "visual": "settings",
+   "caption": "Particles and wings, on and off",
+   "numbers": ""
+  },
+  {
+   "id": "keys",
+   "chapter": 6,
+   "title": "Keys & HUD",
+   "subtitle": "Every key in one place",
+   "keywords": [
+    "keys",
+    "controls",
+    "hotkey",
+    "hud",
+    "bind"
+   ],
+   "body": "Wings: Shift + Right-Click on air, or {key:toggle_wings}.\nFlight Thrust: {key:flight_thrust}.\nQuantum Tunnel: {key:warp}.\nX-Ray Pulse: {key:xray_pulse}.\nChange any of them in Controls.\nThe HUD sits top left, below the dungeon timer.",
+   "visual": "items:infinium:infinium_helmet",
+   "caption": "Set keys in Options > Controls",
+   "numbers": ""
+  },
+  {
+   "id": "fair_play",
+   "chapter": 6,
+   "title": "Fair Play",
+   "subtitle": "On servers",
+   "keywords": [
+    "server",
+    "trade",
+    "rules",
+    "admin"
+   ],
+   "body": "Some servers limit trading Infinium gear or block certain areas. Ask your server admin if something won't work.",
+   "visual": "none",
+   "caption": "",
+   "numbers": ""
+  }
+ ]
 }

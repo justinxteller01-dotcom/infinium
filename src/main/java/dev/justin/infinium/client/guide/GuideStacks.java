@@ -85,6 +85,7 @@ public final class GuideStacks {
                     Items.BREAD, Items.AIR, Items.BREAD,
                     Items.AIR, Items.AIR, Items.AIR
             }, of(Infinium.BREAD_HELMET)));
+            case "sword" -> List.of(tool(Items.NETHERITE_SWORD, Infinium.SWORD));
             case "dyes" -> dyes();
             case "rocket" -> List.of(smithing(
                     ItemStack.EMPTY, of(Items.FIREWORK_ROCKET), of(Infinium.INGOT), infinium("infinium_rocket")));
