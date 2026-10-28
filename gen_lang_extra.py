@@ -33,8 +33,8 @@ S = 'src/main/resources/assets/infinium/sounds.json'
 snd = json.load(open(S))
 for ev, vanilla in (('start', 'minecraft:block.beacon.activate'), ('loop', 'minecraft:block.beacon.ambient'),
                     ('stop', 'minecraft:block.beacon.deactivate')):
-    snd[f'cyberpsycho_thrust_{ev}'] = {"sounds": [{"name": vanilla, "type": "event"}],
-                                       "subtitle": f"subtitles.infinium.cyberpsycho_thrust_{ev}"}
+    snd.setdefault(f'cyberpsycho_thrust_{ev}', {"sounds": [{"name": vanilla, "type": "event"}],
+                                       "subtitle": f"subtitles.infinium.cyberpsycho_thrust_{ev}"})   # never clobber real clips
 json.dump(snd, open(S, 'w'), indent=2, ensure_ascii=False)
 print('gen_lang_extra: sounds merged')
 
@@ -48,10 +48,10 @@ MAX_PH = {'astral': ('minecraft:ui.toast.challenge_complete', 1.1), 'cybernetic'
           'infinity': ('minecraft:block.end_portal.spawn', 0.8)}
 snd = json.load(open(S)); lang = json.load(open(L))
 for st, (ev, pit) in PERK_PH.items():
-    snd[f'perk_unlock_{st}'] = {"sounds": [{"name": ev, "type": "event", "pitch": pit}], "subtitle": f"subtitles.infinium.perk_unlock_{st}"}
+    snd.setdefault(f'perk_unlock_{st}', {"sounds": [{"name": ev, "type": "event", "pitch": pit}], "subtitle": f"subtitles.infinium.perk_unlock_{st}"})
     lang[f'subtitles.infinium.perk_unlock_{st}'] = 'Perk unlocked' if st in ('astral', 'cybernetic') else 'Perk upgraded'
 for st, (ev, pit) in MAX_PH.items():
-    snd[f'set_maxed_{st}'] = {"sounds": [{"name": ev, "type": "event", "pitch": pit}], "subtitle": f"subtitles.infinium.set_maxed_{st}"}
+    snd.setdefault(f'set_maxed_{st}', {"sounds": [{"name": ev, "type": "event", "pitch": pit}], "subtitle": f"subtitles.infinium.set_maxed_{st}"})
     lang[f'subtitles.infinium.set_maxed_{st}'] = 'Armor fully powered'
 lang.update({"gui.infinium.crystal.insert": "Insert Crystal", "gui.infinium.crystal.insert_count": "Insert Crystal (%s left)",
              "gui.infinium.crystal.none": "No crystals", "gui.infinium.crystal.full": "Fully powered"})
