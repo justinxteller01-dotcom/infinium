@@ -31,6 +31,12 @@ public class BleedingEffect extends MobEffect {
         DotDamage.hurt(level, mob, mob.damageSources().magic(), 1.0F);   // no i-frames from DoT
         return true;
     }
+    /** Slash/beam DoT length by the owner's full set: 60 ticks Astral/Cybernetic, 80 Singularity/Cyber Psycho, 100 Infinity. */
+    public static int durationTicks(net.minecraft.world.entity.Entity owner) {
+        SetLook l = owner instanceof LivingEntity le ? SetLook.of(le) : null;
+        if (l == null) return 60;
+        return switch (l) { case INFINITY -> 100; case SINGULARITY, CYBERPSYCHO -> 80; default -> 60; };
+    }
     /** Bleed, or Burn when the owner wears a full Cybernetic / Cyber Psycho set. */
     public static net.minecraft.core.Holder<MobEffect> forOwner(net.minecraft.world.entity.Entity owner) {
         SetLook l = owner instanceof LivingEntity le ? SetLook.of(le) : null;

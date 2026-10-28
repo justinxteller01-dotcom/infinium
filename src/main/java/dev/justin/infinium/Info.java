@@ -83,7 +83,7 @@ public final class Info {
         if (it == Infinium.SWORD) {
             o.add(l("12 dmg."));
             o.add(l("Your first two swings send out energy slashes. The third fires an energy beam that hits even harder."));
-            o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (5.5 dmg). Slashes and the beam apply 8s bleed, or burn with Cyber armor."));
+            o.add(l("Energy mode (full Infinium armor set only): a fully charged swing fires a piercing Energy Slash (5.5 dmg). Slashes and the beam apply bleed, or burn with Cyber armor: 3s Astral/Cybernetic, 4s Singularity/Cyber Psycho, 5s Infinity."));
             o.add(l("Without a full set it's a normal sword."));
             o.add(l("Swings faster with Cyber armor and hits fast enemies again sooner."));
         }
