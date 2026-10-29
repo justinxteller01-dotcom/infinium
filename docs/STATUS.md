@@ -1,10 +1,12 @@
 # Infinium: project status (living file)
-Updated 2026-10-28 ~5:58 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
+Updated 2026-10-28 ~8:10 PM ET. Branch `batch1`, private repo `justinxteller01-dotcom/infinium`.
 Notation: x/y/z = tier 1/2/3 = Astral+Cybernetic / Singularity+Cyber Psycho / Infinity.
 Sources: `/home/box/shared/minecraft/{MINECRAFT_BRIEF,PERK_VALUES_MASTER}.md`, `PROJECT_MAP.md`, `review_verification_2026-10-26.md`, git log, GitHub releases.
 Update rule: on every release, edit section 1 and add a line to section 6.
 
-## 1. Current release: `batch1-819c7cd` (pre-release, 2026-10-28 5:58 PM ET; includes everything below)
+## 1. Current release: `batch1-097165f` (pre-release, 2026-10-28 8:06 PM ET; includes everything below)
+- **Testing/rebuild phase (Justin, 10-28 8:06 PM ET)**: no new jars/releases for now; code changes are compiled, checked, and pushed to `batch1` only. `batch1-097165f` was published moments before this instruction arrived.
+- **Sky FX rarity** (`097165f`): ambient (non-shower) night shooting stars and daytime sky ripples now come 5% as often as before; the base rate is set in code (`WorldSkyFx.AMBIENT_METEOR_CHANCE` 70/8400 -> 3.5/8400 per tick, about 70 -> 3.5 per night; `RIPPLE_START_CHANCE` replaces the fixed 180-399 tick wait, about 1 per 365 -> 1 per 7300 ticks, about 30 -> 1.5 per day). `meteorDensity`/`daytimeSkyRippleDensity` still multiply the rate (ripple density still also scales brightness). Meteor showers, look and colors unchanged. Menu preview (`4cc0a13`) also included.
 - **Review fixes**: guide + sword tooltip slash/beam damage now read from code (`EnergySlashEntity.SLASH_PCT/BEAM_PCT`, `dmg()`): 6 / 7.7 / 9.6 and 7.5 / 9.35 / 11.4; guide shows Cybernetic milestones 2/4/6/8 (slots 8/16/32 already from code); stale slow config/constants removed; `gen_data.py` never overwrites sounds.json, mixin configs or fabric.mod.json and skips the missing `gen_r8.py`; new `tools/check_assets.py` (27 checks, all pass).
 - **Custom gap sounds**: the 13 vanilla stand-ins are now real clips (`tools/gen_gap_sounds.py`, mono 48 kHz vorbis, loudness matched to crystal/flight files): Cyber Psycho thrust start (electric zap + charge, not a rocket), seamless 3 s hum loop, smooth power-down stop (`sounds/cyberpsycho/thrust_*.ogg`); per-set perk unlock (short) and set maxed (bigger, 4.4 s) in `sounds/perk/`. Bass "Fire Force" foundation under all; cyber sets electric, Astral/Singularity spacey, Infinity both. `gen_lang_extra.py` now uses setdefault so it can no longer reset these to vanilla. Preview: `/workspace/sound_preview/gap_sounds_preview.ogg`. Remaining stand-ins: `bonus_jump`, `bonus_jump_last`.
 - **Metadata**: fabricloader `>=0.19.5`; all 3 mixin configs `compatibilityLevel` JAVA_25 (highest in bundled Mixin 0.17.4; no JAVA_26, and the game runs Java 25).
@@ -108,6 +110,7 @@ Update rule: on every release, edit section 1 and add a line to section 6.
 - [ ] Multiplayer: everything also works for other players on the server.
 
 ## 6. Changelog (GitHub pre-releases, ET)
+- `batch1-097165f` 10-28 8:06 PM: ambient shooting stars + daytime ripples at 5% frequency; menu preview.
 - `batch1-819c7cd` 10-28 5:58 PM: review fixes (guide/tooltip damage from code, milestones, stale slow config removed, gen_data.py safe, tools/check_assets.py).
 - `batch1-2f54375` 10-28 5:49 PM: custom sounds for Cyber Psycho thrust start/loop/stop and the 10 perk-unlock / set-maxed cues.
 - `batch1-06a8938` 10-28 5:47 PM: title menu v4, rebuilt from scratch (figure-free procedural village landscape, evenly spread frozen meteors, fog, fireflies, sparkles, parallax sway).
