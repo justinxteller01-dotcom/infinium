@@ -45,7 +45,12 @@ public final class WorldSkyFx {
     private static final DustParticleOptions SHIMMER = new DustParticleOptions(0xB06AD4, 0.7F);
     private static final int[] RIPPLE_RGB = {0xA14AD0, 0xC45AD4, 0x8A3AA0, 0xD84CFF};
     private static int rippleLeft;
-    private static int rippleWait = 140 + RNG.nextInt(160);
+    /** Ambient (non-shower) shooting stars: per-tick spawn chance at density 1.0. Was 70/8400 (~70 per night);
+     *  cut to 5% on request (rarity): 3.5/8400 = ~3.5 per night window (13800-22200). x meteorDensity. */
+    private static final float AMBIENT_METEOR_CHANCE = 3.5F / 8400F;
+    /** Daytime ripple: per-tick start chance while idle at density 1.0. Was a fixed 180-399 tick wait + 75 tick
+     *  ripple (~1 per 365 ticks, ~30 per day window); cut to 5% = ~1 per 7300 ticks (~1.5 per day). x density. */
+    private static final float RIPPLE_START_CHANCE = 1F / 7225F;
     private static float rippleGrow;
     private static float rippleDens;
     private static boolean rippleShow;
@@ -62,7 +67,7 @@ public final class WorldSkyFx {
         boolean showerActive = MeteorShowerClient.isActive();
         float meteorDens = InfiniumClientConfig.meteorDensity();
         boolean meteorsEnabled = overworld && InfiniumClientConfig.shootingStars() && meteorDens > 0.001F;
-        if (meteorsEnabled && night && (showerActive ? RNG.nextFloat() < 0.25F * meteorDens : RNG.nextFloat() < (70F / 8400F) * meteorDens)) spawn();
+        if (meteorsEnabled && night && (showerActive ? RNG.nextFloat() < 0.25F * meteorDens : RNG.nextFloat() < AMBIENT_METEOR_CHANCE * meteorDens)) spawn();
         if (showerActive && meteorsEnabled && RNG.nextFloat() < 0.35F * meteorDens) spawnDistant();
         shimmer(mc, level, camera(mc));
         for (int i = 0; i < MAX; i++) {
@@ -83,10 +88,9 @@ public final class WorldSkyFx {
         if (rippleLeft > 0) {
             rippleLeft--;
             rippleGrow += 0.95F;
-        } else if (--rippleWait <= 0) {
+        } else if (RNG.nextFloat() < RIPPLE_START_CHANCE * rippleDens) {
             rippleLeft = 75;
             rippleGrow = 0;
-            rippleWait = 180 + RNG.nextInt(220);
         }
     }
 
