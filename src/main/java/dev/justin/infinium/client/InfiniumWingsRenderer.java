@@ -288,22 +288,31 @@ public final class InfiniumWingsRenderer {
     private static final int CP_FRAME_MS = 100;   // = InfiniumStyle.CYBERPSYCHO frameMs (armor glow clock)
     private static final Identifier[][][] R3 = new Identifier[5][][];   // [fam][kind: base, glow, glow_gray][frame]
     private static final Identifier[] R3_BORDER = new Identifier[5];
-    private static net.minecraft.client.model.object.equipment.ElytraModel r3Model;
 
-    /** Thin elytra: vanilla layout/UVs (texOffs 22,0, 10x20x2 box) but Z deformation -0.75 instead of +1.0, so each wing
-     *  is ~0.5px thick instead of 4px. The 4px slab rendered the front and back faces far apart (the "gap") and showed the
-     *  side/top/bottom strips as stray connecting bars. Edge strips are rebuilt by tools/fix_elytra_strips.py. */
-    static net.minecraft.client.model.geom.builders.LayerDefinition thinElytraLayer() {
+    private static final net.minecraft.client.model.object.equipment.ElytraModel[] R3_MODELS = new net.minecraft.client.model.object.equipment.ElytraModel[5];
+
+    /** Solid-plate elytra (tools/gen_elytra_plate.py): per wing a 12x22 plate with only its front/back faces (box UV at
+     *  0,0 on a 128x64 sheet) plus one single-face wall per silhouette edge run (WingPlateData), 2px deep, zScale 0.75
+     *  = a 1.5px solid slab. Replaces the vanilla 4px inflated box, whose cut-out faces sat 4px apart with no walls and
+     *  whose box-UV faces/strips sampled the wrong parts of the flat wing picture. Same footprint, pivots and poses. */
+    static net.minecraft.client.model.geom.builders.LayerDefinition plateLayer(int fam) {
+        int[][] walls = fam == 3 ? WingPlateData.FAM3 : fam == 4 ? WingPlateData.FAM4 : WingPlateData.FAM1;
         var mesh = new net.minecraft.client.model.geom.builders.MeshDefinition();
         var root = mesh.getRoot();
-        var def = new net.minecraft.client.model.geom.builders.CubeDeformation(1.0F, 1.0F, -0.75F);
-        root.addOrReplaceChild("left_wing", net.minecraft.client.model.geom.builders.CubeListBuilder.create()
-            .texOffs(22, 0).addBox(-10.0F, 0.0F, 0.0F, 10.0F, 20.0F, 2.0F, def),
-            net.minecraft.client.model.geom.PartPose.offsetAndRotation(5.0F, 0.0F, 0.0F, 0.2617994F, 0.0F, -0.2617994F));
-        root.addOrReplaceChild("right_wing", net.minecraft.client.model.geom.builders.CubeListBuilder.create()
-            .texOffs(22, 0).mirror().addBox(0.0F, 0.0F, 0.0F, 10.0F, 20.0F, 2.0F, def),
-            net.minecraft.client.model.geom.PartPose.offsetAndRotation(-5.0F, 0.0F, 0.0F, 0.2617994F, 0.0F, 0.2617994F));
-        return net.minecraft.client.model.geom.builders.LayerDefinition.create(mesh, 64, 32);
+        java.util.Set<net.minecraft.core.Direction> plate = java.util.EnumSet.of(net.minecraft.core.Direction.NORTH, net.minecraft.core.Direction.SOUTH);
+        net.minecraft.core.Direction[] dirs = {net.minecraft.core.Direction.WEST, net.minecraft.core.Direction.EAST,
+            net.minecraft.core.Direction.DOWN, net.minecraft.core.Direction.UP};
+        for (int side = 0; side < 2; side++) {
+            var b = net.minecraft.client.model.geom.builders.CubeListBuilder.create().texOffs(0, 0).mirror(side == 1)
+                .addBox(side == 0 ? -11.0F : -1.0F, -1.0F, 0.0F, 12.0F, 22.0F, 2.0F, plate).mirror(false);
+            for (int[] w : walls) if (w[0] == side)
+                b.texOffs(w[1], w[2]).addBox(w[3], w[4], w[5], w[6], w[7], w[8], java.util.EnumSet.of(dirs[w[9]]));
+            float sgn = side == 0 ? 1F : -1F;
+            root.addOrReplaceChild(side == 0 ? "left_wing" : "right_wing", b,
+                net.minecraft.client.model.geom.PartPose.offsetAndRotation(5.0F * sgn, 0.0F, 0.0F, 0.2617994F, 0.0F, -0.2617994F * sgn)
+                    .scaled(1.0F, 1.0F, 0.75F));
+        }
+        return net.minecraft.client.model.geom.builders.LayerDefinition.create(mesh, WingPlateData.TEX_W, WingPlateData.TEX_H);
     }
     /** Cyber Psycho thrust border glow + ribbon when undyed (pink; no cyan per the palette rule). */
     public static final int CP_THRUST_DEFAULT = 0xFF2EA8;
@@ -325,8 +334,8 @@ public final class InfiniumWingsRenderer {
 
     private static void renderR3(PoseStack pose, SubmitNodeCollector collector, int light, HumanoidRenderState state,
                                  ItemStack chest, int fam, float alpha, float fold, float speedMul) {
-        if (r3Model == null) r3Model = new net.minecraft.client.model.object.equipment.ElytraModel(
-            thinElytraLayer().bakeRoot());
+        if (R3_MODELS[fam] == null) R3_MODELS[fam] = new net.minecraft.client.model.object.equipment.ElytraModel(plateLayer(fam).bakeRoot());
+        var r3Model = R3_MODELS[fam];
         // stray-dot fix: at near-zero fold scale the whole wing collapses to a single dot at the pivot; draw nothing then
         if (fold < 0.05F) return;
         r3Model.setupAnim(state);
