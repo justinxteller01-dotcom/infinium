@@ -438,16 +438,17 @@ public final class ArmorParticles {
         Vec3 look = new Vec3(-Math.sin(yaw) * Math.cos(pitch), -Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
         Vec3 right = new Vec3(Math.cos(yaw), 0, Math.sin(yaw));
         Vec3 up = look.cross(right).normalize();
+        boolean rightHand = (p.getMainArm() == net.minecraft.world.entity.HumanoidArm.RIGHT) != offhand;
         if (fp) {
             // First person: positioned right at the held tool in the lower right of the screen (or left for offhand)
-            double side = offhand ? -0.24 : 0.24;
-            return p.getEyePosition().add(look.scale(0.42)).add(right.scale(side)).add(up.scale(-0.16));
+            // (cos,0,sin) is the player's LEFT in MC (yaw 0 faces +Z, right hand is -X), so screen-right is a NEGATIVE scale
+            return p.getEyePosition().add(look.scale(0.42)).add(right.scale(rightHand ? -0.24 : 0.24)).add(up.scale(-0.16));
         }
         double by = Math.toRadians(p.yBodyRot);
         Vec3 bf = new Vec3(-Math.sin(by), 0, Math.cos(by)), br = new Vec3(-bf.z, 0, bf.x);
-        // closer and lower: tip of held tool
-        double side = offhand ? 0.22 : -0.22;
-        return p.position().add(bf.scale(0.28)).add(br.scale(side)).add(0, 0.62, 0);
+        // br = (-cos,0,-sin) is the body's RIGHT. Old code used -0.22 for the main hand (= left side) at y 0.62 (= knee), which is the
+        // "clumped on the left kneecap" bug. Now: the actual hand side (respects left-handed players), at hand/tool height.
+        return p.position().add(bf.scale(0.30)).add(br.scale(rightHand ? 0.36 : -0.36)).add(0, p.getBbHeight() * 0.5, 0);
     }
 
     static void tool(Minecraft mc, ClientLevel level, RandomSource r, Player p, InfiniumStyle st, boolean fp) {
