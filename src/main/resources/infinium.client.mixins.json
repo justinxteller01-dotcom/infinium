@@ -32,7 +32,11 @@
     "SwordAnimHumanoidModelMixin",
     "SkyRendererMixin",
     "VariableJumpLivingMixin",
-    "VariableJumpLocalPlayerMixin"
+    "VariableJumpLocalPlayerMixin",
+    "KeyBindsScreenAccessor",
+    "KeyBindsCategoryEntryAccessor",
+    "InventoryTooltipOrderGuiMixin",
+    "InventoryTooltipOrderScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

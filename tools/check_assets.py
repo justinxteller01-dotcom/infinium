@@ -85,9 +85,7 @@ for mj, d in (('src/main/resources/infinium.mixins.json', J + 'mixin/'), ('src/m
     cfg = json.load(open(mj, encoding='utf-8'))
     listed = set(cfg.get('mixins', []) + cfg.get('client', []) + cfg.get('server', []))
     classes = {f[:-5] for f in os.listdir(d) if f.endswith('.java') and '@Mixin' in src(d + f)}
-    # Pre-existing unregistered since the initial import (not batch1 scope; flagged to Justin, see STATUS):
-    known = {'InventoryTooltipOrderGuiMixin', 'InventoryTooltipOrderScreenMixin', 'KeyBindsCategoryEntryAccessor', 'KeyBindsScreenAccessor'}
-    miss = sorted(classes - listed - known)
+    miss = sorted(classes - listed)
     check(not miss, f'{os.path.basename(mj)} registers all {len(classes)} @Mixin classes' + (f' (missing: {miss})' if miss else ''))
 
 print(f'\n{len(fails)} failure(s)')
