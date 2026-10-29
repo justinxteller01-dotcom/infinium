@@ -6,6 +6,7 @@ import dev.justin.infinium.client.mixin.KeyBindsCategoryEntryAccessor;
 import dev.justin.infinium.client.mixin.KeyBindsScreenAccessor;
 import java.util.List;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsList;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 
 /**
@@ -31,10 +33,15 @@ public final class BindKeyHandler {
     public static void register() {
         ScreenEvents.AFTER_INIT.register((mc, screen, w, h) -> {
             if (applies(screen)) {
-                ScreenMouseEvents.allowMouseClick(screen).register((s, ev) -> {
+                // Early phase: JEI registers its own allowMouseClick per screen (before us) and takes clicks over its
+                // ingredient list, which covers the pill on the right; we must see the click first.
+                var allow = ScreenMouseEvents.allowMouseClick(screen);
+                allow.addPhaseOrdering(EARLY, Event.DEFAULT_PHASE);
+                allow.register(EARLY, (s, ev) -> {
                     if (ev.button() != 0) return true;
+                    double[] c = hudCursor(mc, s, ev.x(), ev.y());
                     for (AbilityHud.Slot slot : AbilityHud.layout(mc, mc.player)) {
-                        if (slot.bindHit(ev.x(), ev.y())) { openControls(mc, s); return false; }
+                        if (slot.bindHit(c[0], c[1])) { openControls(mc, s); return false; }
                     }
                     return true;
                 });
@@ -51,9 +58,25 @@ public final class BindKeyHandler {
     static boolean hovered(AbilityHud.Slot slot) {
         Minecraft mc = Minecraft.getInstance();
         if (!applies(mc.gui.screen())) return false;
-        double mx = mc.mouseHandler.getScaledXPos(mc.getWindow()), my = mc.mouseHandler.getScaledYPos(mc.getWindow());
-        return slot.bindHit(mx, my);
+        double[] c = hudCursor(mc, mc.gui.screen(), mc.mouseHandler.getScaledXPos(mc.getWindow()), mc.mouseHandler.getScaledYPos(mc.getWindow()));
+        return slot.bindHit(c[0], c[1]);
     }
+
+    private static final Identifier EARLY = Infinium.id("bind_key_pill");
+
+    /** Cursor in HUD (gui-scaled window) space. The pill is drawn flat on the HUD, but Spatial GUI remaps the screen's
+     *  mouse position into its 3D panel's space, so with Spatial hooking the screen we use its physical cursor instead. */
+    static double[] hudCursor(Minecraft mc, Screen s, double x, double y) {
+        if (SPATIAL) {
+            double[] src = dev.justin.infinium.compat.SpatialMargin.hudCursor(s);
+            if (src != null) {
+                var w = mc.getWindow();
+                return new double[] { src[0] * w.getGuiScaledWidth() / w.getScreenWidth(), src[1] * w.getGuiScaledHeight() / w.getScreenHeight() };
+            }
+        }
+        return new double[] { x, y };
+    }
+    private static final boolean SPATIAL = net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("spatial-gui");
 
     public static void openControls(Minecraft mc, Screen parent) {
         mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -71,14 +94,24 @@ public final class BindKeyHandler {
             String want = InfiniumKeys.CATEGORY.label().getString();
             List<KeyBindsList.Entry> entries = list.children();
             for (int i = 0; i < entries.size(); i++) {
-                if (entries.get(i) instanceof KeyBindsList.CategoryEntry ce
-                    && ((KeyBindsCategoryEntryAccessor) ce).infinium$categoryName().getMessage().getString().equals(want)) {
+                if (isInfiniumHeader(entries.get(i), want)) {
                     list.setScrollAmount(list.scrollAmount() + (list.getRowTop(i) - list.getY()) - 4);
                     return;
                 }
             }
         } catch (Throwable t) {
             Infinium.LOG.debug("Could not scroll key binds to Infinium: {}", t.toString());
+        }
+    }
+
+    /** Vanilla header by label; Controlling replaces the list with its own CategoryEntry (public category()). */
+    private static boolean isInfiniumHeader(KeyBindsList.Entry e, String want) {
+        if (e instanceof KeyBindsList.CategoryEntry ce)
+            return ((KeyBindsCategoryEntryAccessor) ce).infinium$categoryName().getMessage().getString().equals(want);
+        try {
+            return InfiniumKeys.CATEGORY.equals(e.getClass().getMethod("category").invoke(e));
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            return false;
         }
     }
 

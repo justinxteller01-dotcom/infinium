@@ -88,5 +88,11 @@ for mj, d in (('src/main/resources/infinium.mixins.json', J + 'mixin/'), ('src/m
     miss = sorted(classes - listed)
     check(not miss, f'{os.path.basename(mj)} registers all {len(classes)} @Mixin classes' + (f' (missing: {miss})' if miss else ''))
 
+# ---- Bind-key pill click (batch1: JEI ate the click; Spatial GUI remapped it; Controlling has its own headers) ----
+bk = src(J + 'client/ability/BindKeyHandler.java')
+check('addPhaseOrdering(EARLY, Event.DEFAULT_PHASE)' in bk and 'allow.register(EARLY' in bk, 'Bind-key pill click registered in an early phase (before JEI)')
+check(bk.count('hudCursor(mc,') >= 2 and 'getSourceX' in src(J + 'compat/SpatialMargin.java'), 'Bind-key pill click + hover use HUD-space cursor (Spatial GUI aware)')
+check('getMethod("category")' in bk, 'Key Binds scroll finds Controlling category headers too')
+
 print(f'\n{len(fails)} failure(s)')
 sys.exit(1 if fails else 0)

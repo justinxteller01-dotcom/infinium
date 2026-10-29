@@ -30,5 +30,13 @@ public final class SpatialMargin {
     }
     /** Texture side in pixels: window side * render scale * F, capped to a safe GPU size. */
     public static int grow(int px) { return on() ? Math.max(1, Math.min(16384, Math.round(px * F))) : px; }
+    /** Physical cursor in window pixels while Spatial GUI draws this screen in 3D (its mouse events are then in panel
+     *  space, not HUD space), else null. Verified in game: MouseHandlerUtil.getSourceX/Y = window cursor (1.7.1+26.2). */
+    public static double[] hudCursor(net.minecraft.client.gui.screens.Screen s) {
+        try {
+            if (s == null || !SpatialGUIClient.isEnabled() || !SpatialGUIClient.shouldHookScreen(s)) return null;
+            return new double[] { org.tastytrash.spatialGUI.util.MouseHandlerUtil.getSourceX(), org.tastytrash.spatialGUI.util.MouseHandlerUtil.getSourceY() };
+        } catch (Throwable t) { return null; }
+    }
     private SpatialMargin() {}
 }
