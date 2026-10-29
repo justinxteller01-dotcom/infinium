@@ -30,7 +30,9 @@
     "SwordAnimRenderStateMixin",
     "SwordAnimAvatarRendererMixin",
     "SwordAnimHumanoidModelMixin",
-    "SkyRendererMixin"
+    "SkyRendererMixin",
+    "VariableJumpLivingMixin",
+    "VariableJumpLocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
