@@ -289,6 +289,22 @@ public final class InfiniumWingsRenderer {
     private static final Identifier[][][] R3 = new Identifier[5][][];   // [fam][kind: base, glow, glow_gray][frame]
     private static final Identifier[] R3_BORDER = new Identifier[5];
     private static net.minecraft.client.model.object.equipment.ElytraModel r3Model;
+
+    /** Thin elytra: vanilla layout/UVs (texOffs 22,0, 10x20x2 box) but Z deformation -0.75 instead of +1.0, so each wing
+     *  is ~0.5px thick instead of 4px. The 4px slab rendered the front and back faces far apart (the "gap") and showed the
+     *  side/top/bottom strips as stray connecting bars. Edge strips are rebuilt by tools/fix_elytra_strips.py. */
+    static net.minecraft.client.model.geom.builders.LayerDefinition thinElytraLayer() {
+        var mesh = new net.minecraft.client.model.geom.builders.MeshDefinition();
+        var root = mesh.getRoot();
+        var def = new net.minecraft.client.model.geom.builders.CubeDeformation(1.0F, 1.0F, -0.75F);
+        root.addOrReplaceChild("left_wing", net.minecraft.client.model.geom.builders.CubeListBuilder.create()
+            .texOffs(22, 0).addBox(-10.0F, 0.0F, 0.0F, 10.0F, 20.0F, 2.0F, def),
+            net.minecraft.client.model.geom.PartPose.offsetAndRotation(5.0F, 0.0F, 0.0F, 0.2617994F, 0.0F, -0.2617994F));
+        root.addOrReplaceChild("right_wing", net.minecraft.client.model.geom.builders.CubeListBuilder.create()
+            .texOffs(22, 0).mirror().addBox(0.0F, 0.0F, 0.0F, 10.0F, 20.0F, 2.0F, def),
+            net.minecraft.client.model.geom.PartPose.offsetAndRotation(-5.0F, 0.0F, 0.0F, 0.2617994F, 0.0F, 0.2617994F));
+        return net.minecraft.client.model.geom.builders.LayerDefinition.create(mesh, 64, 32);
+    }
     /** Cyber Psycho thrust border glow + ribbon when undyed (pink; no cyan per the palette rule). */
     public static final int CP_THRUST_DEFAULT = 0xFF2EA8;
     /** Infinity thrust border glow + ribbon when undyed (design default purple). */
@@ -310,7 +326,7 @@ public final class InfiniumWingsRenderer {
     private static void renderR3(PoseStack pose, SubmitNodeCollector collector, int light, HumanoidRenderState state,
                                  ItemStack chest, int fam, float alpha, float fold, float speedMul) {
         if (r3Model == null) r3Model = new net.minecraft.client.model.object.equipment.ElytraModel(
-            net.minecraft.client.model.object.equipment.ElytraModel.createLayer().bakeRoot());
+            thinElytraLayer().bakeRoot());
         // stray-dot fix: at near-zero fold scale the whole wing collapses to a single dot at the pivot; draw nothing then
         if (fold < 0.05F) return;
         r3Model.setupAnim(state);

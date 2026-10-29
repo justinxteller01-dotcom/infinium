@@ -103,5 +103,16 @@ check('SPIN' not in cl.split('}')[0].replace('PENDING_SPIN', '').replace('SPIN_S
 check('SLASH2_LAUNCH' in sch and 'SLASH2_LAUNCH' in ssh and 'slash2_launch' in arrays['SWORD_KINDS'], 'slash 1 / slash 2 / stab 3 each have their own sound')
 check('SwordCooldownHud.render' in hud, 'energy-mode cooldown meter drawn on the HUD')
 
+# elytra: thin plate + edge strips matching the faces they touch (tools/fix_elytra_strips.py is idempotent)
+wr = src(J + 'client/InfiniumWingsRenderer.java')
+check('thinElytraLayer().bakeRoot()' in wr and 'CubeDeformation(1.0F, 1.0F, -0.75F)' in wr and 'ElytraModel.createLayer()' not in wr, 'elytra wings use the thin (~0.5px) layer, not the 4px vanilla slab')
+import importlib.util as _iu, glob as _g, numpy as _np
+from PIL import Image as _Im
+_sp = _iu.spec_from_file_location('fes', os.path.join(os.path.dirname(__file__), 'fix_elytra_strips.py'))
+_src = open(_sp.origin).read().split('n = 0')[0]; _ns = {'__file__': _sp.origin}; exec(_src, _ns)
+_bad = [p for d in ('r3/cybernetic', 'r7/cyberpsycho', 'r5/infinity') for p in _g.glob(f"{_ns['ROOT']}/{d}/**/*.png", recursive=True)
+        if (lambda a: a.shape[1] == a.shape[0]*2 and not _np.array_equal(a, _ns['fix'](a)))(_np.asarray(_Im.open(p).convert('RGBA')))]
+check(not _bad, f'elytra edge strips match adjacent faces ({len(_bad)} bad)')
+
 print(f'\n{len(fails)} failure(s)')
 sys.exit(1 if fails else 0)
