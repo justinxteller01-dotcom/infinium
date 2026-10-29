@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Intercepts WingsLayer for Infinium & Infinity chestplates:
  *  - Completely bypasses vanilla's flat box ElytraModel and equipment layer.
- *  - Delegates directly to InfiniumWingsRenderer (custom 3D multi-piece models, dynamic crystal opacity,
- *    unlocked perk milestone pieces, zero-clipping resting stance, walking clearance, and emissive glow).
+ *  - batch1 (2026-10-29): no wing model is drawn for any Infinium set any more; InfiniumWingsRenderer only updates
+ *    fold state. Captures the posed leg soles for the foot-thruster flight visuals (FootThrusters).
  */
 @Mixin(WingsLayer.class)
 public abstract class WingsLayerMixin {
@@ -23,6 +23,8 @@ public abstract class WingsLayerMixin {
             at = @At("HEAD"), cancellable = true)
     private void infinium$wings(PoseStack pose, SubmitNodeCollector collector, int light, HumanoidRenderState state, float yRot, float xRot, CallbackInfo ci) {
         if (state.chestEquipment != null && Infinium.isChestplate(state.chestEquipment)) {
+            dev.justin.infinium.client.FootThrusters.capture(pose, state,
+                ((net.minecraft.client.renderer.entity.layers.RenderLayer<?, ?>) (Object) this).getParentModel());   // foot-thruster anchors
             InfiniumWingsRenderer.render(pose, collector, light, state, yRot, xRot);
             ci.cancel();
         }

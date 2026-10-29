@@ -650,94 +650,83 @@ public final class ArmorParticles {
             return;
         }
 
-        // 2. CYBERNETIC & CYBERPSYCHO: Jet-wing style with energy radiation and afterburner boost
-        if (look == dev.justin.infinium.SetLook.CYBERNETIC || look == dev.justin.infinium.SetLook.CYBERPSYCHO) {
-            boolean isPsycho = (look == dev.justin.infinium.SetLook.CYBERPSYCHO);
-            float baseDensity = isPsycho ? (1.30F + 0.90F * prog) : (0.90F + 0.70F * prog);
-            float countMul = baseDensity * mult * dens * (thrustHeld ? 2.5F : 1.0F);
-
-            int count = Math.max(1, Math.round(2 * countMul));
-            Vec3 trailVel = fwd.scale(thrustHeld ? -0.55 : -0.28).add(0, 0.02, 0);
-
-            for (int i = 0; i < count; i++) {
-                for (int side = -1; side <= 1; side += 2) {
-                    double span = 1.05 + (r.nextDouble() - 0.5) * 0.15;
-                    Vec3 tip = center.add(right.scale(side * span)).add(fwd.scale(-0.70)).add(up.scale(0.1));
-                    double jx = (r.nextDouble() - 0.5) * 0.05;
-                    double jy = (r.nextDouble() - 0.5) * 0.05;
-                    double jz = (r.nextDouble() - 0.5) * 0.05;
-
-                    ParticleOptions particle;
-                    if (isPsycho) {
-                        particle = dust(psycho(r, -1), thrustHeld ? 0.65F : 0.55F);
-                    } else {
-                        particle = r.nextFloat() < 0.35F ? ParticleTypes.ELECTRIC_SPARK : dust(r.nextBoolean() ? 0xFF00AA : 0xD24CFF, thrustHeld ? 0.60F : 0.50F);
-                    }
-                    exact(level, particle, tip.x + jx, tip.y + jy, tip.z + jz, trailVel.x, trailVel.y, trailVel.z, thrustHeld ? CYBER_LIFE_THRUST : CYBER_LIFE);   // batch1: shorter (was 14 / 9)
-                }
-            }
-            return;
-        }
-
-        // 3. INFINITY: Combination of Astral/Singularity particles + thrusters.
-        if (look == dev.justin.infinium.SetLook.INFINITY) {
-            float ramp = dev.justin.infinium.InfinityFlight.getRampProgress(p);
-            float countMul = (1.8F + 1.2F * prog) * mult * dens * (thrustHeld ? 2.2F : 1.0F);
-
-            // A. Swirling cosmic void/starlight particles circling the player
-            int swirlCount = Math.max(3, Math.round(5 * countMul));
-            for (int i = 0; i < swirlCount; i++) {
-                double angle = (p.tickCount * 0.40) + (i * (Math.PI * 2.0 / swirlCount)) + (r.nextDouble() - 0.5) * 0.30;
-                double rad = 0.75 + r.nextDouble() * 0.45;
-                double along = (r.nextDouble() - 0.5) * 1.2;
-                Vec3 pt = center.add(right.scale(Math.cos(angle) * rad)).add(up.scale(Math.sin(angle) * rad)).add(fwd.scale(along));
-                double orbitSpeed = 0.15 + r.nextDouble() * 0.08;
-                Vec3 orbitVel = right.scale(-Math.sin(angle) * orbitSpeed).add(up.scale(Math.cos(angle) * orbitSpeed)).add(vel.scale(0.30));
-
-                ParticleOptions particle = (r.nextFloat() < 0.45F)
-                    ? dust(sing(r), 0.65F)
-                    : dust(psycho(r, -1), 0.55F);
-                exact(level, particle, pt.x, pt.y, pt.z, orbitVel.x, orbitVel.y, orbitVel.z, 6 + r.nextInt(5));
-            }
-
-            // B. Dual back thrusters firing high-energy exhaust
-            Vec3 trailVel = fwd.scale(thrustHeld ? -0.58 : -0.30).add(0, 0.02, 0);
-            int thrusterCount = Math.max(1, Math.round(2 * countMul));
-            for (int i = 0; i < thrusterCount; i++) {
-                for (int side = -1; side <= 1; side += 2) {
-                    Vec3 nozzle = center.add(right.scale(side * 0.28)).add(fwd.scale(-0.45)).add(up.scale(0.12));
-                    double jx = (r.nextDouble() - 0.5) * 0.04;
-                    double jy = (r.nextDouble() - 0.5) * 0.04;
-                    double jz = (r.nextDouble() - 0.5) * 0.04;
-
-                    ParticleOptions particle;
-                    if (ramp > 0.15F && r.nextFloat() < ramp * 0.75F) {
-                        particle = ParticleTypes.END_ROD;
-                    } else {
-                        particle = r.nextBoolean() ? dust(sing(r), 0.65F) : dust(psycho(r, -1), 0.60F);
-                    }
-                    exact(level, particle, nozzle.x + jx, nozzle.y + jy, nozzle.z + jz, trailVel.x, trailVel.y, trailVel.z, thrustHeld ? 15 : 10);
-                }
-            }
-
-            // C. While thrust is held: telekinetic downward thrust column
-            if (thrustHeld) {
-                int downCount = Math.max(3, Math.round(6 * countMul));
-                for (int i = 0; i < downCount; i++) {
-                    Vec3 downPos = center.add(up.scale(-0.25 - r.nextDouble() * 0.20))
-                        .add(right.scale((r.nextDouble() - 0.5) * 0.45))
-                        .add(fwd.scale(-0.15 + r.nextDouble() * 0.40));
-                    Vec3 downVel = up.scale(-0.28 - r.nextDouble() * 0.20)
-                        .add(fwd.scale(-0.12))
-                        .add(vel.scale(0.15));
-                    ParticleOptions downPart = (ramp > 0.3F && r.nextFloat() < 0.3F)
-                        ? ParticleTypes.END_ROD
-                        : dust(sing(r), 0.70F);
-                    exact(level, downPart, downPos.x, downPos.y, downPos.z, downVel.x, downVel.y, downVel.z, 8 + r.nextInt(6));
-                }
-            }
-        }
+        // 2. CYBERNETIC / CYBER PSYCHO / INFINITY (batch1, Justin final 2026-10-29): foot thrusters, no wings.
+        if (look == dev.justin.infinium.SetLook.CYBERNETIC || look == dev.justin.infinium.SetLook.CYBERPSYCHO
+                || look == dev.justin.infinium.SetLook.INFINITY)
+            footThrusters(mc, level, r, p, look, chest, mult * dens, prog, thrustHeld, fp, vel);
     }
+
+    /** Foot-thruster tunables: base jets per foot per tick (before density / particle setting). */
+    static final float FT_CYB = 1.0F, FT_CP = 1.6F, FT_INF = 2.2F;
+    /** Own first person: multiplier on everything (the soles sit behind / below the camera). */
+    static final float FT_FP_MUL = 0.35F;
+
+    /** Exhaust from both boot soles along the leg axis (FootThrusters = posed leg model), purely visual. Colours are
+     *  set explicitly (CUR cleared so the per-band armor tint does not override them). */
+    static void footThrusters(Minecraft mc, ClientLevel level, RandomSource r, Player p, dev.justin.infinium.SetLook look,
+                              ItemStack chest, float mul, float prog, boolean thrust, boolean fp, Vec3 vel) {
+        Player prevCur = CUR; CUR = null;
+        try {
+            boolean cp = look == dev.justin.infinium.SetLook.CYBERPSYCHO, inf = look == dev.justin.infinium.SetLook.INFINITY;
+            int dye = GlowColor.argb(chest);
+            int tint = dye != -1 ? dye & 0xFFFFFF : InfiniumWingsRenderer.CP_THRUST_DEFAULT;   // CP: same dye glow as its thrust border
+            float k = mul * (0.8F + 0.4F * prog) * (thrust ? 1.8F : 1F) * (fp ? FT_FP_MUL : 1F);
+            float base = inf ? FT_INF : cp ? FT_CP : FT_CYB;
+            FootThrusters.Feet f = FootThrusters.get(p);
+            Vec3[] soles = {f.left(), f.right()}, dirs = {f.leftDir(), f.rightDir()};
+            Vec3 carry = vel.scale(0.6);   // exhaust keeps most of the player's speed so it forms a short plume
+            for (int s = 0; s < 2; s++) {
+                Vec3 o = soles[s], d = dirs[s];
+                if (fp && !camClear(mc, o.x, o.y, o.z)) continue;
+                double sp = thrust ? 0.32 : 0.18;
+                // A. core jet: bright hot core + purple/black crystal flame
+                int n = Math.max(1, Math.round(base * k));
+                for (int i = 0; i < n; i++) {
+                    double j = 0.03;
+                    Vec3 pos = o.add((r.nextDouble() - 0.5) * j, (r.nextDouble() - 0.5) * j, (r.nextDouble() - 0.5) * j);
+                    Vec3 v = d.scale(sp * (0.8 + r.nextDouble() * 0.4)).add(carry);
+                    int col = r.nextFloat() < 0.35F ? 0xE6B8FF : r.nextFloat() < 0.5F ? 0xB048F0 : 0x5A1A9E;
+                    if (cp) col = r.nextFloat() < 0.5F ? tint : r.nextBoolean() ? 0xB048F0 : 0x2E102E;
+                    if (inf) col = r.nextFloat() < 0.3F ? 0x0A0014 : r.nextFloat() < 0.6F ? INF_C : 0xE6B8FF;
+                    exact(level, dust(col, inf ? 0.75F : cp ? 0.65F : 0.5F), pos.x, pos.y, pos.z, v.x, v.y, v.z, thrust ? 7 : 5);
+                }
+                // B. trail: slower, longer lived puffs left behind (modest for Cybernetic)
+                if (chance(r, (inf ? 0.9F : cp ? 0.7F : 0.4F) * k)) {
+                    Vec3 v = d.scale(0.05).add(vel.scale(0.15));
+                    int col = cp ? tint : inf ? (r.nextBoolean() ? 0x1A0530 : INF_C) : 0x7526C8;
+                    exact(level, dust(col, 0.55F), o.x, o.y, o.z, v.x, v.y, v.z, inf ? 16 : cp ? 13 : 9);
+                }
+                if (!cp && !inf) continue;
+                // C. Cyber Psycho + Infinity: outer jet layer (wider cone, darker)
+                if (chance(r, 0.8F * k)) {
+                    Vec3 side = d.cross(new Vec3(0, 1, 0)); if (side.lengthSqr() < 1e-4) side = new Vec3(1, 0, 0);
+                    Vec3 v = d.scale(sp * 0.7).add(side.normalize().scale((r.nextDouble() - 0.5) * 0.08)).add(carry);
+                    exact(level, dust(inf ? 0x320960 : 0x621CAC, 0.8F), o.x, o.y, o.z, v.x, v.y, v.z, 6);
+                }
+                // D. occasional electric crackle at the sole
+                if (chance(r, (inf ? 0.25F : 0.18F) * k))
+                    for (int i = 0; i < 2 + r.nextInt(2); i++)
+                        exact(level, ParticleTypes.ELECTRIC_SPARK, o.x + (r.nextDouble() - 0.5) * 0.25, o.y + (r.nextDouble() - 0.5) * 0.25,
+                            o.z + (r.nextDouble() - 0.5) * 0.25, vel.x * 0.5, vel.y * 0.5, vel.z * 0.5, 3 + r.nextInt(3));
+                if (!inf) continue;
+                // E. Infinity: singularity bits swirling around the jet axis (dark void + purple spacetime sparks)
+                if (fp) continue;
+                Vec3 u = d.cross(new Vec3(0, 1, 0)); if (u.lengthSqr() < 1e-4) u = new Vec3(1, 0, 0); u = u.normalize();
+                Vec3 w = d.cross(u).normalize();
+                int sw = Math.max(1, Math.round(1.2F * k));
+                for (int i = 0; i < sw; i++) {
+                    double ang = p.tickCount * 0.55 + s * Math.PI + i * 2.1, rad = 0.16 + r.nextDouble() * 0.1, al = 0.1 + r.nextDouble() * 0.5;
+                    Vec3 pos = o.add(d.scale(al)).add(u.scale(Math.cos(ang) * rad)).add(w.scale(Math.sin(ang) * rad));
+                    Vec3 v = u.scale(-Math.sin(ang) * 0.09).add(w.scale(Math.cos(ang) * 0.09)).subtract(u.scale(Math.cos(ang) * 0.03))
+                        .subtract(w.scale(Math.sin(ang) * 0.03)).add(carry);   // tangential + slight inward pull
+                    exact(level, r.nextFloat() < 0.6F ? dust(SING_BLACK, 0.7F) : dust(0x9B41F0, 0.45F), pos.x, pos.y, pos.z, v.x, v.y, v.z, 8);
+                }
+                if (chance(r, 0.35F * k))
+                    exact(level, ParticleTypes.REVERSE_PORTAL, o.x, o.y, o.z, d.x * 0.05 + vel.x * 0.5, d.y * 0.05 + vel.y * 0.5, d.z * 0.05 + vel.z * 0.5, 10);
+            }
+        } finally { CUR = prevCur; }
+    }
+    static final int INF_C = InfiniumWingsRenderer.INF_THRUST_DEFAULT;
     // ---- Strange Fragments / Spacetime Crystal: dropped item entities and held stacks (subtle; held = hidden in own first person) ----
     static void itemFx(Minecraft mc, ClientLevel level, RandomSource r) {
         if (mc.player == null) return;
