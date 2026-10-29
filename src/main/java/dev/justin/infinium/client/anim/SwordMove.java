@@ -15,6 +15,8 @@ public enum SwordMove {
     OVERHEAD_CLEAVE,
     /** roll 0, horizontal arc : flat sweep right -> left (crouch attack). */
     FLAT_SWEEP,
+    /** Spin return after the stab (auto-chained by SwordAnimState, never from a payload). */
+    TWIRL,
     /** Swing with no slash emitted (cooldown/throttle, no armor tier, non-energy mode, block/mining). */
     PLAIN;
 

@@ -35,11 +35,12 @@ public final class ModSounds {
     public static Holder.Reference<SoundEvent> SWORD_SLASH_LAUNCH, SWORD_STAB_LAUNCH, SWORD_SLASH_CHARGE, SWORD_STAB_CHARGE, SWORD_SPIN, SWORD_SLASH_BLOCK_HIT;
     /** Themed sword sounds: [family 0..4][0..8 kinds] = infinium:sword.<set>.<kind>, files sounds/sword/<set>_<kind>.ogg. */
     public static final String[] SWORD_KINDS = {
-        "slash_launch", "stab_launch", "slash_charge", "stab_charge", "spin", "crit_twirl", "block_hit", "entity_hit", "mode_toggle"
+        "slash_launch", "stab_launch", "slash_charge", "stab_charge", "spin", "crit_twirl", "block_hit", "entity_hit", "mode_toggle", "slash2_launch"
     };
     public static final int SLASH_LAUNCH = 0, STAB_LAUNCH = 1, SLASH_CHARGE = 2, STAB_CHARGE = 3,
-                            SPIN = 4, CRIT_TWIRL = 5, BLOCK_HIT = 6, ENTITY_HIT = 7, MODE_TOGGLE = 8;
-    public static final Holder.Reference<SoundEvent>[][] SWORD = new Holder.Reference[5][9];
+                            SPIN = 4, CRIT_TWIRL = 5, BLOCK_HIT = 6, ENTITY_HIT = 7, MODE_TOGGLE = 8,
+                            /** combo step 2 (right slash); slash_launch = step 1, stab_launch = step 3. */ SLASH2_LAUNCH = 9;
+    public static final Holder.Reference<SoundEvent>[][] SWORD = new Holder.Reference[5][10];
 
     /** Meteor shower sound events */
     public static Holder.Reference<SoundEvent> METEOR_FALLING, METEOR_IMPACT, METEOR_WARNING, METEOR_COUNTDOWN, METEOR_AMBIENT;
@@ -97,7 +98,7 @@ public final class ModSounds {
         SWORD_SLASH_BLOCK_HIT = reg("sword_slash_block_hit");
 
         for (int f = 0; f < 5; f++) {
-            for (int k = 0; k < 9; k++) {
+            for (int k = 0; k < SWORD_KINDS.length; k++) {
                 SWORD[f][k] = reg("sword." + Perk.FAMILY_IDS[f] + "." + SWORD_KINDS[k]);
             }
         }

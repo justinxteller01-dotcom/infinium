@@ -94,5 +94,14 @@ check('addPhaseOrdering(EARLY, Event.DEFAULT_PHASE)' in bk and 'allow.register(E
 check(bk.count('hudCursor(mc,') >= 2 and 'getSourceX' in src(J + 'compat/SpatialMargin.java'), 'Bind-key pill click + hover use HUD-space cursor (Spatial GUI aware)')
 check('getMethod("category")' in bk, 'Key Binds scroll finds Controlling category headers too')
 
+# ---- sword combo (2026-10-29) ----
+sc, ssh, sch, hud = (src(J + f) for f in ('SwordCombo.java', 'SwordSlashHandler.java', 'client/SwordSlashClientHandler.java', 'client/mixin/HudOverlayMixin.java'))
+check('STAB_WINDOW_TICKS = 40' in sc and 'STAB_WINDOW_MIN_TICKS = 32' in sc, 'stab window 2 s (40 ticks), shrinks to >= 1.6 s with attack speed')
+check('* 1.25' not in ssh and 'isStab ? (int) Math.round' not in ssh and 'SERVER_SLACK_TICKS' in ssh and 'LOCK_UNTIL_TICK' in ssh, 'server: no exact 1.25x stab gate, packet slack + post-stab lockout')
+cl = sch[sch.index('public static void clientTick'):]
+check('SPIN' not in cl.split('}')[0].replace('PENDING_SPIN', '').replace('SPIN_SOUND', '') and 'CRIT_TWIRL,' not in sch, 'twirl / crit-twirl sounds no longer played')
+check('SLASH2_LAUNCH' in sch and 'SLASH2_LAUNCH' in ssh and 'slash2_launch' in arrays['SWORD_KINDS'], 'slash 1 / slash 2 / stab 3 each have their own sound')
+check('SwordCooldownHud.render' in hud, 'energy-mode cooldown meter drawn on the HUD')
+
 print(f'\n{len(fails)} failure(s)')
 sys.exit(1 if fails else 0)

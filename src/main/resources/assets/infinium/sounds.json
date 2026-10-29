@@ -800,5 +800,30 @@
       "infinium:perk/maxed_infinity"
     ],
     "subtitle": "subtitles.infinium.set_maxed_infinity"
+  },
+  "sword.astral.slash2_launch": {
+    "sounds": [
+      "infinium:sword/astral_slash2_launch"
+    ]
+  },
+  "sword.cybernetic.slash2_launch": {
+    "sounds": [
+      "infinium:sword/cybernetic_slash2_launch"
+    ]
+  },
+  "sword.singularity.slash2_launch": {
+    "sounds": [
+      "infinium:sword/singularity_slash2_launch"
+    ]
+  },
+  "sword.cyberpsycho.slash2_launch": {
+    "sounds": [
+      "infinium:sword/cyberpsycho_slash2_launch"
+    ]
+  },
+  "sword.infinity.slash2_launch": {
+    "sounds": [
+      "infinium:sword/infinity_slash2_launch"
+    ]
   }
 }

@@ -22,10 +22,10 @@ public final class SwordAnimTuning {
     public static final float FP_HOLD_PITCH = 0F, FP_HOLD_YAW = 0F, FP_HOLD_ROLL = 0F;
 
     // ---- swing / attack ----
-    public static final float WINDUP_END = 0.16F;      // fraction of swing spent pulling back
-    public static final float STRIKE_END = 0.52F;      // fraction where the main arc finishes
+    public static final float WINDUP_END = 0.22F;      // fraction of swing spent pulling back
+    public static final float STRIKE_END = 0.58F;      // fraction where the main arc finishes
     /** Trailing follow-through: damped overshoot after the arc, then settles back to rest. */
-    public static final float FOLLOW_OVERSHOOT = 0.14F, FOLLOW_DAMPING = 5.5F, FOLLOW_FREQ = 2.2F;
+    public static final float FOLLOW_OVERSHOOT = 0.24F, FOLLOW_DAMPING = 4.2F, FOLLOW_FREQ = 1.8F;
 
     // ---- per-move swings (synced to the emitted slash; arc tilt comes from the payload roll itself) ----
     /** Which end of the slash arc axis the blade starts at: +1 = the axis' +X end after rolling by the payload roll. */
@@ -33,9 +33,10 @@ public final class SwordAnimTuning {
     public static final float RIGHT_CUT_START = 1F;   // roll +35: +X end is upper-right -> start there
     public static final float CLEAVE_START = 1F;      // roll 90: +X end is top -> chop downward
     public static final float SWEEP_START = 1F;       // roll 0: start right, sweep left
-    public static final float CUT_TICKS = 8F, CLEAVE_TICKS = 10F, SWEEP_TICKS = 8F, STAB_TICKS = 9F, PLAIN_TICKS = 6F;
+    public static final float CUT_TICKS = 11.75F, CLEAVE_TICKS = 14F, SWEEP_TICKS = 11.75F, STAB_TICKS = 11.25F, PLAIN_TICKS = 6F;
+    // (fallbacks for other players; the local player uses SwordCombo.cutTicks/stabTicks/twirlTicks = attack-speed scaled)
     /** First-person: sweep angles (deg) of the arm around the camera, in the slash plane. */
-    public static final float ARC_WINDUP_DEG = 38F, ARC_STRIKE_DEG = 52F;
+    public static final float ARC_WINDUP_DEG = 44F, ARC_STRIKE_DEG = 62F;
     public static final float CLEAVE_WINDUP_DEG = 48F, CLEAVE_STRIKE_DEG = 40F;
     /** Pull the hand toward screen centre during a slash (0..1 of the side offset). */
     public static final float ARC_CENTER_PULL = 0.55F;
@@ -48,8 +49,13 @@ public final class SwordAnimTuning {
     // plain (no slash emitted): small vanilla-like tap
     public static final float PLAIN_YAW = 18F, PLAIN_PITCH = -20F, PLAIN_FORWARD = 0.08F;
     // third person
-    public static final float TP_ARC_WINDUP_DEG = 70F, TP_ARC_STRIKE_DEG = 70F, TP_YAW_SIGN = 1F;
-    public static final float TP_STAB_PULLBACK = 0.6F, TP_PLAIN_PITCH = -0.8F;
+    public static final float TP_ARC_WINDUP_DEG = 85F, TP_ARC_STRIKE_DEG = 120F, TP_YAW_SIGN = 1F;
+    /** Third person: torso follows the arm yaw (fraction), forearm roll into the cut (rad), arm pivot radius (model px). */
+    public static final float TP_BODY_FOLLOW = 0.38F, TP_FOLLOW_ROLL = 0.45F, TP_ARM_PIVOT = 5F;
+    public static final float TP_STAB_PULLBACK = 0.75F, TP_STAB_INWARD = 0.28F, TP_PLAIN_PITCH = -0.8F;
+    // twirl (spin return after the stab): first-person blade turns this many degrees around the grip
+    public static final float TWIRL_SPIN_DEG = -360F, TWIRL_LIFT = 0.10F, TWIRL_CENTER_PULL = 0.35F;
+    public static final float TP_TWIRL_RAISE = 0.9F, TP_TWIRL_CIRCLE = 0.35F;
 
     // ---- idle sway / breathing ----
     public static final float IDLE_BREATH_PERIOD = 70F;  // ticks per breath

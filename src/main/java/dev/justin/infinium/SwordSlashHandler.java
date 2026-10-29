@@ -14,11 +14,12 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Server-side authoritative handler for Infinium Sword energy slashes.
- * Strictly server-authoritative: enforces rate limits, 1.25x stab gate, server player's own rotation,
+ * Strictly server-authoritative: enforces rate limits (with packet slack), the post-stab twirl lockout, server player's own rotation,
  * and clamps color. Contains NO client-only classes or imports.
  */
 public final class SwordSlashHandler {
     private static final Map<UUID, Long> LAST_SERVER_SLASH_TICK = new ConcurrentHashMap<>();
+    private static final Map<UUID, Long> LOCK_UNTIL_TICK = new ConcurrentHashMap<>();
 
     private SwordSlashHandler() {}
 
@@ -31,14 +32,17 @@ public final class SwordSlashHandler {
         int tier = InfiniumArmorTier.getTier(player);
         if (tier < 1 || !CrystalCharge.saberUnlocked(player)) return;
 
-        double attackSpeed = player.getAttributeValue(Attributes.ATTACK_SPEED);
-        int baseInterval = Math.max(3, (int) Math.floor(20.0 / attackSpeed) - 1);
-        int minIntervalTicks = isStab ? (int) Math.round(baseInterval * 1.25) : baseInterval;
-
+        // Rate limit with slack: packets sent N client ticks apart can arrive fewer server ticks apart
+        // (network bunching). The old exact 1.25x stab gate silently dropped correctly-timed stabs.
         long now = player.level().getGameTime();
-        Long last = LAST_SERVER_SLASH_TICK.get(player.getUUID());
-        if (last != null && (now - last) < minIntervalTicks) return;
-        LAST_SERVER_SLASH_TICK.put(player.getUUID(), now);
+        UUID id = player.getUUID();
+        Long last = LAST_SERVER_SLASH_TICK.get(id);
+        int minInterval = Math.max(1, SwordCombo.minIntervalTicks(player) - SwordCombo.SERVER_SLACK_TICKS);
+        if (last != null && (now - last) < minInterval) return;
+        Long lock = LOCK_UNTIL_TICK.get(id);
+        if (lock != null && now < lock) return;   // post-stab twirl cooldown
+        LAST_SERVER_SLASH_TICK.put(id, now);
+        if (isStab) LOCK_UNTIL_TICK.put(id, now + Math.max(0, SwordCombo.postStabLockTicks(player) - SwordCombo.SERVER_SLACK_TICKS));
 
         // Server authoritative rotation and clamped color
         float serverYaw = player.getYRot();
@@ -68,21 +72,13 @@ public final class SwordSlashHandler {
 
         player.level().addFreshEntity(slash);
 
-        // Broadcast release audio to nearby players (volume & pitch scaled by armor tier)
-        float vol = tier == 1 ? 0.60F : (tier == 2 ? 0.85F : 1.0F);
-        float pitch = tier == 1 ? 0.90F : (tier == 2 ? 1.0F : 1.10F);
-        if (isStab) {
-            Holder<SoundEvent> s = ModSounds.sword(player, ModSounds.STAB_LAUNCH, ModSounds.SWORD_STAB_LAUNCH);
-            if (s != null) {
-                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                    s.value(), SoundSource.PLAYERS, vol, pitch);
-            }
-        } else {
-            Holder<SoundEvent> s = ModSounds.sword(player, ModSounds.SLASH_LAUNCH, ModSounds.SWORD_SLASH_LAUNCH);
-            if (s != null) {
-                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                    s.value(), SoundSource.PLAYERS, vol, pitch);
-            }
+        // Release audio for OTHER nearby players (the shooter already heard it client-side, instantly).
+        // Combo step from the payload: stab = step 3, roll +35 = right slash (step 2), else step 1.
+        float vol = tier == 1 ? 0.75F : (tier == 2 ? 0.9F : 1.0F);
+        int kind = isStab ? ModSounds.STAB_LAUNCH : (clampedRoll >= 10F && clampedRoll < 60F ? ModSounds.SLASH2_LAUNCH : ModSounds.SLASH_LAUNCH);
+        Holder<SoundEvent> s = ModSounds.sword(player, kind, isStab ? ModSounds.SWORD_STAB_LAUNCH : ModSounds.SWORD_SLASH_LAUNCH);
+        if (s != null) {
+            player.level().playSound(player, player.getX(), player.getY(), player.getZ(), s.value(), SoundSource.PLAYERS, vol, 1.0F);
         }
     }
 
@@ -90,6 +86,7 @@ public final class SwordSlashHandler {
     public static void onPlayerDisconnect(UUID uuid) {
         if (uuid != null) {
             LAST_SERVER_SLASH_TICK.remove(uuid);
+            LOCK_UNTIL_TICK.remove(uuid);
         }
     }
 }

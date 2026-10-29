@@ -63,7 +63,7 @@ public final class InfiniumSwordAnimator {
         pose.mulPose(Axis.XP.rotationDegrees(lagPitch * CAMERA_LAG_SCALE));
         pose.mulPose(Axis.YP.rotationDegrees(lagYaw * CAMERA_LAG_SCALE));
 
-        float pull = 0F, fwd = 0F, bladeLevel = 0F, bladeRoll = 0F, twist = 0F, plainYaw = 0F, plainPitch = 0F;
+        float pull = 0F, fwd = 0F, bladeLevel = 0F, bladeRoll = 0F, twist = 0F, plainYaw = 0F, plainPitch = 0F, twirlSpin = 0F, twirlLift = 0F;
         if (swing > 0F) {
             if (isArc(move)) {
                 boolean cleave = move == SwordMove.OVERHEAD_CLEAVE;
@@ -77,6 +77,11 @@ public final class InfiniumSwordAnimator {
                 pull = STAB_CENTER_PULL * env;
                 bladeLevel = STAB_BLADE_LEVEL * env;
                 twist = STAB_TWIST * k;
+            } else if (move == SwordMove.TWIRL) {
+                float bell = Mth.sin(Mth.PI * swing);
+                twirlSpin = TWIRL_SPIN_DEG * SwordAnimCurves.easeInOutCubic(swing);
+                pull = TWIRL_CENTER_PULL * bell;
+                twirlLift = TWIRL_LIFT * bell;
             } else { // PLAIN
                 plainYaw = s * PLAIN_YAW * k;
                 plainPitch = PLAIN_PITCH * k;
@@ -86,19 +91,23 @@ public final class InfiniumSwordAnimator {
 
         // hand position (camera space)
         pose.translate(s * FP_BASE_X * (1F - pull) + s * sway * IDLE_SWAY_X,
-                FP_BASE_Y + breath - equipLeft * EQUIP_RISE,
+                FP_BASE_Y + breath - equipLeft * EQUIP_RISE + twirlLift,
                 FP_BASE_Z + fwd);
 
         // blade orientation around the grip
         pose.translate(0F, -0.1F, 0.1F);
         pose.mulPose(Axis.YP.rotationDegrees(s * FP_HOLD_YAW + plainYaw));
-        pose.mulPose(Axis.XP.rotationDegrees(FP_HOLD_PITCH + bladeLevel + plainPitch + sway * IDLE_SWAY_PITCH + equipLeft * EQUIP_TILT));
+        pose.mulPose(Axis.XP.rotationDegrees(FP_HOLD_PITCH + bladeLevel + plainPitch + twirlSpin + sway * IDLE_SWAY_PITCH + equipLeft * EQUIP_TILT));
         pose.mulPose(Axis.ZP.rotationDegrees(s * FP_HOLD_ROLL + bladeRoll + twist + s * sway * IDLE_SWAY_ROLL + s * equipLeft * EQUIP_SPIN));
         pose.translate(0F, 0.1F, -0.1F);
     }
 
-    /** Third-person: overwrites the holding arm's rotations (called at TAIL of HumanoidModel.setupAnim). */
-    public static void applyThirdPerson(ModelPart armPart, HumanoidArm arm, float headPitchRad, SwordMove move, float roll,
+    /**
+     * Third-person: overwrites the holding arm's rotations (called at TAIL of HumanoidModel.setupAnim) and, while a
+     * move plays, the torso twist (so the vanilla 6-tick linear body swing never shows on an Infinium sword).
+     * Returns the body yaw to apply (0 when idle).
+     */
+    public static float applyThirdPerson(ModelPart armPart, HumanoidArm arm, float headPitchRad, SwordMove move, float roll,
                                         float swing, float equipLeft, float time) {
         float s = arm == HumanoidArm.RIGHT ? 1F : -1F;
         float w = SwordAnimCurves.windup(swing);
@@ -123,10 +132,18 @@ public final class InfiniumSwordAnimator {
                 // Model arm: xRot = -PI/2 points forward; more negative raises it; yRot turns it sideways.
                 tx = headPitchRad * 0.5F - Mth.HALF_PI - elev;
                 ty = -azim * TP_YAW_SIGN;
-                tz = 0F;
+                // forearm rolls into the cut direction, trailing on the follow-through
+                tz = -startSide(move) * s * TP_FOLLOW_ROLL * (k - 0.5F * w);
             } else if (move == SwordMove.STAB) {
                 tx = headPitchRad - Mth.HALF_PI + TP_STAB_PULLBACK * w;
-                ty = 0F;
+                ty = -s * TP_STAB_INWARD * k;            // thrust toward the centre line
+            } else if (move == SwordMove.TWIRL) {
+                float bell = Mth.sin(Mth.PI * swing);
+                float c = Mth.TWO_PI * SwordAnimCurves.easeInOutCubic(swing);
+                tx = restX - TP_TWIRL_RAISE + TP_TWIRL_CIRCLE * Mth.cos(c);
+                ty = restY + s * TP_TWIRL_CIRCLE * Mth.sin(c);
+                tz = s * TP_TWIRL_CIRCLE * Mth.sin(c);
+                env = bell;
             } else {
                 tx = restX + TP_PLAIN_PITCH * k;
             }
@@ -134,5 +151,7 @@ public final class InfiniumSwordAnimator {
         armPart.xRot = Mth.lerp(env, restX, tx);
         armPart.yRot = Mth.lerp(env, restY, ty);
         armPart.zRot = Mth.lerp(env, 0F, tz);
+        if (swing <= 0F || move == SwordMove.PLAIN) return 0F;
+        return (armPart.yRot - restY) * TP_BODY_FOLLOW;
     }
 }

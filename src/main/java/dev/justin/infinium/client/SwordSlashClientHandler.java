@@ -33,9 +33,10 @@ import java.util.Optional;
  * - Stage 0: Left Cut (-35° diagonal, 50% damage, attack_1) -> next stage 1
  * - Stage 1: Right Cut (+35° diagonal, 50% damage, attack_2) -> next stage 2
  * - Stage 2: Stab (Straight laser lance, 75% damage, attack_3, railgun audio) -> next stage 0
- * - Cooldown from Stage 1 -> Stage 2 is 25% longer (1.25x).
- * - Premature swing or pausing for >1.5s resets pattern to Left Cut (attack_1).
- * - Stopping after Stab triggers blade flourish twirl + sword_spin.ogg.
+ * - (2026-10-29, Infinium animator path) a fully charged third click within SwordCombo.stabWindowTicks (40 ticks,
+ *   shrinking slightly with attack speed) of the second swing is ALWAYS the stab. Early click = plain swing + reset.
+ * - After the stab: twirl animation; the combo is locked for SwordCombo.postStabLockTicks. No twirl / ready sounds.
+ * - The Punchy-clip path below is only used when Infinium does NOT override Punchy (OVERRIDE_PUNCHY=false).
  * - Critical Hit (attack_critical): plays Punchy's firstspinv2 twirl audio synchronized to the itemgrip twirl at 833ms.
  */
 public final class SwordSlashClientHandler {
@@ -46,6 +47,7 @@ public final class SwordSlashClientHandler {
     private static boolean CLIENT_PENDING_SPIN = false;
     private static long CLIENT_STAB_FINISH_TIME = 0L;
     private static boolean QUEUED_ATTACK_TARGET_BLOCK = false;
+    private static long CLIENT_LOCK_UNTIL_TICK = Long.MIN_VALUE;
 
     // Crit twirl timing (attack_critical itemgrip twirl 0.8333s-1.125s)
     private static final long CRIT_TWIRL_START_MS = 833L;
@@ -296,95 +298,69 @@ public final class SwordSlashClientHandler {
     public static void onStartAttackVanilla(LocalPlayer player, ItemStack held) {
         int tier = InfiniumArmorTier.getTier(player);
         if (tier < 1 || !InfiniumSwordItem.isEnergyMode(held) || !dev.justin.infinium.CrystalCharge.saberUnlocked(player)) return;
-
-        long now = System.currentTimeMillis();
-        long currentTick = player.level().getGameTime();
-        int baseInterval = getBaseIntervalTicks(player);
-        int stabInterval = getStabIntervalTicks(player);
         cancelPendingSpin();
 
-        // If held for >1.5 seconds without swinging, reset pattern to Left Cut
-        if (now - CLIENT_LAST_SWING_TIME > 1500L) {
-            CLIENT_COMBO_STAGE = 0;
-        }
+        // All combo timing is in client game ticks (same clock as the attack-strength ticker and the server
+        // rate limit). Read the charge here at startAttack HEAD, i.e. BEFORE vanilla resets the ticker for this click.
+        long tick = player.level().getGameTime();
+        boolean charged = player.getAttackStrengthScale(0.0F) >= 0.99F;
 
-        float attackCooldown = player.getAttackStrengthScale(0.0F);
+        // Post-stab twirl cooldown: clicks during the twirl do nothing to the combo (vanilla swing still happens).
+        if (tick < CLIENT_LOCK_UNTIL_TICK) return;
 
-        // Jump / Critical attack: overhead vertical cleave
-        boolean isJumpCrit = !player.onGround() && player.fallDistance > 0.0F && !player.isInWater() && !player.onClimbable();
-        if (isJumpCrit) {
-            CLIENT_COMBO_STAGE = 0;
-            if (attackCooldown >= 0.99F && (CLIENT_LAST_SLASH_TICK == -1L || (currentTick - CLIENT_LAST_SLASH_TICK) >= baseInterval)) {
-                CLIENT_LAST_SWING_TIME = now;
-                CLIENT_LAST_SLASH_TICK = currentTick;
-                CLIENT_PENDING_SPIN = true;
-                CLIENT_STAB_FINISH_TIME = now;
-                int color = resolveSwordColor(held);
-                emitSlash(player.getYRot(), player.getXRot(), 90.0F, color, false);
-                playLaunchSound(player, false, tier);
-                playChargeSound(player, false, tier);
-            }
-            return;
-        }
-
-        // Crouching attack: flat horizontal sweep
-        if (player.isCrouching()) {
-            CLIENT_COMBO_STAGE = 0;
-            if (attackCooldown >= 0.99F && (CLIENT_LAST_SLASH_TICK == -1L || (currentTick - CLIENT_LAST_SLASH_TICK) >= baseInterval)) {
-                CLIENT_LAST_SWING_TIME = now;
-                CLIENT_LAST_SLASH_TICK = currentTick;
-                int color = resolveSwordColor(held);
-                emitSlash(player.getYRot(), player.getXRot(), 0.0F, color, false);
-                playLaunchSound(player, false, tier);
-                playChargeSound(player, false, tier);
-            }
-            return;
-        }
-
-        // Premature swing check (cooldown < 100% or server throttle): reset pattern
-        if (attackCooldown < 0.99F || (CLIENT_LAST_SLASH_TICK != -1L && (currentTick - CLIENT_LAST_SLASH_TICK) < baseInterval)) {
+        if (!charged) {           // early click = regular swing, pattern resets to left, right, stab
             CLIENT_COMBO_STAGE = 0;
             return;
         }
-
-        // Enforce 25% longer cooldown when transitioning into Stage 2 (Stab)
-        if (CLIENT_COMBO_STAGE == 2) {
-            if ((currentTick - CLIENT_LAST_SLASH_TICK) < stabInterval) {
-                // Swung early for stab: reset to Stage 0 and fire Left Cut since baseInterval elapsed
-                CLIENT_COMBO_STAGE = 1;
-                CLIENT_LAST_SWING_TIME = now;
-                CLIENT_LAST_SLASH_TICK = currentTick;
-                int color = resolveSwordColor(held);
-                emitSlash(player.getYRot(), player.getXRot(), -35.0F, color, false);
-                playLaunchSound(player, false, tier);
-                playChargeSound(player, false, tier);
-                return;
-            }
+        if (CLIENT_COMBO_STAGE != 0 && tick - CLIENT_LAST_SLASH_TICK > dev.justin.infinium.SwordCombo.stabWindowTicks(player)) {
+            CLIENT_COMBO_STAGE = 0;  // waited too long
         }
+        // Safety: never emit faster than the server will accept (charged already implies this).
+        if (CLIENT_LAST_SLASH_TICK != -1L && tick - CLIENT_LAST_SLASH_TICK < dev.justin.infinium.SwordCombo.minIntervalTicks(player)) return;
 
-        int stage = CLIENT_COMBO_STAGE;
-        CLIENT_LAST_SWING_TIME = now;
-        CLIENT_LAST_SLASH_TICK = currentTick;
         int color = resolveSwordColor(held);
+        CLIENT_LAST_SWING_TIME = System.currentTimeMillis();
 
-        if (stage == 0) {
+        // A due stab ALWAYS wins (even mid-jump or crouched): that was part of the ~50% miss rate.
+        if (CLIENT_COMBO_STAGE == 2) {
+            CLIENT_COMBO_STAGE = 0;
+            CLIENT_LAST_SLASH_TICK = tick;
+            CLIENT_LOCK_UNTIL_TICK = tick + dev.justin.infinium.SwordCombo.postStabLockTicks(player);
+            emitSlash(player.getYRot(), player.getXRot(), 0.0F, color, true);
+            playLaunchSound(player, ModSounds.STAB_LAUNCH, tier);
+            playChargeSound(player, true, tier);   // long charge-up under the twirl cooldown
+            return;
+        }
+
+        boolean isJumpCrit = !player.onGround() && player.fallDistance > 0.0F && !player.isInWater() && !player.onClimbable();
+        if (isJumpCrit || player.isCrouching()) {   // overhead cleave / flat sweep: standalone, resets the pattern
+            CLIENT_COMBO_STAGE = 0;
+            CLIENT_LAST_SLASH_TICK = tick;
+            emitSlash(player.getYRot(), player.getXRot(), isJumpCrit ? 90.0F : 0.0F, color, false);
+            playLaunchSound(player, ModSounds.SLASH_LAUNCH, tier);
+            playChargeSound(player, false, tier);
+            return;
+        }
+
+        CLIENT_LAST_SLASH_TICK = tick;
+        if (CLIENT_COMBO_STAGE == 0) {
             CLIENT_COMBO_STAGE = 1;
             emitSlash(player.getYRot(), player.getXRot(), -35.0F, color, false);
-            playLaunchSound(player, false, tier);
-            playChargeSound(player, false, tier);
-        } else if (stage == 1) {
+            playLaunchSound(player, ModSounds.SLASH_LAUNCH, tier);
+        } else {
             CLIENT_COMBO_STAGE = 2;
             emitSlash(player.getYRot(), player.getXRot(), 35.0F, color, false);
-            playLaunchSound(player, false, tier);
-            playChargeSound(player, true, tier);
-        } else {
-            CLIENT_COMBO_STAGE = 0;
-            CLIENT_PENDING_SPIN = true;
-            CLIENT_STAB_FINISH_TIME = now;
-            emitSlash(player.getYRot(), player.getXRot(), 0.0F, color, true);
-            playLaunchSound(player, true, tier);
-            playChargeSound(player, false, tier);
+            playLaunchSound(player, ModSounds.SLASH2_LAUNCH, tier);
         }
+        playChargeSound(player, false, tier);
+    }
+
+    /** Client: post-stab twirl cooldown still running (HUD meter shows it). */
+    public static float lockProgress(Player player) {
+        long tick = player.level().getGameTime();
+        if (tick >= CLIENT_LOCK_UNTIL_TICK) return 1F;
+        float total = dev.justin.infinium.SwordCombo.postStabLockTicks(player);
+        return Math.max(0F, 1F - (CLIENT_LOCK_UNTIL_TICK - tick) / total);
     }
 
     /**
@@ -401,28 +377,22 @@ public final class SwordSlashClientHandler {
     }
 
     private static void playLaunchSound(Player player, boolean isStab, int tier) {
-        float vol = tier == 1 ? 0.60F : (tier == 2 ? 0.85F : 1.0F);
-        float pitch = tier == 1 ? 0.90F : (tier == 2 ? 1.0F : 1.10F);
-        if (isStab) {
-            Holder<SoundEvent> s = ModSounds.sword(player, ModSounds.STAB_LAUNCH, ModSounds.SWORD_STAB_LAUNCH);
-            if (s != null) {
-                player.level().playSound(player, player.getX(), player.getY(), player.getZ(),
-                    s.value(), SoundSource.PLAYERS, vol, pitch);
-            }
-        } else {
-            Holder<SoundEvent> s = ModSounds.sword(player, ModSounds.SLASH_LAUNCH, ModSounds.SWORD_SLASH_LAUNCH);
-            if (s != null) {
-                player.level().playSound(player, player.getX(), player.getY(), player.getZ(),
-                    s.value(), SoundSource.PLAYERS, vol, pitch);
-            }
+        playLaunchSound(player, isStab ? ModSounds.STAB_LAUNCH : ModSounds.SLASH_LAUNCH, tier);
+    }
+
+    /** Local launch sound for combo step kind (SLASH_LAUNCH = 1, SLASH2_LAUNCH = 2, STAB_LAUNCH = 3). */
+    private static void playLaunchSound(Player player, int kind, int tier) {
+        float vol = tier == 1 ? 0.75F : (tier == 2 ? 0.9F : 1.0F);
+        Holder<SoundEvent> s = ModSounds.sword(player, kind, kind == ModSounds.STAB_LAUNCH ? ModSounds.SWORD_STAB_LAUNCH : ModSounds.SWORD_SLASH_LAUNCH);
+        if (s != null) {
+            player.level().playSound(player, player.getX(), player.getY(), player.getZ(), s.value(), SoundSource.PLAYERS, vol, 1.0F);
         }
     }
 
     private static void playChargeSound(Player player, boolean isStabCharge, int tier) {
         double attackSpeed = player.getAttributeValue(Attributes.ATTACK_SPEED);
-        float pitchScale = tier == 1 ? 0.90F : (tier == 2 ? 1.0F : 1.10F);
-        float pitch = (float) Math.min(1.8, Math.max(0.8, (attackSpeed / 4.0) * pitchScale));
-        float baseVol = isStabCharge ? 0.55F : 0.45F;
+        float pitch = (float) Math.min(1.35, Math.max(0.9, attackSpeed / dev.justin.infinium.SwordCombo.BASE_ATTACK_SPEED));   // faster cooldown = shorter, higher charge
+        float baseVol = isStabCharge ? 0.40F : 0.32F;   // subtle bed under the launch sounds
         float vol = baseVol * (tier == 1 ? 0.70F : (tier == 2 ? 0.85F : 1.0F));
         if (isStabCharge) {
             Holder<SoundEvent> s = ModSounds.sword(player, ModSounds.STAB_CHARGE, ModSounds.SWORD_STAB_CHARGE);
@@ -439,61 +409,10 @@ public final class SwordSlashClientHandler {
         }
     }
 
-    /** Client tick: monitors post-stab / crit idle to trigger sword twirl flourish SFX. */
+    /** Client tick. The twirl / crit-twirl sounds were removed by request (2026-10-29); only cleanup remains. */
     public static void clientTick(Minecraft mc) {
-        if (ACTIVE_SPIN_SOUND != null && mc.player != null) {
-            ItemStack held = mc.player.getMainHandItem();
-            if (!held.is(dev.justin.infinium.Infinium.SWORD)) {
-                stopActiveSpinSound();
-            }
-        }
-
-        long now = System.currentTimeMillis();
-
-        // Crit twirl sound sync (attack_critical itemgrip twirl starting at 833ms into clip)
-        if (CLIENT_PENDING_CRIT_TWIRL && mc.player != null && now - CLIENT_CRIT_START_TIME >= CRIT_TWIRL_START_MS) {
-            CLIENT_PENDING_CRIT_TWIRL = false;
-            ItemStack held = mc.player.getMainHandItem();
-            if (held.is(dev.justin.infinium.Infinium.SWORD)) {
-                Holder<SoundEvent> themed = ModSounds.sword(mc.player, ModSounds.CRIT_TWIRL, null);
-                SoundEvent event = (themed != null) ? themed.value() : getPunchySpinSoundEvent();
-                if (event != null) {
-                    stopActiveSpinSound();
-                    try {
-                        SimpleSoundInstance sound = SimpleSoundInstance.forUI(event, 1.0F, 1.0F);
-                        ACTIVE_SPIN_SOUND = sound;
-                        mc.getSoundManager().play(sound);
-                    } catch (Throwable ignored) {}
-                }
-            }
-        }
-
-        if (!CLIENT_PENDING_SPIN || mc.player == null) return;
-        // Trigger spin sound after 350ms of stopping after the stab (moment return-from-stab begins)
-        if (now - CLIENT_STAB_FINISH_TIME >= 350L) {
-            CLIENT_PENDING_SPIN = false;
-            ItemStack held = mc.player.getMainHandItem();
-            if (held.is(dev.justin.infinium.Infinium.SWORD)) {
-                Holder<SoundEvent> themed = ModSounds.sword(mc.player, ModSounds.SPIN, null);
-                if (themed != null) {
-                    mc.player.level().playSound(mc.player, mc.player.getX(), mc.player.getY(), mc.player.getZ(),
-                        themed.value(), SoundSource.PLAYERS, 0.70F, 1.0F);
-                } else {
-                    SoundEvent punchySpin = getPunchySpinSoundEvent();
-                    if (punchySpin != null) {
-                        stopActiveSpinSound();
-                        try {
-                            SimpleSoundInstance sound = SimpleSoundInstance.forUI(punchySpin, 1.0F, 1.0F);
-                            ACTIVE_SPIN_SOUND = sound;
-                            mc.getSoundManager().play(sound);
-                        } catch (Throwable ignored) {}
-                    }
-                    if (ModSounds.SWORD_SPIN != null) {
-                        mc.player.level().playSound(mc.player, mc.player.getX(), mc.player.getY(), mc.player.getZ(),
-                            ModSounds.SWORD_SPIN.value(), SoundSource.PLAYERS, 0.70F, 1.0F);
-                    }
-                }
-            }
-        }
+        CLIENT_PENDING_SPIN = false;
+        CLIENT_PENDING_CRIT_TWIRL = false;
+        if (ACTIVE_SPIN_SOUND != null) stopActiveSpinSound();
     }
 }

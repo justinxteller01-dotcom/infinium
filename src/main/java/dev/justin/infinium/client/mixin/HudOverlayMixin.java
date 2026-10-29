@@ -22,5 +22,6 @@ public abstract class HudOverlayMixin {
         dev.justin.infinium.client.DungeonHudClient.render(g);
         dev.justin.infinium.client.ability.WarpScreenFx.render(g);   // batch1: Quantum Tunnel overlay (under the HUD bits)
         dev.justin.infinium.client.ability.AbilityHud.render(g);   // M1 ability bar
+        dev.justin.infinium.client.SwordCooldownHud.render(g);     // energy-mode sword cooldown meter (permanent)
     }
 }
