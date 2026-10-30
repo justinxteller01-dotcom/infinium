@@ -656,73 +656,33 @@ public final class ArmorParticles {
             footThrusters(mc, level, r, p, look, chest, mult * dens, prog, thrustHeld, fp, vel);
     }
 
-    /** Foot-thruster tunables: base jets per foot per tick (before density / particle setting). */
-    static final float FT_CYB = 1.0F, FT_CP = 1.6F, FT_INF = 2.2F;
-    /** Own first person: multiplier on everything (the soles sit behind / below the camera). */
-    static final float FT_FP_MUL = 0.35F;
+    /** Boot-energy flight particles (10-29 rework): EXTREMELY sparse accents only; the jet itself is solid geometry
+     *  (WingThrustTrail). Chance per foot per tick before density / particle setting. */
+    static final float FT_CP_CRACKLE = 0.06F, FT_INF_BIT = 0.08F, FT_SPARK = 0.04F;
 
-    /** Exhaust from both boot soles along the leg axis (FootThrusters = posed leg model), purely visual. Colours are
-     *  set explicitly (CUR cleared so the per-band armor tint does not override them). */
     static void footThrusters(Minecraft mc, ClientLevel level, RandomSource r, Player p, dev.justin.infinium.SetLook look,
                               ItemStack chest, float mul, float prog, boolean thrust, boolean fp, Vec3 vel) {
+        if (fp) return;   // own first person: no loose particles at all
         Player prevCur = CUR; CUR = null;
         try {
             boolean cp = look == dev.justin.infinium.SetLook.CYBERPSYCHO, inf = look == dev.justin.infinium.SetLook.INFINITY;
             int dye = GlowColor.argb(chest);
-            int tint = dye != -1 ? dye & 0xFFFFFF : InfiniumWingsRenderer.CP_THRUST_DEFAULT;   // CP: same dye glow as its thrust border
-            float k = mul * (0.8F + 0.4F * prog) * (thrust ? 1.8F : 1F) * (fp ? FT_FP_MUL : 1F);
-            float base = inf ? FT_INF : cp ? FT_CP : FT_CYB;
+            int tint = dye != -1 ? dye & 0xFFFFFF : InfiniumWingsRenderer.CP_THRUST_DEFAULT;
+            float k = mul * (thrust ? 1.5F : 1F);
             FootThrusters.Feet f = FootThrusters.get(p);
             Vec3[] soles = {f.left(), f.right()}, dirs = {f.leftDir(), f.rightDir()};
-            Vec3 carry = vel.scale(0.6);   // exhaust keeps most of the player's speed so it forms a short plume
+            Vec3 carry = vel.scale(0.7);
             for (int s = 0; s < 2; s++) {
-                Vec3 o = soles[s], d = dirs[s];
-                if (fp && !camClear(mc, o.x, o.y, o.z)) continue;
-                double sp = thrust ? 0.32 : 0.18;
-                // A. core jet: bright hot core + purple/black crystal flame
-                int n = Math.max(1, Math.round(base * k));
-                for (int i = 0; i < n; i++) {
-                    double j = 0.03;
-                    Vec3 pos = o.add((r.nextDouble() - 0.5) * j, (r.nextDouble() - 0.5) * j, (r.nextDouble() - 0.5) * j);
-                    Vec3 v = d.scale(sp * (0.8 + r.nextDouble() * 0.4)).add(carry);
-                    int col = r.nextFloat() < 0.35F ? 0xE6B8FF : r.nextFloat() < 0.5F ? 0xB048F0 : 0x5A1A9E;
-                    if (cp) col = r.nextFloat() < 0.5F ? tint : r.nextBoolean() ? 0xB048F0 : 0x2E102E;
-                    if (inf) col = r.nextFloat() < 0.3F ? 0x0A0014 : r.nextFloat() < 0.6F ? INF_C : 0xE6B8FF;
-                    exact(level, dust(col, inf ? 0.75F : cp ? 0.65F : 0.5F), pos.x, pos.y, pos.z, v.x, v.y, v.z, thrust ? 7 : 5);
+                Vec3 o = soles[s].add(dirs[s].scale(0.35)), d = dirs[s];
+                if (chance(r, FT_SPARK * k)) {   // a single ember off the jet (all sets)
+                    Vec3 v = d.scale(0.08).add(carry);
+                    exact(level, dust(cp ? tint : inf ? INF_C : 0xB048F0, 0.4F), o.x, o.y, o.z, v.x, v.y, v.z, 6);
                 }
-                // B. trail: slower, longer lived puffs left behind (modest for Cybernetic)
-                if (chance(r, (inf ? 0.9F : cp ? 0.7F : 0.4F) * k)) {
-                    Vec3 v = d.scale(0.05).add(vel.scale(0.15));
-                    int col = cp ? tint : inf ? (r.nextBoolean() ? 0x1A0530 : INF_C) : 0x7526C8;
-                    exact(level, dust(col, 0.55F), o.x, o.y, o.z, v.x, v.y, v.z, inf ? 16 : cp ? 13 : 9);
-                }
-                if (!cp && !inf) continue;
-                // C. Cyber Psycho + Infinity: outer jet layer (wider cone, darker)
-                if (chance(r, 0.8F * k)) {
-                    Vec3 side = d.cross(new Vec3(0, 1, 0)); if (side.lengthSqr() < 1e-4) side = new Vec3(1, 0, 0);
-                    Vec3 v = d.scale(sp * 0.7).add(side.normalize().scale((r.nextDouble() - 0.5) * 0.08)).add(carry);
-                    exact(level, dust(inf ? 0x320960 : 0x621CAC, 0.8F), o.x, o.y, o.z, v.x, v.y, v.z, 6);
-                }
-                // D. occasional electric crackle at the sole
-                if (chance(r, (inf ? 0.25F : 0.18F) * k))
-                    for (int i = 0; i < 2 + r.nextInt(2); i++)
-                        exact(level, ParticleTypes.ELECTRIC_SPARK, o.x + (r.nextDouble() - 0.5) * 0.25, o.y + (r.nextDouble() - 0.5) * 0.25,
-                            o.z + (r.nextDouble() - 0.5) * 0.25, vel.x * 0.5, vel.y * 0.5, vel.z * 0.5, 3 + r.nextInt(3));
-                if (!inf) continue;
-                // E. Infinity: singularity bits swirling around the jet axis (dark void + purple spacetime sparks)
-                if (fp) continue;
-                Vec3 u = d.cross(new Vec3(0, 1, 0)); if (u.lengthSqr() < 1e-4) u = new Vec3(1, 0, 0); u = u.normalize();
-                Vec3 w = d.cross(u).normalize();
-                int sw = Math.max(1, Math.round(1.2F * k));
-                for (int i = 0; i < sw; i++) {
-                    double ang = p.tickCount * 0.55 + s * Math.PI + i * 2.1, rad = 0.16 + r.nextDouble() * 0.1, al = 0.1 + r.nextDouble() * 0.5;
-                    Vec3 pos = o.add(d.scale(al)).add(u.scale(Math.cos(ang) * rad)).add(w.scale(Math.sin(ang) * rad));
-                    Vec3 v = u.scale(-Math.sin(ang) * 0.09).add(w.scale(Math.cos(ang) * 0.09)).subtract(u.scale(Math.cos(ang) * 0.03))
-                        .subtract(w.scale(Math.sin(ang) * 0.03)).add(carry);   // tangential + slight inward pull
-                    exact(level, r.nextFloat() < 0.6F ? dust(SING_BLACK, 0.7F) : dust(0x9B41F0, 0.45F), pos.x, pos.y, pos.z, v.x, v.y, v.z, 8);
-                }
-                if (chance(r, 0.35F * k))
-                    exact(level, ParticleTypes.REVERSE_PORTAL, o.x, o.y, o.z, d.x * 0.05 + vel.x * 0.5, d.y * 0.05 + vel.y * 0.5, d.z * 0.05 + vel.z * 0.5, 10);
+                if (cp && chance(r, FT_CP_CRACKLE * k))   // Cyber Psycho: occasional electric crackle at the boot
+                    exact(level, ParticleTypes.ELECTRIC_SPARK, soles[s].x + (r.nextDouble() - 0.5) * 0.2, soles[s].y + (r.nextDouble() - 0.5) * 0.2,
+                        soles[s].z + (r.nextDouble() - 0.5) * 0.2, carry.x, carry.y, carry.z, 4);
+                if (inf && chance(r, FT_INF_BIT * k))   // Infinity: one dark singularity bit or purple spacetime spark
+                    exact(level, r.nextBoolean() ? dust(SING_BLACK, 0.6F) : dust(0x9B41F0, 0.4F), o.x, o.y, o.z, carry.x, carry.y, carry.z, 8);
             }
         } finally { CUR = prevCur; }
     }

@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 /** batch1 (Justin final 2026-10-29): foot-thruster anchor points for the Cybernetic / Cyber Psycho / Infinity elytra
- *  flight visuals. While a player model is rendered (WingsLayerMixin, same pose stack as the body), the sole centre and
+ *  flight visuals (the boots themselves emit the energy; there is no thruster object). While a player model is rendered (WingsLayerMixin, same pose stack as the body), the sole centre and
  *  the leg axis of both legs are read from the posed HumanoidModel legs and stored relative to the player's render
  *  position, so the effects follow the real pose (incl. vanilla fall-flying roll) for the local and remote players.
  *  When no fresh sample exists (own first person: the model is not drawn) an approximation from the look vector is used.
@@ -46,9 +46,10 @@ public final class FootThrusters {
     }
 
     /** World-space feet for p: fresh render sample if any, otherwise an approximation (legs trail along -look). */
-    public static Feet get(Player p) {
+    public static Feet get(Player p) { return get(p, p.position()); }
+    /** Same, anchored at an explicit (e.g. render-interpolated) player position. */
+    public static Feet get(Player p, Vec3 pos) {
         Feet f = FEET.get(p.getId());
-        Vec3 pos = p.position();
         if (f != null && System.currentTimeMillis() - f.t() < STALE_MS)
             return new Feet(pos.add(f.left()), pos.add(f.right()), f.leftDir(), f.rightDir(), f.t());
         Vec3 fwd = p.getLookAngle();
