@@ -20,7 +20,8 @@ import net.minecraft.world.phys.Vec3;
  *  each boot sole (FootThrusters) drops a thin flat ribbon that fades out (Cybernetic modest 260 ms, Cyber Psycho dye
  *  tinted 420 ms, Infinity 600 ms; wider + brighter while thrusting). Client only, world-space samples, one per tick. */
 public final class WingThrustTrail {
-    record S(Vec3 lo, Vec3 li, Vec3 ro, Vec3 ri, long t, int rgb, boolean cut, float bright, long life) {}
+    record S(Vec3 lo, Vec3 li, Vec3 ro, Vec3 ri, long t, int rgb, boolean cut, float bright, long life, Vec3 up) {}
+    static final int ASTRAL_RGB = 0x9B4CFF, SING_RGB = 0x621CAC;
     static final int CYB_RGB = 0xB048F0;
     private static final Map<Integer, ArrayDeque<S>> TRAILS = new HashMap<>();
 
@@ -34,7 +35,8 @@ public final class WingThrustTrail {
                 boolean inf = Infinium.isInfinity(c);
                 InfiniumStyle st = InfiniumStyle.get(c);
                 boolean cp = !inf && st == InfiniumStyle.CYBERPSYCHO, cyb = !inf && st == InfiniumStyle.CYBERNETIC;
-                if (!(cp || inf || cyb)) continue;
+                boolean ast = !inf && st == InfiniumStyle.ASTRAL, sing = !inf && st == InfiniumStyle.SINGULARITY;
+                if (!(cp || inf || cyb || ast || sing)) continue;
                 boolean thrust = InfinityFlightClient.thrusting(p);
                 ArrayDeque<S> q = TRAILS.get(p.getId());
                 if (q == null) TRAILS.put(p.getId(), q = new ArrayDeque<>());
@@ -42,14 +44,19 @@ public final class WingThrustTrail {
                 Vec3 fwd = p.getLookAngle();
                 Vec3 right = fwd.cross(new Vec3(0, 1, 0));
                 right = right.lengthSqr() < 1e-4 ? new Vec3(1, 0, 0) : right.normalize();
-                double hw = cyb ? 0.06 : cp ? 0.08 : 0.10;   // ribbon half width per foot
+                double hw = cyb ? 0.06 : cp ? 0.08 : ast || sing ? 0.07 : 0.10;   // ribbon half width per foot
                 if (thrust) hw *= 1.5;
                 int dye = GlowColor.argb(c);
-                int rgb = cyb ? CYB_RGB : dye != -1 ? dye & 0xFFFFFF : inf ? InfiniumWingsRenderer.INF_THRUST_DEFAULT : InfiniumWingsRenderer.CP_THRUST_DEFAULT;
+                int rgb = cyb ? CYB_RGB : ast ? ASTRAL_RGB : sing ? SING_RGB : dye != -1 ? dye & 0xFFFFFF : inf ? InfiniumWingsRenderer.INF_THRUST_DEFAULT : InfiniumWingsRenderer.CP_THRUST_DEFAULT;
                 boolean cutNow = q.isEmpty() || now - q.peekLast().t() > 200;
                 Vec3 l = f.left(), r = f.right();
+                if (ast || sing) {   // magic flight: two body-wake ribbons from the torso sides (no boot energy)
+                    Vec3 c0 = p.position().add(0, p.getBbHeight() * 0.45, 0);
+                    l = c0.subtract(right.scale(0.22)); r = c0.add(right.scale(0.22));
+                }
+                Vec3 up = fwd.cross(right).normalize().scale(hw);   // second (crossed) ribbon plane
                 q.addLast(new S(l.add(right.scale(hw)), l.subtract(right.scale(hw)), r.add(right.scale(hw)), r.subtract(right.scale(hw)),
-                    now, rgb, cutNow, thrust ? 1F : 0.8F, cyb ? 350 : cp ? 450 : 550));
+                    now, rgb, cutNow, thrust ? 1F : 0.8F, cyb ? 350 : cp ? 450 : ast ? 400 : sing ? 450 : 550, up));
             }
             TRAILS.values().forEach(q -> { while (!q.isEmpty() && now - q.peekFirst().t() > q.peekFirst().life()) q.pollFirst(); });
             TRAILS.values().removeIf(ArrayDeque::isEmpty);
@@ -69,6 +76,12 @@ public final class WingThrustTrail {
                         int a0 = alpha(a[i - 1], now), a1 = alpha(a[i], now);
                         quad(vc, pose, a[i - 1].lo(), a[i - 1].li(), a[i].li(), a[i].lo(), r, g, b, a0, a1);
                         quad(vc, pose, a[i - 1].ro(), a[i - 1].ri(), a[i].ri(), a[i].ro(), r, g, b, a0, a1);
+                        // crossed plane: same ribbon rotated 90 deg so it never vanishes edge-on
+                        Vec3 lm0 = mid(a[i - 1].lo(), a[i - 1].li()), lm1 = mid(a[i].lo(), a[i].li());
+                        Vec3 rm0 = mid(a[i - 1].ro(), a[i - 1].ri()), rm1 = mid(a[i].ro(), a[i].ri());
+                        Vec3 u0 = a[i - 1].up(), u1 = a[i].up();
+                        quad(vc, pose, lm0.add(u0), lm0.subtract(u0), lm1.subtract(u1), lm1.add(u1), r, g, b, a0, a1);
+                        quad(vc, pose, rm0.add(u0), rm0.subtract(u0), rm1.subtract(u1), rm1.add(u1), r, g, b, a0, a1);
                     }
                 });
             }
@@ -101,8 +114,31 @@ public final class WingThrustTrail {
             boolean inf = Infinium.isInfinity(c);
             InfiniumStyle st = InfiniumStyle.get(c);
             int set = inf ? 2 : st == InfiniumStyle.CYBERPSYCHO ? 1 : st == InfiniumStyle.CYBERNETIC ? 0 : -1;
-            if (set < 0) continue;
             boolean thrust = InfinityFlightClient.thrusting(p);
+            if (set < 0) {
+                // Astral / Singularity (magic flight, no boots energy): a soft comet glow behind the torso, plus a
+                // downward telekinetic energy cone while thrust is held. Singularity adds a dark void sheath.
+                boolean ast = st == InfiniumStyle.ASTRAL, sing = st == InfiniumStyle.SINGULARITY;
+                if (!ast && !sing) continue;
+                Vec3 c0 = p.getPosition(pt).add(0, p.getBbHeight() * 0.45, 0);
+                Vec3 fwd = p.getViewVector(pt), right = fwd.cross(new Vec3(0, 1, 0));
+                right = right.lengthSqr() < 1e-4 ? new Vec3(1, 0, 0) : right.normalize();
+                Vec3 down = fwd.cross(right).normalize();   // body "down" in the glide plane
+                if (down.y > 0) down = down.scale(-1);
+                Vec3 back = fwd.scale(-1), dn = down;
+                int col = ast ? ASTRAL_RGB : SING_RGB;
+                float fl = 0.93F + 0.07F * (float) Math.sin(now / 60.0 + p.getId());
+                ctx.submitNodeCollector().submitCustomGeometry(ps, RenderTypes.lightning(), (pose, vc) -> {
+                    cone(vc, pose, c0.add(back.scale(0.3)), back, 0.22F, 0.7F * fl, col, 110);
+                    cone(vc, pose, c0.add(back.scale(0.3)), back, 0.09F, 0.45F * fl, 0xE6CCFF, 150);
+                    if (sing) cone(vc, pose, c0.add(back.scale(0.3)), back, 0.32F, 0.5F * fl, 0x0E0612, 120);
+                    if (thrust) {
+                        cone(vc, pose, c0, dn, 0.28F, 0.8F * fl, col, 150);
+                        cone(vc, pose, c0, dn, 0.1F, 0.5F * fl, 0xE6CCFF, 170);
+                    }
+                });
+                continue;
+            }
             int dye = GlowColor.argb(c);
             int rgb = set == 0 ? CYB_RGB : dye != -1 ? dye & 0xFFFFFF : inf ? InfiniumWingsRenderer.INF_THRUST_DEFAULT : InfiniumWingsRenderer.CP_THRUST_DEFAULT;
             int core = set == 2 ? 0xF0D8FF : 0xF4E0FF;
@@ -120,6 +156,7 @@ public final class WingThrustTrail {
             });
         }
     }
+    private static Vec3 mid(Vec3 a, Vec3 b) { return a.add(b).scale(0.5); }
     private static void cone(com.mojang.blaze3d.vertex.VertexConsumer vc, PoseStack.Pose pose, Vec3 o, Vec3 d, float rad, float len, int rgb, int a) {
         Vec3 u = d.cross(new Vec3(0, 1, 0)); if (u.lengthSqr() < 1e-4) u = d.cross(new Vec3(1, 0, 0)); u = u.normalize();
         Vec3 w = d.cross(u).normalize();

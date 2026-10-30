@@ -594,59 +594,14 @@ public final class ArmorParticles {
             boolean isAstral = (look == dev.justin.infinium.SetLook.ASTRAL);
             // batch1: no Astral/Singularity flight particles in first person for the camera player
             if (p == mc.getCameraEntity() && mc.options.getCameraType().isFirstPerson()) return;
-            // Particle amount and density scale linearly with progression (Astral has fewer than Singularity)
-            float baseDensity = (isAstral ? (0.85F + 0.65F * prog) : (1.50F + 1.20F * prog)) * FLIGHT_MAGIC_DENSITY;   // batch1: toned down
-            float countMul = baseDensity * mult * dens * (thrustHeld ? 2.2F : 1.0F);
-
-            // A. Swirling particles circling the flying player
-            int swirlCount = Math.max(2, Math.round((isAstral ? 3 : 5) * countMul));
-            for (int i = 0; i < swirlCount; i++) {
-                double angle = (p.tickCount * 0.40) + (i * (Math.PI * 2.0 / swirlCount)) + (r.nextDouble() - 0.5) * 0.35;
-                double rad = (isAstral ? 0.65 : 0.85) + r.nextDouble() * 0.45;
-                double along = (r.nextDouble() - 0.5) * 1.2;
-                Vec3 pt = center.add(right.scale(Math.cos(angle) * rad)).add(up.scale(Math.sin(angle) * rad)).add(fwd.scale(along));
-                double orbitSpeed = 0.14 + r.nextDouble() * 0.08;
-                Vec3 orbitVel = right.scale(-Math.sin(angle) * orbitSpeed).add(up.scale(Math.cos(angle) * orbitSpeed)).add(vel.scale(0.30));
-
-                ParticleOptions particle;
-                if (isAstral) {
-                    particle = r.nextFloat() < 0.35F ? ParticleTypes.PORTAL : dust(r.nextBoolean() ? 0x9B4CFF : 0xBF70FF, 0.55F);
-                } else {
-                    particle = r.nextFloat() < 0.25F ? ParticleTypes.WITCH : dust(sing(r), 0.65F);
-                }
-                if (camClear(mc, pt.x, pt.y, pt.z)) exact(level, particle, pt.x, pt.y, pt.z, orbitVel.x, orbitVel.y, orbitVel.z, 6 + r.nextInt(5));
-            }
-
-            // B. While Shift is held: telekinetic downward thrust & trail behind
-            if (thrustHeld) {
-                int downCount = Math.max(2, Math.round((isAstral ? 4 : 7) * countMul));
-                for (int i = 0; i < downCount; i++) {
-                    Vec3 downPos = center.add(up.scale(-0.25 - r.nextDouble() * 0.20))
-                        .add(right.scale((r.nextDouble() - 0.5) * 0.45))
-                        .add(fwd.scale(-0.15 + r.nextDouble() * 0.40));
-                    Vec3 downVel = up.scale(-0.25 - r.nextDouble() * 0.20)
-                        .add(fwd.scale(-0.10))
-                        .add(vel.scale(0.15));
-
-                    ParticleOptions downPart = isAstral
-                        ? (r.nextBoolean() ? dust(0xBF70FF, 0.65F) : dust(0x8A3CE0, 0.60F))
-                        : dust(sing(r), 0.70F);
-                    if (camClear(mc, downPos.x, downPos.y, downPos.z)) exact(level, downPart, downPos.x, downPos.y, downPos.z, downVel.x, downVel.y, downVel.z, 8 + r.nextInt(6));
-                }
-
-                // Streaming cosmic trail behind the player
-                int trailCount = Math.max(1, Math.round((isAstral ? 2 : 4) * countMul));
-                Vec3 trailVel = fwd.scale(-0.45).add(0, 0.02, 0);
-                for (int i = 0; i < trailCount; i++) {
-                    Vec3 trailPos = center.add(fwd.scale(-0.85))
-                        .add(right.scale((r.nextDouble() - 0.5) * 0.40))
-                        .add(up.scale((r.nextDouble() - 0.5) * 0.40));
-                    ParticleOptions trailPart = isAstral
-                        ? dust(r.nextBoolean() ? 0x9B4CFF : 0xC45AD4, 0.60F)
-                        : (r.nextFloat() < 0.3F ? ParticleTypes.PORTAL : dust(sing(r), 0.70F));
-                    if (camClear(mc, trailPos.x, trailPos.y, trailPos.z)) exact(level, trailPart, trailPos.x, trailPos.y, trailPos.z, trailVel.x, trailVel.y, trailVel.z, 12 + r.nextInt(8));
-                }
-            }
+            // batch1 (Justin 2026-10-29): extremely minimal. The energy + trails are solid geometry (WingThrustTrail);
+            // only a sparse touch of each set's identity remains: Astral = rare star/portal mote, Singularity = rare
+            // dark void bit or witch spark near the body.
+            if (!chance(r, (isAstral ? 0.12F : 0.16F) * mult * (thrustHeld ? 1.5F : 1F))) return;
+            Vec3 pt = center.add(right.scale((r.nextDouble() - 0.5) * 1.2)).add(up.scale((r.nextDouble() - 0.5) * 0.6)).add(fwd.scale(-0.4));
+            ParticleOptions particle = isAstral ? (r.nextBoolean() ? ParticleTypes.PORTAL : dust(0xBF70FF, 0.5F))
+                : (r.nextBoolean() ? dust(SING_BLACK, 0.6F) : ParticleTypes.WITCH);
+            if (camClear(mc, pt.x, pt.y, pt.z)) exact(level, particle, pt.x, pt.y, pt.z, vel.x * 0.5, vel.y * 0.5, vel.z * 0.5, 8);
             return;
         }
 
