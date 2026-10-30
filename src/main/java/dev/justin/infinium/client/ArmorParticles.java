@@ -623,20 +623,21 @@ public final class ArmorParticles {
             boolean cp = look == dev.justin.infinium.SetLook.CYBERPSYCHO, inf = look == dev.justin.infinium.SetLook.INFINITY;
             int dye = GlowColor.argb(chest);
             int tint = dye != -1 ? dye & 0xFFFFFF : InfiniumWingsRenderer.CP_THRUST_DEFAULT;
-            float k = mul * (thrust ? 1.5F : 1F);
+            float tb = cp || inf ? WingThrustTrail.boostLevel(p.getId()) : 0F;   // smoothed thrust level (Cybernetic: none)
+            float k = mul;
             FootThrusters.Feet f = FootThrusters.get(p);
             Vec3[] soles = {f.left(), f.right()}, dirs = {f.leftDir(), f.rightDir()};
             Vec3 carry = vel.scale(0.7);
             for (int s = 0; s < 2; s++) {
                 Vec3 o = soles[s].add(dirs[s].scale(0.35)), d = dirs[s];
-                if (chance(r, FT_SPARK * k)) {   // a single ember off the jet (all sets)
+                if (chance(r, FT_SPARK * k)) {   // (unchanged by thrust)   // a single ember off the jet (all sets)
                     Vec3 v = d.scale(0.08).add(carry);
                     exact(level, dust(cp ? tint : inf ? INF_C : 0xB048F0, 0.4F), o.x, o.y, o.z, v.x, v.y, v.z, 6);
                 }
-                if (cp && chance(r, FT_CP_CRACKLE * k))   // Cyber Psycho: occasional electric crackle at the boot
+                if (cp && chance(r, (FT_CP_CRACKLE + 0.22F * tb) * k))   // Cyber Psycho: occasional electric crackle at the boot
                     exact(level, ParticleTypes.ELECTRIC_SPARK, soles[s].x + (r.nextDouble() - 0.5) * 0.2, soles[s].y + (r.nextDouble() - 0.5) * 0.2,
                         soles[s].z + (r.nextDouble() - 0.5) * 0.2, carry.x, carry.y, carry.z, 4);
-                if (inf && chance(r, FT_INF_BIT * k))   // Infinity: one dark singularity bit or purple spacetime spark
+                if (inf && chance(r, (FT_INF_BIT + 0.14F * tb) * k))   // Infinity: one dark singularity bit or purple spacetime spark
                     exact(level, r.nextBoolean() ? dust(SING_BLACK, 0.6F) : dust(0x9B41F0, 0.4F), o.x, o.y, o.z, carry.x, carry.y, carry.z, 8);
             }
         } finally { CUR = prevCur; }
